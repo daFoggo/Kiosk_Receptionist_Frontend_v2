@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { motion } from "framer-motion";
 
@@ -8,11 +6,16 @@ import LunarCalendar from "@/components/LunarCalendar/LunarCalendar";
 import RootNavbar from "@/components/RootNavbar";
 import Weather from "@/components/Weather/Weather";
 import InstitueCalendar from "@/components/InstitueCalendar";
+import AIModel from "@/components/AIModel";
 
-import { IEvent } from "@/models/EventBanner/EventBanner";
+import AITranscript from "@/components/AITranscript";
+import HomeWebcam from "@/components/HomeWebcam";
+import InteractionMenu from "@/components/InteractionMenu";
+
 import { navbarVariants, leftItemVariants, rightItemVariants } from "./motion";
+
 const Home = () => {
-  const [eventData] = useState<IEvent[]>([
+  const [eventData] = useState([
     {
       id: 1,
       title: "Hội thảo Software Engineering",
@@ -32,6 +35,8 @@ const Home = () => {
       >
         <RootNavbar />
       </motion.div>
+
+      {/*Utility components */}
       <div className="grid grid-cols-4 gap-6 w-full">
         <motion.div
           className="col-span-3"
@@ -69,6 +74,42 @@ const Home = () => {
           <InstitueCalendar />
         </motion.div>
       </div>
+
+      {/* Interaction components */}
+      <div className="grid grid-cols-2 gap-6 w-full mt-6">
+        {/* Left side*/}
+        <motion.div
+          className="space-y-4"
+          initial="hidden"
+          animate="visible"
+          variants={leftItemVariants}
+        >
+          {/* AI Video Container */}
+          <AIModel videoSrc="/src/assets/videos/default.mp4" />
+
+          {/* AI Transcript Container */}
+          <AITranscript transcript="Chào mừng quý khách đến với Viện Khoa học Kỹ thuật Bưu điện" />
+        </motion.div>
+
+        {/* Right side */}
+        <motion.div
+          className="space-y-4"
+          initial="hidden"
+          animate="visible"
+          variants={rightItemVariants}
+        >
+          {/* Webcam Container */}
+          <HomeWebcam />
+
+          <InteractionMenu
+            userRole="student"
+            activingMenu={1}
+            onMenuItemClick={() => {}}
+          />
+        </motion.div>
+      </div>
+
+      {/* Footer */}
       <div className="absolute bottom-0 left-0 right-0 h-2/5 bg-gradient-to-t from-primary/20 to-transparent clip-path-wave" />
     </div>
   );

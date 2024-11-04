@@ -190,6 +190,7 @@ export default {
         auto: "auto",
         square: "1 / 1",
         video: "16 / 9",
+        reels: "9 / 16",
       },
     },
   },

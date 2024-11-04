@@ -184,7 +184,7 @@ const InstitueCalendar = () => {
             <Button
               variant="outline"
               icon={<ArrowUpRight className="h-6 w-6" />}
-              className="rounded-3xl text-lg font-semibold"
+              className="rounded-3xl text-lg font-semibold bg-secondary"
               iconPosition="right"
             >
               Chi tiết
