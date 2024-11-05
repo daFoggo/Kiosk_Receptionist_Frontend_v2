@@ -18,7 +18,7 @@ const InteractionMenu = ({
   };
 
   return (
-    <Card className="w-full p-4 rounded-2xl bg-background/30 backdrop-blur-sm space-y-4">
+    <Card className="w-full p-4 rounded-2xl bg-background/20 backdrop-blur-sm space-y-4">
       <CardContent className="p-0">
         <div className="grid grid-cols-3 gap-2">
           {menuItems.map((item) => {

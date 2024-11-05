@@ -1,30 +1,19 @@
-const backendIp = import.meta.env.VITE_BACKEND_IP;
+export const httpIp = import.meta.env.VITE_BACKEND_IP;
+export const wsIp = import.meta.env.VITE_WEBSOCKET_IP;
+export const openWeatherIp = import.meta.env.VITE_OPENWEATHER_API;
 
-const authIp = `${backendIp}/auth`;
-const verifyTokenIp = `${authIp}/verify-token`;
-const loginIp = `${authIp}/login`;
-const getIdentifyDataIp = `${backendIp}/get-identify-data`;
-const getInstitueCalendarIp = `${backendIp}/get-lich-tuan`;
-const updateInstitueCalendarIp = `${backendIp}/post-lich-tuan`;
-const createEventIp = `${backendIp}/create-event`;
-const getEventsIp = `${backendIp}/get-events`;
-const putEventIp = `${backendIp}/put-event`;
-const deleteEventIp = `${backendIp}/delete-event`;
-const imageUploadIp = `${backendIp}/post-personal-img`;
+export const authIp = `${httpIp}/auth`;
+export const verifyTokenIp = `${authIp}/verify-token`;
+export const loginIp = `${authIp}/login`;
 
-const openWeatherIp = import.meta.env.VITE_OPENWEATHER_API;
-export {
-  backendIp,
-  authIp,
-  verifyTokenIp,
-  loginIp,
-  getIdentifyDataIp,
-  getInstitueCalendarIp,
-  updateInstitueCalendarIp,
-  createEventIp,
-  getEventsIp,
-  putEventIp,
-  deleteEventIp,
-  imageUploadIp,
-  openWeatherIp,
-};
+export const getIdentifyDataIp = `${httpIp}/identity-data/get`;
+export const updateIdentifyDataIp = `${httpIp}/identity-data/update`;
+
+export const getInstitueCalendarIp = `${httpIp}/institude-calendar/get`;
+export const updateInstitueCalendarIp = `${httpIp}/institude-calendar/post`;
+
+export const createEventIp = `${httpIp}/create-event`;
+export const getEventsIp = `${httpIp}/get-events`;
+export const putEventIp = `${httpIp}/put-event`;
+export const deleteEventIp = `${httpIp}/delete-event`;
+

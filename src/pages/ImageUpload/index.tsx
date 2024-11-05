@@ -25,7 +25,7 @@ import ParticlesBackground from "@/components/ui/particles-background";
 import { toast } from "sonner";
 import { Toaster } from "sonner";
 import axios from "axios";
-import { imageUploadIp } from "@/utils/ip";
+import { updateIdentifyDataIp } from "@/utils/ip";
 import { IFormData } from "@/models/ImageUpload/type";
 
 //step 1
@@ -427,7 +427,7 @@ const ImageUpload = () => {
 
         try {
           setIsSubmitting(true);
-          await axios.post(imageUploadIp, formattedData);
+          await axios.post(updateIdentifyDataIp, formattedData);
           toast.success("Đã tải ảnh thành công");
           localStorage.setItem("isUploaded", "true");
           localStorage.setItem("userName", formattedData.cccd.Name);

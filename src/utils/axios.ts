@@ -1,9 +1,9 @@
 import axios from "axios";
-import { backendIp } from "./ip";
+import { httpIp } from "./ip";
 
 // create axios instance for auth
 const axiosAuth = axios.create({
-  baseURL: backendIp,
+  baseURL: httpIp,
   headers: {
     "Content-Type": "application/json",
   },

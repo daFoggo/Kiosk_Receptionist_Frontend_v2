@@ -38,3 +38,18 @@ export const generateHours = (length: number) => {
     return `${hour}:00`;
   });
 };
+
+export const convertRole = (role: string) => {
+  switch (role) {
+    case "guest":
+      return "Khách";
+    case "student":
+      return "Sinh viên";
+    case "instructor":
+      return "Giảng viên";
+    case "staff":
+      return "Cán bộ";
+    default:
+      return "Không xác định";
+  }
+}

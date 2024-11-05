@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 import EventBanner from "@/components/EventBanner/EventBanner";
@@ -13,9 +13,10 @@ import HomeWebcam from "@/components/HomeWebcam";
 import InteractionMenu from "@/components/InteractionMenu";
 
 import { navbarVariants, leftItemVariants, rightItemVariants } from "./motion";
+import { useWebsocket } from "@/contexts/WebsocketContext";
 
 const Home = () => {
-  const [eventData] = useState([
+  const [eventData, setEventData] = useState([
     {
       id: 1,
       title: "Hội thảo Software Engineering",
@@ -24,6 +25,26 @@ const Home = () => {
       location: "Hội trường 2 - T2",
     },
   ]);
+  const [mainRole, setMainRole] = useState("guest");
+  const [currentCccd, setCurrentCccd] = useState("");
+
+  const { isConnected, webcamData, cccdData, connectWebsocket, sendFrame } =
+    useWebsocket();
+
+  useEffect(() => {
+    connectWebsocket();
+  }, [connectWebsocket]);
+
+  useEffect(() => {
+    if (webcamData?.main) {
+      setMainRole(webcamData.main.role);
+      setCurrentCccd(webcamData.main.cccd || "");
+    }
+  });
+
+  const handleFrameCapture = (frameData: string) => {
+    sendFrame(frameData);
+  };
 
   return (
     <div className="relative h-screen bg-gradient-to-b from-indigo-100 to-violet-100 dark:from-indigo-900 dark:to-violet-900 w-full flex flex-col items-center p-6 space-y-6 overflow-hidden">
@@ -99,7 +120,11 @@ const Home = () => {
           variants={rightItemVariants}
         >
           {/* Webcam Container */}
-          <HomeWebcam />
+          <HomeWebcam
+            isConnected={isConnected}
+            onFrameCapture={handleFrameCapture}
+            webcamData={webcamData}
+          />
 
           <InteractionMenu
             userRole="student"

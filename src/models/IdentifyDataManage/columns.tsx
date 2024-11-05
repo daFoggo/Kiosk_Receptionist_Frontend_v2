@@ -35,10 +35,10 @@ const columns: ColumnDef<IIdentifyDataManagement>[] = [
       switch (role) {
         case "GUEST":
           return "Khách";
-        case "EVENT_GUEST":
-          return "Khách mời sự kiện";
         case "STUDENT":
           return "Sinh viên";
+        case "INSTRUCTOR":
+          return "Giảng viên";
         case "STAFF":
           return "Cán bộ";
         default:
