@@ -67,7 +67,6 @@ export const WebsocketProvider = ({ children }: IWebsocketProviderProps) => {
                 const webcamPayload = data.payload as IWebcamData;
                 if (webcamPayload) {
                   setWebcamData(webcamPayload);
-                  console.log("Webcam data: ", webcamPayload);
                 }
                 break;
               case "cccd":

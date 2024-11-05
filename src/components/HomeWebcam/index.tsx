@@ -8,6 +8,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 import { IHomeWebcamProps } from "@/models/HomeWebcam/type";
 import { convertRole } from "@/utils/Helper/common";
+import { badgeVariants, containerVariants } from "./motion";
 
 const HomeWebcam = ({
   isConnected,
@@ -45,44 +46,6 @@ const HomeWebcam = ({
   const totalDetectedPeople =
     (webcamData?.main ? 1 : 0) + (webcamData?.others?.length || 0);
 
-  // Animation variants for stack effect
-  const badgeVariants = {
-    initial: {
-      opacity: 0,
-      x: 100,
-      scale: 0.8,
-    },
-    animate: {
-      opacity: 1,
-      x: 0,
-      scale: 1,
-      transition: {
-        type: "spring",
-        stiffness: 400,
-        damping: 30,
-      },
-    },
-    exit: {
-      opacity: 0,
-      x: -100,
-      scale: 0.8,
-      transition: {
-        duration: 0.2,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  // Stagger children delay for stack effect
-  const containerVariants = {
-    animate: {
-      transition: {
-        staggerChildren: 0.08,
-        staggerDirection: -1, // Reverse stagger direction for right-to-left effect
-      },
-    },
-  };
-
   return (
     <div className="flex flex-col space-y-3">
       <div className="relative w-full aspect-video overflow-hidden rounded-3xl">
@@ -103,7 +66,7 @@ const HomeWebcam = ({
         {isConnected && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className="relative animate-pulse">
-              <Scan className="w-72 h-72 text-white/30 stroke-[0.75]" />
+              <Scan className="w-72 h-72 text-white/80 stroke-[0.75]" />
               <div className="absolute inset-0 bg-gradient-radial from-white/10 to-transparent blur-xl" />
             </div>
           </div>

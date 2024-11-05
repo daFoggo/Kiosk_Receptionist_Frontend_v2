@@ -194,10 +194,9 @@ const InfoFormStep = ({
                   <SelectValue placeholder="Chọn vai trò" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="STUDENT">Sinh viên</SelectItem>
-                  <SelectItem value="STAFF">Cán bộ</SelectItem>
-                  <SelectItem value="EVENT_GUEST">Khách mời sự kiện</SelectItem>
-                  <SelectItem value="GUEST">Khách</SelectItem>
+                  <SelectItem value="student">Sinh viên</SelectItem>
+                  <SelectItem value="officer">Cán bộ</SelectItem>
+                  <SelectItem value="guest">Khách</SelectItem>
                 </SelectContent>
               </Select>
             )}
@@ -496,7 +495,7 @@ const ImageUpload = () => {
                   </Button>
                 </motion.div>
               </DialogTrigger>
-              <DialogContent className="max-w-[98%] rounded-xl sm:rounded-2xl sm:max-w-[35%]">
+              <DialogContent className="max-w-[98%] rounded-xl sm:rounded-2xl sm:max-w-[35%]" onOpenAutoFocus={(e) => e.preventDefault()}>
                 {currentStep === 1 ? (
                   <ImageUploadStep
                     uploadedImages={uploadedImages}

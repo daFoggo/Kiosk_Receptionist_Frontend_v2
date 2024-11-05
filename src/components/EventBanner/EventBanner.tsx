@@ -161,7 +161,7 @@ export default function EventBanner({ eventData }: IEventBannerProps) {
       )}
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-[98%] rounded-xl sm:rounded-2xl sm:max-w-[70%]">
+        <DialogContent className="max-w-[98%] rounded-xl sm:rounded-2xl sm:max-w-[70%]" onOpenAutoFocus={(e) => e.preventDefault()}>
           <DialogHeader>
             <DialogTitle className="text-2xl font-semibold text-primary">
               Chi tiết sự kiện

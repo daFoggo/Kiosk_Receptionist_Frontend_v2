@@ -72,7 +72,7 @@ const columns: ColumnDef<IIdentifyDataManagement>[] = [
               <Eye className="h-4 w-4" />
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-md">
+          <DialogContent className="sm:max-w-md" onOpenAutoFocus={(e) => e.preventDefault()}>
             <DialogTitle className="text-center">
               Dữ liệu ảnh của {row.getValue("name")}
             </DialogTitle>

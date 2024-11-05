@@ -6,38 +6,89 @@ import {
   ScanQrCode,
   Signature,
 } from "lucide-react";
+import { IMenuItem } from "@/models/InteractionMenu/type";
+import GeneralCalendar from "../GeneralCalendar";
+import PersonalCalendar from "../PersonalCalendar";
+import UserInfo from "../UserInfo";
+import VerifyCCCD from "../VerifyCCCD";
+import AppointmentCheckin from "../AppointmentCheckin";
+import Procedures from "../Procedures";
 
-export const interactionMenu = {
+export const interactionMenu: Record<string, IMenuItem[]> = {
+  guest: [
+    {
+      id: 1,
+      title: "Xác thực thông tin",
+      icon: IdCard,
+      action: "dialog",
+      component: VerifyCCCD,
+      requiredProps: [],
+    },
+    {
+      id: 2,
+      title: "Check-in lịch hẹn",
+      icon: ScanQrCode,
+      action: "dialog",
+      component: AppointmentCheckin,
+      requiredProps: [],
+    },
+    {
+      id: 3,
+      title: "Thủ tục hành chính",
+      icon: Signature,
+      action: "drawer",
+      component: Procedures,
+      requiredProps: [],
+    },
+  ],
   student: [
     {
       id: 1,
       title: "Lịch học chung",
       icon: CalendarDays,
+      action: "sheet",
+      component: GeneralCalendar,
+      requiredProps: ["mainRole"],
     },
     {
       id: 2,
       title: "Lịch học của tôi",
       icon: CalendarHeart,
+      action: "sheet",
+      component: PersonalCalendar,
+      requiredProps: ["currentCccd"],
     },
     {
       id: 3,
       title: "Thông tin của tôi",
       icon: FileUser,
+      action: "drawer",
+      component: UserInfo,
+      requiredProps: ["currentCccd"],
     },
     {
       id: 4,
       title: "Xác thực thông tin",
       icon: IdCard,
+      action: "dialog",
+      component: VerifyCCCD,
+      requiredProps: [],
     },
     {
       id: 5,
       title: "Check-in lịch hẹn",
       icon: ScanQrCode,
+      action: "dialog",
+      component: AppointmentCheckin,
+      requiredProps: [],
     },
     {
       id: 6,
       title: "Thủ tục hành chính",
       icon: Signature,
+      action: "drawer",
+      component: Procedures,
+      requiredProps: [],
     },
   ],
   instructor: [
@@ -45,31 +96,49 @@ export const interactionMenu = {
       id: 1,
       title: "Lịch giảng dạy chung",
       icon: CalendarDays,
+      action: "sheet",
+      component: GeneralCalendar,
+      requiredProps: ["mainRole"],
     },
     {
       id: 2,
       title: "Lịch giảng dạy của tôi",
       icon: CalendarHeart,
+      action: "sheet",
+      component: PersonalCalendar,
+      requiredProps: ["currentCccd"],
     },
     {
       id: 3,
       title: "Thông tin của tôi",
       icon: FileUser,
+      action: "drawer",
+      component: UserInfo,
+      requiredProps: ["currentCccd"],
     },
     {
       id: 4,
       title: "Xác thực thông tin",
       icon: IdCard,
+      action: "dialog",
+      component: VerifyCCCD,
+      requiredProps: [],
     },
     {
       id: 5,
       title: "Check-in lịch hẹn",
       icon: ScanQrCode,
+      action: "dialog",
+      component: AppointmentCheckin,
+      requiredProps: [],
     },
     {
       id: 6,
       title: "Thủ tục hành chính",
       icon: Signature,
+      action: "drawer",
+      component: Procedures,
+      requiredProps: [],
     },
   ],
   staff: [
@@ -77,31 +146,49 @@ export const interactionMenu = {
       id: 1,
       title: "Lịch công tác chung",
       icon: CalendarDays,
+      action: "sheet",
+      component: GeneralCalendar,
+      requiredProps: ["mainRole"],
     },
     {
       id: 2,
       title: "Lịch công tác của tôi",
       icon: CalendarHeart,
+      action: "sheet",
+      component: PersonalCalendar,
+      requiredProps: ["currentCccd"],
     },
     {
       id: 3,
       title: "Thông tin của tôi",
       icon: FileUser,
+      action: "drawer",
+      component: UserInfo,
+      requiredProps: ["currentCccd"],
     },
     {
       id: 4,
       title: "Xác thực thông tin",
       icon: IdCard,
+      action: "dialog",
+      component: VerifyCCCD,
+      requiredProps: [],
     },
     {
       id: 5,
       title: "Check-in lịch hẹn",
       icon: ScanQrCode,
+      action: "dialog",
+      component: AppointmentCheckin,
+      requiredProps: [],
     },
     {
       id: 6,
       title: "Thủ tục hành chính",
       icon: Signature,
+      action: "drawer",
+      component: Procedures,
+      requiredProps: [],
     },
   ],
 };

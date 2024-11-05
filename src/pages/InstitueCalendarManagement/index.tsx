@@ -209,7 +209,7 @@ const InstitueCalendarManagement = () => {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="w-[90%] rounded-xl sm:w-full">
+        <DialogContent className="w-[90%] rounded-xl sm:w-full" onOpenAutoFocus={(e) => e.preventDefault()}>
           <DialogHeader>
             <DialogTitle>Tải lên lịch tuần mới</DialogTitle>
             <DialogDescription>Chỉ chấp nhận tệp .docx.</DialogDescription>

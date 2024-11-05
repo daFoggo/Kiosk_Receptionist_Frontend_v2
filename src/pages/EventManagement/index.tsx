@@ -255,7 +255,7 @@ export default function Component() {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="w-[90%] rounded-xl sm:w-full">
+        <DialogContent className="w-[90%] rounded-xl sm:w-full" onOpenAutoFocus={(e) => e.preventDefault()}>
           <DialogHeader>
             <DialogTitle>
               {editingEvent ? "Chỉnh sửa sự kiện" : "Thêm sự kiện mới"}

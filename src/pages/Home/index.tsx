@@ -14,6 +14,7 @@ import InteractionMenu from "@/components/InteractionMenu";
 
 import { navbarVariants, leftItemVariants, rightItemVariants } from "./motion";
 import { useWebsocket } from "@/contexts/WebsocketContext";
+import { IMenuItem } from "@/models/InteractionMenu/type";
 
 const Home = () => {
   const [eventData, setEventData] = useState([
@@ -25,10 +26,16 @@ const Home = () => {
       location: "Hội trường 2 - T2",
     },
   ]);
+
   const [mainRole, setMainRole] = useState("guest");
   const [currentCccd, setCurrentCccd] = useState("");
 
-  const { isConnected, webcamData, cccdData, connectWebsocket, sendFrame } =
+  const menuItemsData = {
+    currentCccd,
+    mainRole,
+  };
+
+  const { isConnected, webcamData, connectWebsocket, sendFrame } =
     useWebsocket();
 
   useEffect(() => {
@@ -40,10 +47,14 @@ const Home = () => {
       setMainRole(webcamData.main.role);
       setCurrentCccd(webcamData.main.cccd || "");
     }
-  });
+  }, [webcamData]);
 
   const handleFrameCapture = (frameData: string) => {
     sendFrame(frameData);
+  };
+
+  const handleMenuItemClick = (item: IMenuItem) => {
+    console.log(item);
   };
 
   return (
@@ -127,9 +138,9 @@ const Home = () => {
           />
 
           <InteractionMenu
-            userRole="student"
-            activingMenu={1}
-            onMenuItemClick={() => {}}
+            userRole={mainRole}
+            onMenuItemClick={handleMenuItemClick}
+            itemsData={menuItemsData}
           />
         </motion.div>
       </div>

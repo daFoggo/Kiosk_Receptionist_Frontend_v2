@@ -214,7 +214,7 @@ const WeeklySchedule = ({ works }: IInstitueCalendarTableProps) => {
       <AnimatePresence>
         {isDialogOpen && (
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogContent className="max-w-[98%] rounded-xl sm:rounded-2xl sm:max-w-[70%]">
+            <DialogContent className="max-w-[98%] rounded-xl sm:rounded-2xl sm:max-w-[70%]" onOpenAutoFocus={(e) => e.preventDefault()}>
               <DialogHeader>
                 <motion.div
                   initial={{ y: -20, opacity: 0 }}
