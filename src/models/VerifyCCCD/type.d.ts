@@ -1,7 +1,7 @@
 export type TRole = "guest" | "student" | "staff";
 
 export type IFormData = {
-  role: TRole;
+  role: string;
   fullName: string;
   idNumber: string;
   dateOfBirth: string;

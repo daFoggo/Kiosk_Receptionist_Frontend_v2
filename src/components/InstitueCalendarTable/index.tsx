@@ -189,7 +189,7 @@ const WeeklySchedule = ({ works }: IInstitueCalendarTableProps) => {
             size="icon"
             onClick={() => navigateCalendar(-1)}
             disabled={currentDate <= monday}
-            icon={<ChevronLeft className="h-6 w-6" />}
+            icon={<ChevronLeft className="h-8 w-8" />}
             iconPosition="center"
           ></Button>
           <Button
@@ -204,7 +204,7 @@ const WeeklySchedule = ({ works }: IInstitueCalendarTableProps) => {
             size="icon"
             onClick={() => navigateCalendar(1)}
             disabled={currentDate >= sunday}
-            icon={<ChevronRight className="h-6 w-6" />}
+            icon={<ChevronRight className="h-8 w-8" />}
             iconPosition="center"
           ></Button>
         </motion.div>

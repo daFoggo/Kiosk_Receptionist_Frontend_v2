@@ -79,9 +79,10 @@ const Weather = () => {
             °
           </p>
           <p className="text-xl text-muted-foreground font-bold">
+            CG
             {weatherData.feels_like ? Math.round(weatherData.feels_like) : null}
+            °
           </p>
-          °
         </div>
         <p className="text-xl text-muted-foreground font-semibold">
           {weatherData.description

@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/card";
 import { IEventBannerProps } from "@/models/EventBanner/EventBanner";
 
-export default function EventBanner({ eventData }: IEventBannerProps) {
+const EventBanner = ({ eventData }: IEventBannerProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const currentEvent = eventData[currentIndex];
@@ -225,3 +225,5 @@ const renderField = (icon: React.ReactNode, label: string, value: string) => {
     </div>
   );
 };
+
+export default EventBanner;

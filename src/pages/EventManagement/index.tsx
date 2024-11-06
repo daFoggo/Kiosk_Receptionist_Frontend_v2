@@ -54,7 +54,7 @@ import createColumns from "@/models/EventManagement/columns";
 
 const timeZone = "Asia/Ho_Chi_Minh";
 
-export default function Component() {
+const EventManagement = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [eventData, setEventData] = useState<IEventManagement[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -351,3 +351,5 @@ export default function Component() {
     </div>
   );
 }
+
+export default EventManagement;

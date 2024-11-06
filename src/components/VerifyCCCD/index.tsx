@@ -23,14 +23,19 @@ import { useWebsocket } from "@/contexts/WebsocketContext";
 import { TRole, IFormData } from "@/models/VerifyCCCD/type";
 import { convertFormKey } from "@/utils/Helper/VerifyCCCD";
 
-export default function VerifyCCCD() {
+const VerifyCCCD = () => {
   const [step, setStep] = useState(0);
-  const [role, setRole] = useState<TRole | null>(null);
   const [capturedImages, setCapturedImages] = useState<string[]>([]);
   const [isVerifying, setIsVerifying] = useState(false);
   const webcamRef = useRef<Webcam>(null);
   const cccdData = useWebsocket();
-  const { register, handleSubmit, setValue, watch } = useForm<IFormData>();
+  const { register, handleSubmit, setValue, watch } = useForm<IFormData>({
+    defaultValues: {
+      role: "",
+    },
+  });
+
+  const role = watch("role");
 
   const captureSteps = [
     {
@@ -65,17 +70,21 @@ export default function VerifyCCCD() {
   const capturePhoto = useCallback(() => {
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
-      setCapturedImages((prev) => [...prev, imageSrc]);
-      if (capturedImages.length < 2) {
+      setCapturedImages((prev) => {
+        const newImages = [...prev];
+        newImages[step - 1] = imageSrc;
+        return newImages;
+      });
+
+      if (step < 3) {
         setStep((prev) => prev + 1);
       } else {
         setStep(4);
       }
     }
-  }, [capturedImages]);
+  }, [step]);
 
   const handleRoleSelect = (selectedRole: TRole) => {
-    setRole(selectedRole);
     setValue("role", selectedRole);
     setStep(1);
   };
@@ -83,6 +92,9 @@ export default function VerifyCCCD() {
   const handleBack = () => {
     if (step > 1 && step <= 3) {
       setCapturedImages((prev) => prev.slice(0, -1));
+    }
+    if (step === 1) {
+      setValue("role", "");
     }
     setStep((prev) => prev - 1);
   };
@@ -105,13 +117,13 @@ export default function VerifyCCCD() {
     switch (step) {
       case 0:
         return (
-          <Card className="p-6 space-y-6">
+          <Card className="py-6 px-12 space-y-6 rounded-2xl">
             <h2 className="text-3xl font-bold text-center">
               Chọn vai trò của bạn
             </h2>
             <RadioGroup
               className="grid grid-cols-3 gap-6"
-              value={role || ""}
+              value={role}
               onValueChange={handleRoleSelect as (value: string) => void}
             >
               <Label className="flex flex-col items-center space-y-2 cursor-pointer text-xl">
@@ -289,4 +301,6 @@ export default function VerifyCCCD() {
       {renderStep()}
     </Card>
   );
-}
+};
+
+export default VerifyCCCD;

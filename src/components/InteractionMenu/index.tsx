@@ -146,8 +146,8 @@ const InteractionMenu = ({
                         variant="outline"
                         className={`w-full flex flex-col items-center justify-center p-4 rounded-xl gap-2 h-auto font-semibold ${
                           activingButton === item.id
-                            ? "bg-primary/30 border-2 border-primary hover:bg-primary/40"
-                            : "bg-primary/20 hover:bg-primary/30 text-muted-foreground"
+                            ? "bg-primary/30 border-2 border-primary hover:bg-primary/40 text-primary"
+                            : "bg-primary/20 hover:bg-primary/30 text-secondary-foreground"
                         }`}
                         onClick={() => handleItemClick(item)}
                       >
@@ -189,8 +189,11 @@ const InteractionMenu = ({
       </Card>
 
       <Dialog open={menuState.isDialogOpen} onOpenChange={() => closeAll()}>
-        <DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className="max-w-[80%] h-auto rounded-3xl">
-          <DialogTitle className="text-3xl font-semibold p-0">
+        <DialogContent
+          onOpenAutoFocus={(e) => e.preventDefault()}
+          className="max-w-[80%] h-auto rounded-3xl p-6"
+        >
+          <DialogTitle className="text-3xl font-semibold p-0 mb-6">
             {activeItem?.title}
           </DialogTitle>
           {ActiveComponent && <ActiveComponent {...getComponentProps()} />}
@@ -198,8 +201,12 @@ const InteractionMenu = ({
       </Dialog>
 
       <Sheet open={menuState.isSheetOpen} onOpenChange={() => closeAll()}>
-        <SheetContent onOpenAutoFocus={(e) => e.preventDefault()}>
-          <SheetTitle className="text-3xl font-semibold">
+        <SheetContent
+          onOpenAutoFocus={(e) => e.preventDefault()}
+          side="left"
+          className="sm:max-w-7xl p-6"
+        >
+          <SheetTitle className="text-3xl font-semibold p-0 mb-6">
             {activeItem?.title}
           </SheetTitle>
           {ActiveComponent && <ActiveComponent {...getComponentProps()} />}
@@ -207,8 +214,8 @@ const InteractionMenu = ({
       </Sheet>
 
       <Drawer open={menuState.isDrawerOpen} onOpenChange={() => closeAll()}>
-        <DrawerContent onOpenAutoFocus={(e) => e.preventDefault()}>
-          <DrawerTitle className="text-3xl font-semibold">
+        <DrawerContent onOpenAutoFocus={(e) => e.preventDefault()} className="p-6">
+          <DrawerTitle className="text-3xl font-semibold p-0 mb-6">
             {activeItem?.title}
           </DrawerTitle>
           {ActiveComponent && <ActiveComponent {...getComponentProps()} />}
