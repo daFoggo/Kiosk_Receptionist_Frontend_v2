@@ -1,4 +1,4 @@
-"use client";
+;
 import { SolarDate } from "@nghiavuive/lunar_date_vi";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";

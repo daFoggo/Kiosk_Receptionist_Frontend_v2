@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 
 const RootLayout = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col overflow-hidden user-select-none">
       <main className="flex-grow flex flex-col">
         <div className="w-full max-w-7xl mx-auto flex-grow">
           <Outlet />

@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Webcam from "react-webcam";
@@ -163,8 +161,8 @@ const VerifyCCCD = () => {
                 className="w-full h-full object-cover"
                 videoConstraints={{
                   facingMode: "user",
-                  width: 1920,
-                  height: 1080,
+                  width: 1080,
+                  height: 720,
                 }}
                 mirrored
               />

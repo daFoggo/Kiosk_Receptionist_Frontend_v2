@@ -8,7 +8,7 @@ import router from "./router/router";
 const App = () => {
   return (
     <WebsocketProvider>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
         <RouterProvider router={router} />
       </ThemeProvider>
     </WebsocketProvider>

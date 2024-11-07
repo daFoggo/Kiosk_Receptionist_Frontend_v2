@@ -1,0 +1,17 @@
+/* Disable scrolling */
+.min-h-screen {
+  overflow: hidden;
+}
+
+/* Disable zoom */
+html {
+  touch-action: manipulation;
+}
+
+/* Disable right-click menu */
+.min-h-screen {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}

@@ -495,7 +495,10 @@ const ImageUpload = () => {
                   </Button>
                 </motion.div>
               </DialogTrigger>
-              <DialogContent className="max-w-[98%] rounded-xl sm:rounded-2xl sm:max-w-[35%]" onOpenAutoFocus={(e) => e.preventDefault()}>
+              <DialogContent
+                className="max-w-[98%] rounded-xl sm:rounded-2xl sm:max-w-[35%]"
+                onOpenAutoFocus={(e) => e.preventDefault()}
+              >
                 {currentStep === 1 ? (
                   <ImageUploadStep
                     uploadedImages={uploadedImages}

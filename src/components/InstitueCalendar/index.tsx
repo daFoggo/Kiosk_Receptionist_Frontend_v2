@@ -1,5 +1,4 @@
-"use client";
-import { useEffect, useState, useRef } from "react";
+import { memo, useEffect, useState, useRef, useMemo } from "react";
 import axios from "axios";
 import { toast } from "sonner";
 
@@ -33,7 +32,7 @@ import { getInstitueCalendarIp } from "@/utils/ip";
 import { truncateText } from "@/utils/Helper/common";
 import { Card, CardContent, CardFooter, CardTitle } from "../ui/card";
 
-const InstitueCalendar = () => {
+const InstitueCalendar = memo(() => {
   const calendarRef = useRef<HTMLDivElement>(null);
   const [calendar, setCalendar] = useState<IInstitueCalendar | null>(null);
   const [fullCalendar, setFullCalendar] = useState<IInstitueCalendar[]>([]);
@@ -77,67 +76,73 @@ const InstitueCalendar = () => {
   };
 
   // tim lich sap toi trong ngay
-  const findUpcomingWork = (
-    works: IInstitueCalendar[]
-  ): IInstitueCalendar | null => {
-    const currentTime = new Date();
-    const todayStart = new Date(
-      currentTime.getFullYear(),
-      currentTime.getMonth(),
-      currentTime.getDate(),
-      0,
-      0,
-      0,
-      0
-    ).getTime();
+  const findUpcomingWork = useMemo(
+    () => (
+      works: IInstitueCalendar[]
+    ): IInstitueCalendar | null => {
+      const currentTime = new Date();
+      const todayStart = new Date(
+        currentTime.getFullYear(),
+        currentTime.getMonth(),
+        currentTime.getDate(),
+        0,
+        0,
+        0,
+        0
+      ).getTime();
 
-    const todayEnd = new Date(
-      currentTime.getFullYear(),
-      currentTime.getMonth(),
-      currentTime.getDate(),
-      23,
-      59,
-      59,
-      999
-    ).getTime();
+      const todayEnd = new Date(
+        currentTime.getFullYear(),
+        currentTime.getMonth(),
+        currentTime.getDate(),
+        23,
+        59,
+        59,
+        999
+      ).getTime();
 
-    // lay lich trong gio sap toi. neu khong con thi lay lich cuoi cung trong ngay
-    const todayEvents = works.filter((work: IInstitueCalendar) => {
-      const workTime = new Date(work.iso_datetime.toString()).getTime();
-      return workTime >= todayStart && workTime <= todayEnd;
-    });
+      // lay lich trong gio sap toi. neu khong con thi lay lich cuoi cung trong ngay
+      const todayEvents = works.filter((work: IInstitueCalendar) => {
+        const workTime = new Date(work.iso_datetime.toString()).getTime();
+        return workTime >= todayStart && workTime <= todayEnd;
+      });
 
-    // neu hom nay khong co lich thi tra ve null
-    if (todayEvents.length === 0) {
-      return null;
-    }
+      // neu hom nay khong co lich thi tra ve null
+      if (todayEvents.length === 0) {
+        return null;
+      }
 
-    const currentTimeMillis = currentTime.getTime();
-    const upcomingEvent = todayEvents.find((work: IInstitueCalendar) => {
-      const workTime = new Date(work.iso_datetime.toString()).getTime();
-      return workTime > currentTimeMillis;
-    });
+      const currentTimeMillis = currentTime.getTime();
+      const upcomingEvent = todayEvents.find((work: IInstitueCalendar) => {
+        const workTime = new Date(work.iso_datetime.toString()).getTime();
+        return workTime > currentTimeMillis;
+      });
 
-    return upcomingEvent || todayEvents[todayEvents.length - 1];
-  };
+      return upcomingEvent || todayEvents[todayEvents.length - 1];
+    },
+    []
+  );
 
   // Render functions
-  const renderField = (
-    icon: React.ReactNode,
-    label: string,
-    value: string | undefined
-  ) => {
-    if (!value || value === "") return null;
-    return (
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2 min-w-[150px]font-semibold text-lg">
-          <span className="text-primary">{icon}</span>
-          <Label className="text-muted-foreground">{label}</Label>
+  const renderField = useMemo(
+    () => (
+      icon: React.ReactNode,
+      label: string,
+      value: string | undefined
+    ) => {
+      if (!value || value === "") return null;
+      return (
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 min-w-[150px]font-semibold text-lg">
+            <span className="text-primary">{icon}</span>
+            <Label className="text-muted-foreground">{label}</Label>
+          </div>
+          <Input value={value} readOnly tabIndex={-1} />
         </div>
-        <Input value={value} readOnly tabIndex={-1} />
-      </div>
-    );
-  };
+      );
+    },
+    []
+  );
 
   return (
     <Card className="h-full flex flex-col p-4 rounded-3xl" ref={calendarRef}>
@@ -212,16 +217,17 @@ const InstitueCalendar = () => {
                     ? new Date(
                         calendar?.iso_datetime.toString()
                       ).toLocaleDateString("vi-VN") +
-                        " " +
-                        new Date(
-                          calendar?.iso_datetime.toString()
-                        ).toLocaleTimeString("en-US", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          hour12: false,
-                        })
+                      " " +
+                      new Date(
+                        calendar?.iso_datetime.toString()
+                      ).toLocaleTimeString("en-US", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: false,
+                      })
                     : ""
-                )}
+                )
+              }
                 {renderField(
                   <MapPin className="h-6 w-6 text-primary" />,
                   "Địa điểm:",
@@ -252,6 +258,6 @@ const InstitueCalendar = () => {
       </CardFooter>
     </Card>
   );
-};
+});
 
 export default InstitueCalendar;

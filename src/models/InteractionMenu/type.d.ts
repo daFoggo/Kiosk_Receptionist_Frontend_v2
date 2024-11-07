@@ -23,3 +23,11 @@ export interface IInteractionMenuProps {
   onMenuItemClick?: (item: IMenuItem) => void;
   itemsData: Record<string, any>;
 }
+
+
+export interface IMenuItemProps {
+  item: IMenuItem;
+  onClick: (item: IMenuItem) => void;
+  isActive: boolean;
+
+}

@@ -1,4 +1,4 @@
-export interface IInstitueCalendar {
+ export interface IInstitueCalendar {
   id: number;
   name: string;
   iso_datetime: Date;
