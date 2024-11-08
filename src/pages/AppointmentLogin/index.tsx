@@ -20,11 +20,11 @@ import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const formSchema = z.object({
-  username: z.string().min(2, "Username or email is required"),
-  password: z.string().min(3, "Password is required"),
+  username: z.string().min(2, "Tên người dùng là bắt buộc"),
+  password: z.string().min(3, "Mât khẩu là bắt buộc"),
 });
 
-const Login = () => {
+const AppointmentLogin = () => {
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -39,7 +39,7 @@ const Login = () => {
       const res = await axios.post(`${loginIp}`, values);
       // localStorage.setItem("token", res.data.token);
       // localStorage.setItem("user", JSON.stringify(res.data.data));
-      navigate("/admin");
+      navigate("/appointment");
     } catch (error) {
       console.error(error);
       toast.error("Có lỗi xảy ra trong quá trình đăng nhập");
@@ -109,14 +109,25 @@ const Login = () => {
               )}
 
               <Button type="submit" className="w-full h-10 md:h-11 mt-4">
-                Login
+                Xác nhận
               </Button>
             </form>
           </Form>
+
+          <div className="flex items-center gap-2 mt-6 text-sm md:text-base">
+            <span>Chưa có tài khoản?</span>
+            <Button
+              onClick={() => navigate("/auth/appointment/register")}
+              variant="link"
+              className="p-0 h-auto"
+            >
+              Đăng ký
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>
   );
 };
 
-export default Login;
+export default AppointmentLogin;

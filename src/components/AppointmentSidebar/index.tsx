@@ -1,5 +1,4 @@
-import { FaReact } from "react-icons/fa";
-import { ChevronUp, LogOut, Sparkles, User2, UserPen } from "lucide-react";
+import { ChevronUp, LogOut, Sparkles, User2, } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -24,7 +23,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-const RootSidebar = () => {
+const AdminSidebar = () => {
   const [user, setUser] = useState({
     id: "",
     username: "User name",
@@ -44,7 +43,7 @@ const RootSidebar = () => {
   const handleLogout = (e: any) => {
     e.preventDefault();
     localStorage.removeItem("token");
-    navigate("/auth/login");
+    navigate("/auth/appointment/login");
   };
 
   return (
@@ -55,10 +54,10 @@ const RootSidebar = () => {
             <SidebarMenu className="font-semibold">
               <SidebarMenuItem key="header">
                 <SidebarMenuButton className="lg" asChild>
-                  <a href="/admin/identify-data">
+                  <a href="/appointment/">
                     <Sparkles size={24} />
                     <span className="text-xl font-semibold font-clash">
-                      Kiosk Receptionist
+                      Kiosk Appointment
                     </span>
                   </a>
                 </SidebarMenuButton>
@@ -120,4 +119,4 @@ const RootSidebar = () => {
   );
 };
 
-export default RootSidebar;
+export default AdminSidebar;

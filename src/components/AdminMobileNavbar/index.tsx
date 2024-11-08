@@ -23,10 +23,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import ThemeToggle from "@/components/ThemeToggle";
-import { menuItems } from "@/components/RootSidebar/constant";
+import { menuItems } from "@/components/AdminSidebar/constant";
 import { useNavigate } from "react-router-dom";
 
-const MobileRootNavbar = () => {
+const AdminMobileNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState({
     id: "",
@@ -39,7 +39,7 @@ const MobileRootNavbar = () => {
   const handleLogout = (e: any) => {
     e.preventDefault();
     localStorage.removeItem("token");
-    navigate("/auth/login");
+    navigate("/auth/admin/login");
     setIsOpen(false);
   };
 
@@ -49,7 +49,7 @@ const MobileRootNavbar = () => {
         <a href="/" className="flex items-center space-x-2">
           <Sparkles size={24} />
           <span className="text-xl font-semibold font-clash">
-            Kiosk Receptionist
+            Kiosk Management
           </span>
         </a>
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -60,7 +60,7 @@ const MobileRootNavbar = () => {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-[300px] sm:w-[400px]">
-            <SheetTitle>Kiosk Receptionist</SheetTitle>
+            <SheetTitle>Kiosk Management</SheetTitle>
             <nav className="flex flex-col h-full">
               <div className="flex-1 py-4">
                 <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight">
@@ -106,4 +106,4 @@ const MobileRootNavbar = () => {
   );
 };
 
-export default MobileRootNavbar;
+export default AdminMobileNavbar;

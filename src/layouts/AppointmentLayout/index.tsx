@@ -1,12 +1,12 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import AdminMobileNavbar from "@/components/AdminMobileNavbar";
-import AdminSidebar from "@/components/AdminSidebar";
+import AppointmentMobileNavbar from "@/components/AppointmentMobileNavbar";
+import AppointmentSidebar from "@/components/AppointmentSidebar";
 import { isTokenValid } from "@/utils/Helper/common";
 import { useEffect } from "react";
 
-const ManageLayout = () => {
+const AppointmentLayout = () => {
   const navigate = useNavigate();
 
   // useEffect(() => {
@@ -14,8 +14,11 @@ const ManageLayout = () => {
   // }, [navigate])
 
   useEffect(() => {
-    if (location.pathname === "/admin" || location.pathname === "/admin/") {
-      navigate("/admin/identify-data");
+    if (
+      location.pathname === "/appointment" ||
+      location.pathname === "/appointment/"
+    ) {
+      navigate("/appointment/my-appointments");
     }
   }, [location, navigate]);
 
@@ -25,15 +28,15 @@ const ManageLayout = () => {
     if (tokenCheck.success) {
       navigate("/dashboard");
     } else {
-      navigate("/auth/admin/login");
+      navigate("/auth/appointment/login");
     }
   };
 
   return (
     <SidebarProvider>
       <div className="flex flex-col md:flex-row min-h-screen w-full">
-        <AdminMobileNavbar />
-        <AdminSidebar />
+        <AppointmentMobileNavbar />
+        <AppointmentSidebar />
         <main className="flex-grow w-full p-6">
           <div className="w-full">
             <Outlet />
@@ -46,4 +49,4 @@ const ManageLayout = () => {
   );
 };
 
-export default ManageLayout;
+export default AppointmentLayout;

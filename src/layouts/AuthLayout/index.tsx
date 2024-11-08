@@ -9,7 +9,7 @@ const AuthLayout = () => {
 
   useEffect(() => {
     if (location.pathname === "/auth" || location.pathname === "/auth/") {
-      navigate("/auth/login");
+      navigate("/auth/admin/login");
     }
   }, [location, navigate]);
 

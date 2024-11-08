@@ -1,4 +1,3 @@
-;
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -39,7 +38,7 @@ const formSchema = z
     path: ["confirmPassword"],
   });
 
-const Register = () => {
+const AdminRegister = () => {
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -81,15 +80,19 @@ const Register = () => {
                 name="fullName"
                 render={({ field }) => (
                   <FormItem className="space-y-1">
-                    <FormLabel className="text-sm md:text-base">Full name</FormLabel>
+                    <FormLabel className="text-sm md:text-base">
+                      Full name
+                    </FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="Enter full name" 
-                        {...field} 
+                      <Input
+                        placeholder="Enter full name"
+                        {...field}
                         className="h-10 md:h-11"
                       />
                     </FormControl>
-                    <FormDescription className="text-xs md:text-sm">Your real name</FormDescription>
+                    <FormDescription className="text-xs md:text-sm">
+                      Your real name
+                    </FormDescription>
                     <FormMessage className="text-xs md:text-sm" />
                   </FormItem>
                 )}
@@ -99,11 +102,13 @@ const Register = () => {
                 name="email"
                 render={({ field }) => (
                   <FormItem className="space-y-1">
-                    <FormLabel className="text-sm md:text-base">Email</FormLabel>
+                    <FormLabel className="text-sm md:text-base">
+                      Email
+                    </FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="Enter email" 
-                        {...field} 
+                      <Input
+                        placeholder="Enter email"
+                        {...field}
                         className="h-10 md:h-11"
                       />
                     </FormControl>
@@ -116,11 +121,13 @@ const Register = () => {
                 name="username"
                 render={({ field }) => (
                   <FormItem className="space-y-1">
-                    <FormLabel className="text-sm md:text-base">User name</FormLabel>
+                    <FormLabel className="text-sm md:text-base">
+                      User name
+                    </FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="Enter user name" 
-                        {...field} 
+                      <Input
+                        placeholder="Enter user name"
+                        {...field}
                         className="h-10 md:h-11"
                       />
                     </FormControl>
@@ -136,7 +143,9 @@ const Register = () => {
                 name="password"
                 render={({ field }) => (
                   <FormItem className="space-y-1">
-                    <FormLabel className="text-sm md:text-base">Password</FormLabel>
+                    <FormLabel className="text-sm md:text-base">
+                      Password
+                    </FormLabel>
                     <FormControl>
                       <Input
                         type="password"
@@ -154,7 +163,9 @@ const Register = () => {
                 name="confirmPassword"
                 render={({ field }) => (
                   <FormItem className="space-y-1">
-                    <FormLabel className="text-sm md:text-base">Confirm password</FormLabel>
+                    <FormLabel className="text-sm md:text-base">
+                      Confirm password
+                    </FormLabel>
                     <FormControl>
                       <Input
                         type="password"
@@ -173,11 +184,11 @@ const Register = () => {
               </Button>
             </form>
           </Form>
-          
+
           <div className="flex items-center gap-2 mt-6 text-sm md:text-base">
             <span>Already have an account?</span>
             <Button
-              onClick={() => navigate("/auth/login")}
+              onClick={() => navigate("/auth/admin/login")}
               variant="link"
               className="p-0 h-auto"
             >
@@ -190,4 +201,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default AdminRegister;

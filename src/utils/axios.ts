@@ -30,7 +30,7 @@ axiosAuth.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.clear();
-      window.location.href = "/auth/login";
+      window.location.href = "/auth/admin/login";
     }
     return Promise.reject(error);
   }
