@@ -35,7 +35,7 @@ const HomeWebcam = memo(({ isConnected, onFrameCapture, webcamData }: IHomeWebca
 
   const handleWebcamError = useCallback((error: string | DOMException) => {
     console.error("Webcam error:", error);
-    setError("Failed to access webcam. Please check your permissions.");
+    setError("Chưa cấp quyền truy cập Webcam");
   }, []);
 
   const totalDetectedPeople = (webcamData?.main ? 1 : 0) + (webcamData?.others?.length || 0);

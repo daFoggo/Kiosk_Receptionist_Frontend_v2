@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import MakeAppointment from "@/components/MakeAppointment"
+import CreateModifyAppointment from "@/components/CreateModifyAppointment"
 import {
   formatWorkingDays,
   formatWorkingHours,
@@ -63,7 +63,7 @@ export default function DepartmentCard(department: IDepartMentCardProps) {
         </CardContent>
 
         <CardFooter className="mt-auto pt-4 z-10">
-          <MakeAppointment />
+          <CreateModifyAppointment />
         </CardFooter>
       </Card>
     </motion.div>
