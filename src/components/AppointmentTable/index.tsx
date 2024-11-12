@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   format,
   startOfMonth,
   endOfMonth,
   eachDayOfInterval,
-  isSameMonth,
   isToday,
   startOfWeek,
   endOfWeek,
@@ -15,136 +14,206 @@ import {
   addDays,
   eachHourOfInterval,
   startOfDay,
-  endOfDay,
   addWeeks,
   addMonths,
+  differenceInMinutes,
 } from "date-fns";
 import { vi } from "date-fns/locale";
+
 import {
   Calendar as CalendarIcon,
-  Clock,
-  MapPin,
-  Users,
-  AlertCircle,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import AppointmentCard from "../AppointmentCard";
 
-const VIEWS = {
-  DAY: "ngày",
-  WEEK: "tuần",
-  MONTH: "tháng",
-};
+import { VIEWS } from "./constant";
+import { IAppointment } from "@/models/AppointmentTable/type";
 
-const getStatusColor = (status) => {
-  switch (status) {
-    case "Đã xác nhận":
-      return "bg-green-100 text-green-800 border-green-200";
-    case "Chờ xác nhận":
-      return "bg-yellow-100 text-yellow-800 border-yellow-200";
-    case "Đã hủy":
-      return "bg-red-100 text-red-800 border-red-200";
-    default:
-      return "bg-gray-100 text-gray-800 border-gray-200";
-  }
-};
-
-const AppointmentCard = ({ appointment }) => (
-  <div
-    className={`p-2 rounded-lg border ${getStatusColor(
-      appointment.trang_thai
-    )} mb-2 text-xs md:text-sm`}
-  >
-    <div className="font-semibold truncate">{appointment.muc_dich}</div>
-    <div className="space-y-1 mt-1">
-      <div className="flex items-center gap-1">
-        <Clock className="h-3 w-3 md:h-4 md:w-4" />
-        {format(parseISO(appointment.ngay_gio_bat_dau), "HH:mm")} -
-        {format(parseISO(appointment.ngay_gio_ket_thuc), "HH:mm")}
-      </div>
-      <div className="flex items-center gap-1">
-        <MapPin className="h-3 w-3 md:h-4 md:w-4" />
-        <span className="truncate">{appointment.dia_diem}</span>
-      </div>
-    </div>
-  </div>
-);
-
-const DayView = ({ date, appointments }) => {
+const DayView = ({
+  date,
+  appointments,
+}: {
+  date: Date;
+  appointments: IAppointment[];
+}) => {
   const hours = eachHourOfInterval({
     start: startOfDay(date).setHours(7),
     end: startOfDay(date).setHours(19),
   });
 
-  const getAppointmentsForHour = (hour) => {
-    return appointments.filter((apt) => {
-      const startTime = parseISO(apt.ngay_gio_bat_dau);
-      return (
-        isSameDay(startTime, date) &&
-        format(startTime, "HH") === format(hour, "HH")
-      );
-    });
+  const getAppointmentsForDay = () => {
+    return appointments.filter((apt) =>
+      isSameDay(parseISO(apt.ngay_gio_bat_dau), date)
+    );
+  };
+
+  const calculateAppointmentPosition = (appointment: IAppointment) => {
+    const startTime = parseISO(appointment.ngay_gio_bat_dau);
+    const endTime = parseISO(appointment.ngay_gio_ket_thuc);
+    const dayStart = startOfDay(date).setHours(7);
+    const top = (differenceInMinutes(startTime, dayStart) / 60) * 80; // 1 hour = 80px
+    const height = (differenceInMinutes(endTime, startTime) / 60) * 80;
+    return { top, height };
   };
 
   return (
-    <div className="space-y-2 w-full">
-      {hours.map((hour) => {
-        const hourAppointments = getAppointmentsForHour(hour);
-        return (
-          <div key={hour.toString()} className="grid grid-cols-12 gap-2">
-            <div className="col-span-2 py-2 text-left text-muted-foreground text-xs md:text-sm">
+    <div className="overflow-x-auto">
+      <div className="grid grid-cols-[100px_1fr] gap-2 min-w-[600px]">
+        <div className="sticky left-0 bg-background z-10">
+          <div className="h-16"></div>
+          {hours.map((hour) => (
+            <div
+              key={hour.toString()}
+              className="h-20 border-b text-sm text-muted-foreground py-1"
+            >
               {format(hour, "HH:mm")}
             </div>
-            <div className="col-span-10 min-h-[60px] border-b-2 py-2">
-              {hourAppointments.map((apt) => (
-                <AppointmentCard key={apt.id} appointment={apt} />
-              ))}
-            </div>
+          ))}
+        </div>
+        <div>
+          <div
+            className={`h-16 flex items-center justify-center text-center p-1 md:p-2 font-semibold text-sm rounded-lg ${
+              isToday(date) ? "bg-primary text-primary-foreground" : "bg-muted"
+            }`}
+          >
+            {format(date, "EEEE", { locale: vi })}
+            <br />
+            {format(date, "dd/MM")}
           </div>
-        );
-      })}
+          <div
+            className="relative"
+            style={{ height: `${hours.length * 80}px` }}
+          >
+            {hours.map((hour, index) => (
+              <div
+                key={hour.toString()}
+                className="absolute w-full border-b border-border"
+                style={{ top: `${index * 80}px`, height: "80px" }}
+              ></div>
+            ))}
+            {getAppointmentsForDay().map((apt) => {
+              const { top, height } = calculateAppointmentPosition(apt);
+              return (
+                <div
+                  key={apt.id}
+                  className="absolute left-0 right-0 px-1"
+                  style={{ top: `${top}px`, height: `${height}px` }}
+                >
+                  <AppointmentCard
+                    appointment={apt}
+                    style={{ height: "100%" }}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-const WeekView = ({ date, appointments }) => {
+const WeekView = ({
+  date,
+  appointments,
+}: {
+  date: Date;
+  appointments: IAppointment[];
+}) => {
   const weekDays = eachDayOfInterval({
     start: startOfWeek(date, { weekStartsOn: 1 }),
     end: endOfWeek(date, { weekStartsOn: 1 }),
   });
 
-  return (
-    <div className="grid grid-cols-7 gap-2 md:gap-4 min-w-[700px]">
-      {weekDays.map((day) => {
-        const dayAppointments = appointments.filter((apt) =>
-          isSameDay(parseISO(apt.ngay_gio_bat_dau), day)
-        );
+  const hours = eachHourOfInterval({
+    start: startOfDay(date).setHours(7),
+    end: startOfDay(date).setHours(19),
+  });
 
-        return (
-          <div key={day.toString()} className="min-h-[200px]">
+  const getAppointmentsForDay = (day: Date) => {
+    return appointments.filter((apt) =>
+      isSameDay(parseISO(apt.ngay_gio_bat_dau), day)
+    );
+  };
+
+  const calculateAppointmentPosition = (appointment: IAppointment) => {
+    const startTime = parseISO(appointment.ngay_gio_bat_dau);
+    const endTime = parseISO(appointment.ngay_gio_ket_thuc);
+    const dayStart = startOfDay(startTime).setHours(7);
+    const top = (differenceInMinutes(startTime, dayStart) / 60) * 80; // 80px per hour
+    const height = (differenceInMinutes(endTime, startTime) / 60) * 80;
+    return { top, height };
+  };
+
+  return (
+    <div className="overflow-x-auto">
+      <div className="grid grid-cols-8 gap-2 min-w-[800px]">
+        <div className="sticky left-0 bg-background z-10">
+          <div className="h-16"></div>
+          {hours.map((hour) => (
             <div
-              className={`text-center p-1 md:p-2 font-semibold text-xs md:text-sm ${
-                isToday(day) ? "bg-primary/20 rounded-lg" : ""
+              key={hour.toString()}
+              className="h-20 border-b text-sm text-muted-foreground py-1"
+            >
+              {format(hour, "HH:mm")}
+            </div>
+          ))}
+        </div>
+        {weekDays.map((day) => (
+          <div key={day.toString()} className="flex-1">
+            <div
+              className={`h-16 flex items-center p-1 sm:p-2 text-center justify-center font-semibold text-sm rounded-lg ${
+                isToday(day) ? "bg-primary text-primary-foreground" : "bg-muted"
               }`}
             >
               {format(day, "EE", { locale: vi })}
+              <br />
+              {format(day, "dd")}
             </div>
-            <div className="p-1 md:p-2">
-              {dayAppointments.map((apt) => (
-                <AppointmentCard key={apt.id} appointment={apt} />
+            <div
+              className="relative"
+              style={{ height: `${hours.length * 80}px` }}
+            >
+              {hours.map((hour, index) => (
+                <div
+                  key={hour.toString()}
+                  className="absolute w-full border-b border-border"
+                  style={{ top: `${index * 80}px`, height: "80px" }}
+                ></div>
               ))}
+              {getAppointmentsForDay(day).map((apt) => {
+                const { top, height } = calculateAppointmentPosition(apt);
+                return (
+                  <div
+                    key={apt.id}
+                    className="absolute left-0 right-0 px-1"
+                    style={{ top: `${top}px`, height: `${height}px` }}
+                  >
+                    <AppointmentCard
+                      appointment={apt}
+                      style={{ height: "100%" }}
+                    />
+                  </div>
+                );
+              })}
             </div>
           </div>
-        );
-      })}
+        ))}
+      </div>
     </div>
   );
 };
 
-const MonthView = ({ date, appointments }) => {
+const MonthView = ({
+  date,
+  appointments,
+}: {
+  date: Date;
+  appointments: IAppointment[];
+}) => {
   const daysInMonth = eachDayOfInterval({
     start: startOfMonth(date),
     end: endOfMonth(date),
@@ -155,7 +224,7 @@ const MonthView = ({ date, appointments }) => {
       {["T2", "T3", "T4", "T5", "T6", "T7", "CN"].map((day) => (
         <div
           key={day}
-          className="text-center font-semibold p-1 md:p-2 bg-gray-50 rounded text-xs md:text-sm"
+          className="text-center font-semibold p-1 md:p-2 bg-muted rounded text-xs md:text-sm"
         >
           {day}
         </div>
@@ -170,7 +239,7 @@ const MonthView = ({ date, appointments }) => {
           <div
             key={day.toString()}
             className={`min-h-[80px] md:min-h-[120px] p-1 md:p-2 border rounded-lg ${
-              isToday(day) ? "border-primary" : "border-gray-200"
+              isToday(day) ? "border-primary" : "border-border"
             }`}
           >
             <div className="font-semibold mb-1 md:mb-2 text-xs md:text-sm">
@@ -188,11 +257,15 @@ const MonthView = ({ date, appointments }) => {
   );
 };
 
-const AppointmentTable = ({ appointments }) => {
+const AppointmentTable = ({
+  appointments,
+}: {
+  appointments: IAppointment[];
+}) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [currentView, setCurrentView] = useState(VIEWS.WEEK);
 
-  const navigateDate = (amount) => {
+  const navigateDate = (amount: number) => {
     switch (currentView) {
       case VIEWS.DAY:
         setCurrentDate((prev) => addDays(prev, amount));
@@ -236,9 +309,10 @@ const AppointmentTable = ({ appointments }) => {
               variant="outline"
               size="sm"
               onClick={() => navigateDate(-1)}
-              iconPosition="center"
-              icon={<ChevronLeft className="h-4 w-4" />}
-            ></Button>
+              className="p-0 w-9 h-9"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
             <Button variant="outline" size="sm" onClick={goToToday}>
               {getTodayLabel()}
             </Button>
@@ -246,9 +320,10 @@ const AppointmentTable = ({ appointments }) => {
               variant="outline"
               size="sm"
               onClick={() => navigateDate(1)}
-              icon={<ChevronRight className="h-4 w-4" />}
-              iconPosition="center"
-            ></Button>
+              className="p-0 w-9 h-9"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
           </div>
         </div>
         <div className="flex items-center gap-2">

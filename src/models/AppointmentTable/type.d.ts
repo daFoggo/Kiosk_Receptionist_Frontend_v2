@@ -11,3 +11,7 @@ export interface IAppointment {
     cccd: string;
   }[];
 }
+
+export interface IAppointmentCardProps {
+  appointment: IAppointment;
+}
