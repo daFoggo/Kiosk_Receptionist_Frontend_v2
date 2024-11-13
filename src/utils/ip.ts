@@ -17,8 +17,8 @@ export const getEventsIp = `${httpIp}/get-events`;
 export const putEventIp = `${httpIp}/put-event`;
 export const deleteEventIp = `${httpIp}/delete-event`;
 
-export const getStudentCalendarIp = `${httpIp}/student-calendar/get`;
-export const getInstructorCalendarIp = `${httpIp}/instructor-calendar/get`;
-export const getAllStudentCalendarIp = `${httpIp}/all-student-calendar/get`;
-export const getAllInstructorCalendarIp = `${httpIp}/all-instructor-calendar/get`;
+export const getStudentCalendarIp = `${httpIp}/class-calendar/get/by-role`;
+export const getInstructorCalendarIp = `${httpIp}/instructor-calendar/get/by-role`;
+export const getAllStudentCalendarIp = `${httpIp}/all-class-calendar/get/by-role`;
+export const getAllInstructorCalendarIp = `${httpIp}/all-instructor-calendar/get/by-role`;
 

@@ -27,12 +27,12 @@ const Home = () => {
     },
   ]);
 
-  const [mainRole, setMainRole] = useState("student");
-  const [currentCccd, setCurrentCccd] = useState("123456789");
+  const [mainRole, setMainRole] = useState("guest");
+  const [currentCccd, setCurrentCccd] = useState("");
 
   const menuItemsData = {
+    currentRole: mainRole,
     currentCccd,
-    mainRole,
   };
 
   const { isConnected, webcamData, connectWebsocket, sendFrame } =

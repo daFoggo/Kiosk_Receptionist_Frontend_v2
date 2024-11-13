@@ -78,7 +78,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(buttonVariants({ variant, size, className }), "gap-2")}
         ref={ref}
         whileTap={{ scale: 0.95 }}
-        transition={{ type: "spring", stiffness: 400, damping: 17 }}
+        transition={{ type: "spring", stiffness: 300, damping: 17 }}
         {...props}
       >
         {content}

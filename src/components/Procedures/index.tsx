@@ -1,6 +1,6 @@
 const Procedures = () => {
 
-  return <div>Procedures</div>;
+  return <div>Thủ tục hành chính</div>;
 
 };
 

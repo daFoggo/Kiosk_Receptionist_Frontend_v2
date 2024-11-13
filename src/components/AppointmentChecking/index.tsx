@@ -1,4 +1,4 @@
-;
+"use client";
 
 import { useState } from "react";
 import { useZxing } from "react-zxing";
@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { CheckCircle } from "lucide-react";
 
-const AppointmentChecking = () => {
+export default function AppointmentChecking() {
   const [result, setResult] = useState("");
   const [isScanning, setIsScanning] = useState(false);
 
@@ -91,33 +91,37 @@ const AppointmentChecking = () => {
   };
 
   return (
-    <Card className="flex flex-col justify-center items-center space-y-6 p-6 bg-gradient-to-br bg-primary/10 rounded-2xl">
-      <CardContent className="p-6 space-y-6 w-full">
+    <Card className="w-full max-w-full mx-auto bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl overflow-hidden">
+      <CardContent className="p-4 sm:p-6 space-y-6">
         {!result ? (
-          <div className="w-full flex flex-col items-center justify-between gap-4">
+          <div className="flex flex-col items-center justify-between gap-4">
             {isScanning ? (
-                <div className="relative aspect-square rounded-2xl overflow-hidden">
+              <div className="relative aspect-square w-full rounded-2xl overflow-hidden">
                 <video
                   ref={ref}
                   className="w-full h-full object-cover [transform:scaleX(-1)]"
                 />
-                </div>
+              </div>
             ) : (
-              <></>
+              <div className="aspect-square w-full bg-background rounded-2xl flex items-center justify-center">
+                <p className="text-muted-foreground text-lg sm:text-xl font-bold text-center px-4">
+                  Camera đang hoạt động bình thường
+                </p>
+              </div>
             )}
 
-            <div className="flex justify-center">
+            <div className="flex justify-center w-full">
               {!isScanning ? (
                 <Button
                   onClick={handleStartScan}
-                  className="text-xl font-semibold px-8 py-6 bg-primary"
+                  className="text-lg sm:text-xl font-semibold px-6 py-4 sm:px-8 sm:py-6 bg-primary w-full"
                 >
                   Bắt đầu quét
                 </Button>
               ) : (
                 <Button
                   onClick={handleStopScan}
-                  className="text-xl font-semibold px-8 py-6 bg-red-500 hover:bg-red-600"
+                  className="text-lg sm:text-xl font-semibold px-6 py-4 sm:px-8 sm:py-6 bg-red-500 hover:bg-red-600 w-full"
                 >
                   Hủy
                 </Button>
@@ -129,25 +133,31 @@ const AppointmentChecking = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="p-6 bg-white/80 backdrop-blur-sm rounded-xl shadow-sm flex gap-6 flex-col items-center justify-center w-full"
+            className="p-4 sm:p-6 bg-white/80 backdrop-blur-sm rounded-xl shadow-sm flex gap-4 sm:gap-6 flex-col items-center justify-center w-full"
           >
-            <Alert className="mt-4 p-6 shadow-sm space-x-6 border-2 truncate">
-              <CheckCircle className="mt-4 h-8 w-8 text-primary" />
-              <AlertTitle className="text-2xl font-semibold text-primary">Quét QR thành công</AlertTitle>
-              <AlertDescription className="text-xl font-semibold text-muted-foreground truncate ">
+            <Alert className="mt-2 p-4 sm:p-6 shadow-sm space-y-2 border-2 w-full">
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+                <AlertTitle className="text-lg sm:text-xl font-semibold text-primary">
+                  Quét QR thành công
+                </AlertTitle>
+              </div>
+              <AlertDescription className="text-lg font-semibold text-muted-foreground">
                 Đã quét QR và liên lạc tới bên cần hẹn thành công. Quý khách vui
                 lòng đợi nhân viên tiếp đón.
               </AlertDescription>
             </Alert>
-            <h1 className="font-semibold text-primary text-2xl">
-              Kết quả quét
-            </h1>
-            <p className="text-secondary-foreground break-words text-xl font-semibold truncate">
-              {formatResult(result)}
-            </p>
+            <div className="w-full space-y-2">
+              <h2 className="font-semibold text-primary text-lg sm:text-xl">
+                Kết quả quét
+              </h2>
+              <p className="text-secondary-foreground text-base sm:text-lg font-semibold break-words">
+                {formatResult(result)}
+              </p>
+            </div>
             <Button
               onClick={handleStartScan}
-              className="w-full text-xl font-semibold px-8 py-6"
+              className="w-full text-lg sm:text-xl font-semibold px-6 py-4 sm:px-8 sm:py-6"
             >
               Quét lại
             </Button>
@@ -157,6 +167,3 @@ const AppointmentChecking = () => {
     </Card>
   );
 }
-
-
-export default AppointmentChecking;

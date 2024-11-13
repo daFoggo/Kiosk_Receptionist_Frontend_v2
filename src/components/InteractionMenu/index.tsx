@@ -3,9 +3,21 @@ import { AnimatePresence, motion } from "framer-motion";
 import { BookMarked } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogTitle } from "../ui/dialog";
-import { Sheet, SheetContent, SheetTitle } from "../ui/sheet";
-import { Drawer, DrawerContent, DrawerTitle } from "../ui/drawer";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "../ui/sheet";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "../ui/drawer";
 import {
   IInteractionMenuProps,
   IMenuItem,
@@ -14,6 +26,7 @@ import {
 } from "@/models/InteractionMenu/type";
 import { interactionMenu } from "./constant";
 import { gridVariants, itemVariants, activeButtonVariants } from "./motion";
+import { DialogDescription } from "@radix-ui/react-dialog";
 
 const MenuItem = memo(({ item, onClick, isActive }: IMenuItemProps) => (
   <motion.div key={`${item.id}`} variants={itemVariants} layout>
@@ -199,9 +212,14 @@ const InteractionMenu = memo(
             onOpenAutoFocus={(e) => e.preventDefault()}
             className="max-w-[80%] h-auto rounded-3xl p-6"
           >
-            <DialogTitle className="text-3xl font-semibold p-0 mb-6">
-              {activeItem?.title}
-            </DialogTitle>
+            <DialogHeader className="mb-6">
+              <DialogTitle className="text-3xl font-semibold">
+                {activeItem?.title}
+              </DialogTitle>
+              <DialogDescription className="text-xl text-muted-foreground  font-semibold">
+                {activeItem?.description}
+              </DialogDescription>
+            </DialogHeader>
             {ActiveComponent && <ActiveComponent {...getComponentProps()} />}
             <DialogFooter>
               <Button
@@ -221,9 +239,14 @@ const InteractionMenu = memo(
             side="left"
             className="sm:max-w-7xl p-6"
           >
-            <SheetTitle className="text-3xl font-semibold p-0 mb-6">
-              {activeItem?.title}
-            </SheetTitle>
+            <SheetHeader className="mb-6">
+              <SheetTitle className="text-3xl font-semibold">
+                {activeItem?.title}
+              </SheetTitle>
+              <SheetDescription className="text-xl text-muted-foreground  font-semibold">
+                {activeItem?.description}
+              </SheetDescription>
+            </SheetHeader>
             {ActiveComponent && <ActiveComponent {...getComponentProps()} />}
           </SheetContent>
         </Sheet>
@@ -231,11 +254,16 @@ const InteractionMenu = memo(
         <Drawer open={menuState.isDrawerOpen} onOpenChange={closeAll}>
           <DrawerContent
             onOpenAutoFocus={(e) => e.preventDefault()}
-            className="p-6"
+            className="p-6 h-[75%]"
           >
-            <DrawerTitle className="text-3xl font-semibold p-0 mb-6">
-              {activeItem?.title}
-            </DrawerTitle>
+            <DrawerHeader className="mb-6">
+              <DrawerTitle className="text-3xl font-semibold">
+                {activeItem?.title}
+              </DrawerTitle>
+              <DialogDescription className="text-xl text-muted-foreground font-semibold">
+                {activeItem?.description}
+              </DialogDescription>
+            </DrawerHeader>
             {ActiveComponent && <ActiveComponent {...getComponentProps()} />}
           </DrawerContent>
         </Drawer>

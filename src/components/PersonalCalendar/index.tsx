@@ -61,23 +61,31 @@ const PersonalCalendar = ({
     }
   }, [viewMode]);
 
+  useEffect(() => {
+    getCalendarData();
+  }, [currentRole, currentCccd]);
+
   const getCalendarData = async (startDate?: Date) => {
     if (!currentRole || !currentCccd) return;
 
     try {
+      console.log("Getting schedule data...");
       setIsLoading(true);
       let url =
-        currentRole === "STUDENT"
-          ? `${getStudentCalendarIp}/${currentCccd}`
-          : `${getInstructorCalendarIp}/123456789`;
+        currentRole === "student"
+          ? `${getStudentCalendarIp}?cccd_id=${currentCccd}&role=student`
+          : `${getInstructorCalendarIp}?cccd_id=${currentCccd}&role=officer`;
 
       if (startDate) {
-        const formattedDate = formatDateForApi(startDate);
-        url += `?ngaybatdau=${formattedDate}`;
+        const endDate = new Date(startDate);
+        endDate.setDate(endDate.getDate() + 6);
+        const formattedStartDate = formatDateForApi(startDate);
+        const formattedEndDate = formatDateForApi(endDate);
+        url += `?ngaybatdau=${formattedStartDate}&ngayketthuc=${formattedEndDate}`;
       }
 
       const response = await axios.get(url);
-      setCalendarData(response.data);
+      setCalendarData(response.data.payload);
     } catch (error) {
       console.error("Error getting schedule data:", error);
     } finally {
@@ -148,7 +156,7 @@ const PersonalCalendar = ({
           transition={{ duration: 0.3 }}
           className="pr-4"
         >
-          {hours.map((hour) => (
+          {hours?.map((hour) => (
             <motion.div
               key={hour}
               initial={{ y: 20, opacity: 0 }}
@@ -171,7 +179,7 @@ const PersonalCalendar = ({
                 )}
 
                 {calendarData
-                  .filter((course) => {
+                  ?.filter((course) => {
                     const startDate = parseDate(course.startTime);
                     return (
                       startDate.getHours() === parseInt(hour) &&
@@ -180,7 +188,7 @@ const PersonalCalendar = ({
                       startDate.getFullYear() === currentDate.getFullYear()
                     );
                   })
-                  .map((course, index) => {
+                  ?.map((course, index) => {
                     const startDate = parseDate(course.startTime);
                     const endDate = parseDate(course.endTime);
                     const duration =
@@ -226,7 +234,7 @@ const PersonalCalendar = ({
       <div className="w-full min-w-[1200px] ">
         <div className="flex sticky top-0 bg-background z-10">
           <div className="w-24"></div>
-          {weekDays.map((day, index) => (
+          {weekDays?.map((day, index) => (
             <div
               key={index}
               className={`flex-1 text-center p-2 text-xl font-semibold min-w-[150px]
@@ -237,15 +245,12 @@ const PersonalCalendar = ({
             </div>
           ))}
         </div>
-        {hours.map((hour) => (
-          <div
-            key={hour}
-            className="flex items-stretch border-t-2 h-20"
-          >
+        {hours?.map((hour) => (
+          <div key={hour} className="flex items-stretch border-t-2 h-20">
             <span className="w-24 text-xl text-muted-foreground py-2 sticky left-0 bg-background z-20">
               {hour}
             </span>
-            {weekDays.map((day, dayIndex) => (
+            {weekDays?.map((day, dayIndex) => (
               <div
                 key={dayIndex}
                 className="flex-1 relative border-l-2 border-gray-100 min-w-[150px]"
@@ -254,7 +259,7 @@ const PersonalCalendar = ({
                   <div className="absolute inset-0 bg-primary/10 z-0"></div>
                 )}
                 {calendarData
-                  .filter((course) => {
+                  ?.filter((course) => {
                     const startDate = parseDate(course.startTime);
                     return (
                       startDate.getHours() === parseInt(hour) &&
@@ -263,7 +268,7 @@ const PersonalCalendar = ({
                       startDate.getFullYear() === day.getFullYear()
                     );
                   })
-                  .map((course, index) => {
+                  ?.map((course, index) => {
                     const startDate = parseDate(course.startTime);
                     const endDate = parseDate(course.endTime);
                     const duration =
@@ -302,6 +307,7 @@ const PersonalCalendar = ({
       <ScrollBar orientation="horizontal" />
     </ScrollArea>
   );
+
 
   return (
     <Card className="w-full h-full p-6">

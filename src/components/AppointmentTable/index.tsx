@@ -224,7 +224,7 @@ const MonthView = ({
       {["T2", "T3", "T4", "T5", "T6", "T7", "CN"].map((day) => (
         <div
           key={day}
-          className="text-center font-semibold p-1 md:p-2 bg-muted rounded text-xs md:text-sm"
+          className="text-center font-semibold p-1 md:p-2 bg-muted text-xs md:text-sm rounded-lg"
         >
           {day}
         </div>

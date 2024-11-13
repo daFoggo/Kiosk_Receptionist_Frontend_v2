@@ -3,6 +3,7 @@ export type TMenuAction = "dialog" | "sheet" | "drawer";
 export interface IMenuItem {
   id: number;
   title: string;
+  description?: string;
   icon: any;
   action: TMenuAction;
   component?: React.ComponentType<any>;

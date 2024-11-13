@@ -19,6 +19,7 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     {
       id: 1,
       title: "Xác thực thông tin",
+      description: "Xác thực thông tin căn cước công dân qua máy đọc",
       icon: IdCard,
       action: "dialog",
       component: VerifyCCCD,
@@ -27,6 +28,7 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     {
       id: 2,
       title: "Check-in lịch hẹn",
+      description: "Check-in lịch hẹn bạn đã đặt để liên hệ với bên cần hẹn",
       icon: ScanQrCode,
       action: "dialog",
       component: AppointmentChecking,
@@ -35,6 +37,8 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     {
       id: 3,
       title: "Thủ tục hành chính",
+      description:
+        "Thông tin về các thủ tục hành chính cơ bản của Viện Khoa học Kĩ thuật Bưu điện",
       icon: Signature,
       action: "drawer",
       component: Procedures,
@@ -45,22 +49,25 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     {
       id: 1,
       title: "Lịch học chung",
+      description: "Lịch học chung của tất cả sinh viên",
       icon: CalendarDays,
       action: "sheet",
       component: GeneralCalendar,
-      requiredProps: ["mainRole"],
+      requiredProps: ["currentRole"],
     },
     {
       id: 2,
       title: "Lịch học của tôi",
+      description: "Lịch học cá nhân của sinh viên",
       icon: CalendarHeart,
       action: "sheet",
       component: PersonalCalendar,
-      requiredProps: ["currentCccd"],
+      requiredProps: ["currentRole", "currentCccd"],
     },
     {
       id: 3,
       title: "Thông tin của tôi",
+      description: "Thông tin cá nhân của sinh viên",
       icon: FileUser,
       action: "drawer",
       component: UserInfo,
@@ -69,6 +76,7 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     {
       id: 4,
       title: "Xác thực thông tin",
+      description: "Xác thực thông tin căn cước công dân qua máy đọc",
       icon: IdCard,
       action: "dialog",
       component: VerifyCCCD,
@@ -77,6 +85,7 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     {
       id: 5,
       title: "Check-in lịch hẹn",
+      description: "Check-in lịch hẹn bạn đã đặt để liên hệ với bên cần hẹn",
       icon: ScanQrCode,
       action: "dialog",
       component: AppointmentChecking,
@@ -85,6 +94,8 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     {
       id: 6,
       title: "Thủ tục hành chính",
+      description:
+        "Thông tin về các thủ tục hành chính cơ bản của Viện Khoa học Kĩ thuật Bưu điện",
       icon: Signature,
       action: "drawer",
       component: Procedures,
@@ -95,22 +106,25 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     {
       id: 1,
       title: "Lịch giảng dạy chung",
+      description: "Lịch giảng dạy chung của tất cả giảng viên",
       icon: CalendarDays,
       action: "sheet",
       component: GeneralCalendar,
-      requiredProps: ["mainRole"],
+      requiredProps: ["currentRole"],
     },
     {
       id: 2,
       title: "Lịch giảng dạy của tôi",
+      description: "Lịch giảng dạy cá nhân của giảng viên",
       icon: CalendarHeart,
       action: "sheet",
       component: PersonalCalendar,
-      requiredProps: ["currentCccd"],
+      requiredProps: ["currentRole", "currentCccd"],
     },
     {
       id: 3,
       title: "Thông tin của tôi",
+      description: "Thông tin cá nhân của giảng viên",
       icon: FileUser,
       action: "drawer",
       component: UserInfo,
@@ -119,6 +133,7 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     {
       id: 4,
       title: "Xác thực thông tin",
+      description: "Xác thực thông tin căn cước công dân qua máy đọc",
       icon: IdCard,
       action: "dialog",
       component: VerifyCCCD,
@@ -127,6 +142,7 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     {
       id: 5,
       title: "Check-in lịch hẹn",
+      description: "Check-in lịch hẹn bạn đã đặt để liên hệ với bên cần hẹn",
       icon: ScanQrCode,
       action: "dialog",
       component: AppointmentChecking,
@@ -135,6 +151,8 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     {
       id: 6,
       title: "Thủ tục hành chính",
+      description:
+        "Thông tin về các thủ tục hành chính cơ bản của Viện Khoa học Kĩ thuật Bưu điện",
       icon: Signature,
       action: "drawer",
       component: Procedures,
@@ -145,22 +163,25 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     {
       id: 1,
       title: "Lịch công tác chung",
+      description: "Lịch công tác chung của tất cả cán bộ",
       icon: CalendarDays,
       action: "sheet",
       component: GeneralCalendar,
-      requiredProps: ["mainRole"],
+      requiredProps: ["currentRole"],
     },
     {
       id: 2,
       title: "Lịch công tác của tôi",
+      description: "Lịch công tác cá nhân của cán bộ",
       icon: CalendarHeart,
       action: "sheet",
       component: PersonalCalendar,
-      requiredProps: ["currentCccd"],
+      requiredProps: ["currentRole", "currentCccd"],
     },
     {
       id: 3,
       title: "Thông tin của tôi",
+      description: "Thông tin cá nhân của cán bộ",
       icon: FileUser,
       action: "drawer",
       component: UserInfo,
@@ -169,6 +190,7 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     {
       id: 4,
       title: "Xác thực thông tin",
+      description: "Xác thực thông tin căn cước công dân qua máy đọc",
       icon: IdCard,
       action: "dialog",
       component: VerifyCCCD,
@@ -177,6 +199,7 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     {
       id: 5,
       title: "Check-in lịch hẹn",
+      description: "Check-in lịch hẹn bạn đã đặt để liên hệ với bên cần hẹn",
       icon: ScanQrCode,
       action: "dialog",
       component: AppointmentChecking,
@@ -185,6 +208,8 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     {
       id: 6,
       title: "Thủ tục hành chính",
+      description:
+        "Thông tin về các thủ tục hành chính cơ bản của Viện Khoa học Kĩ thuật Bưu điện",
       icon: Signature,
       action: "drawer",
       component: Procedures,

@@ -62,23 +62,30 @@ const GeneralCalendar = ({ currentRole }: IGeneralCalendarProps) => {
     }
   }, [viewMode]);
 
+  useEffect(() => {
+    getCalendarData();
+  }, [currentRole]);
+
   const getCalendarData = async (startDate?: Date) => {
     if (!currentRole) return;
 
     try {
       setIsLoading(true);
       let url =
-        currentRole === "STUDENT"
-          ? `${getAllStudentCalendarIp}}`
-          : `${getAllStudentCalendarIp}`;
+        currentRole === "student"
+          ? `${getAllStudentCalendarIp}?role=student`
+          : `${getAllStudentCalendarIp}?role=officer`;
 
       if (startDate) {
-        const formattedDate = formatDateForApi(startDate);
-        url += `?ngaybatdau=${formattedDate}`;
+        const endDate = new Date(startDate);
+        endDate.setDate(endDate.getDate() + 6);
+        const formattedStartDate = formatDateForApi(startDate);
+        const formattedEndDate = formatDateForApi(endDate);
+        url += `?ngaybatdau=${formattedStartDate}&ngayketthuc=${formattedEndDate}`;
       }
 
       const response = await axios.get(url);
-      setCalendarData(response.data);
+      setCalendarData(response.data.payload);
     } catch (error) {
       console.error("Error getting schedule data:", error);
     } finally {
