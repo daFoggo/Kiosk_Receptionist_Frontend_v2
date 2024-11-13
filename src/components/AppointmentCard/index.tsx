@@ -5,17 +5,26 @@ import { getStatusColor } from "@/utils/Helper/AppointmentTable";
 import { format, parseISO } from "date-fns";
 import { useForm } from "react-hook-form";
 
-import { Clock, MapPin, User, Download, Share2, ZoomIn } from "lucide-react";
+import {
+  Clock,
+  MapPin,
+  User,
+  Download,
+  CalendarOff,
+  CalendarCheck2,
+} from "lucide-react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Badge } from "../ui/badge";
 import { Form, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "../ui/input";
 import {
   Command,
@@ -27,7 +36,17 @@ import {
 import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const AppointmentCard = ({
   appointment,
@@ -257,7 +276,15 @@ const AppointmentCard = ({
                         </DialogTrigger>
                         <DialogContent
                           onOpenAutoFocus={(e) => e.preventDefault()}
+                          className="w-[95%] sm:h-auto rounded-lg"
                         >
+                          <DialogHeader>
+                            <DialogTitle>QR lịch hẹn</DialogTitle>
+                            <DialogDescription>
+                              Scan mã QR này tại Kiosk để có thể liên hệ với bên
+                              cần hẹn khi bạn đến.
+                            </DialogDescription>
+                          </DialogHeader>
                           <div className="p-6">
                             <QRCode
                               value={getTemporaryQR()}
@@ -295,6 +322,58 @@ const AppointmentCard = ({
             </Card>
           </div>
         </div>
+        <DialogFooter className="mt-6 flex gap-2">
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant="destructive"
+                className="font-semibold"
+                icon={<CalendarOff className="h-4 w-4" />}
+              >
+                Hủy lịch hẹn
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Bạn có chắc chắn muốn hủy lịch hẹn này
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  Hành động này sẽ không thể hoàn tác.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Hủy</AlertDialogCancel>
+                <AlertDialogAction>Đồng ý</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                className="font-semibold"
+                variant="default"
+                icon={<CalendarCheck2 className="h-4 w-4" />}
+              >
+                Đánh dấu đã hoàn thành
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Bạn có chắc chắn muốn đánh dấu lịch hẹn này là đã hoàn thành
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  Hành động này sẽ không thể hoàn tác.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Hủy</AlertDialogCancel>
+                <AlertDialogAction>Đồng ý</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
