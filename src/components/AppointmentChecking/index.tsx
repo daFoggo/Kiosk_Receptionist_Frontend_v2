@@ -96,12 +96,12 @@ const AppointmentChecking = () => {
         {!result ? (
           <div className="w-full flex flex-col items-center justify-between gap-4">
             {isScanning ? (
-              <div className="relative aspect-square rounded-2xl overflow-hidden">
+                <div className="relative aspect-square rounded-2xl overflow-hidden">
                 <video
                   ref={ref}
-                  className="w-full h-full object-cover transform]"
+                  className="w-full h-full object-cover [transform:scaleX(-1)]"
                 />
-              </div>
+                </div>
             ) : (
               <></>
             )}
@@ -131,10 +131,10 @@ const AppointmentChecking = () => {
             transition={{ duration: 0.5 }}
             className="p-6 bg-white/80 backdrop-blur-sm rounded-xl shadow-sm flex gap-6 flex-col items-center justify-center w-full"
           >
-            <Alert className="mt-4 p-6 shadow-sm space-x-6 border-2">
+            <Alert className="mt-4 p-6 shadow-sm space-x-6 border-2 truncate">
               <CheckCircle className="mt-4 h-8 w-8 text-primary" />
               <AlertTitle className="text-2xl font-semibold text-primary">Quét QR thành công</AlertTitle>
-              <AlertDescription className="text-xl font-semibold text-muted-foreground">
+              <AlertDescription className="text-xl font-semibold text-muted-foreground truncate ">
                 Đã quét QR và liên lạc tới bên cần hẹn thành công. Quý khách vui
                 lòng đợi nhân viên tiếp đón.
               </AlertDescription>
@@ -142,7 +142,7 @@ const AppointmentChecking = () => {
             <h1 className="font-semibold text-primary text-2xl">
               Kết quả quét
             </h1>
-            <p className="text-secondary-foreground break-words text-xl font-semibold">
+            <p className="text-secondary-foreground break-words text-xl font-semibold truncate">
               {formatResult(result)}
             </p>
             <Button

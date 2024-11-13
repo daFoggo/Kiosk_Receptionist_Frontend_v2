@@ -11,8 +11,8 @@ import GeneralCalendar from "../GeneralCalendar";
 import PersonalCalendar from "../PersonalCalendar";
 import UserInfo from "../UserInfo";
 import VerifyCCCD from "../VerifyCCCD";
-import AppointmentCheckin from "../AppointmentCheckin";
 import Procedures from "../Procedures";
+import AppointmentChecking from "../AppointmentChecking";
 
 export const interactionMenu: Record<string, IMenuItem[]> = {
   guest: [
@@ -29,7 +29,7 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
       title: "Check-in lịch hẹn",
       icon: ScanQrCode,
       action: "dialog",
-      component: AppointmentCheckin,
+      component: AppointmentChecking,
       requiredProps: [],
     },
     {
@@ -79,7 +79,7 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
       title: "Check-in lịch hẹn",
       icon: ScanQrCode,
       action: "dialog",
-      component: AppointmentCheckin,
+      component: AppointmentChecking,
       requiredProps: [],
     },
     {
@@ -129,7 +129,7 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
       title: "Check-in lịch hẹn",
       icon: ScanQrCode,
       action: "dialog",
-      component: AppointmentCheckin,
+      component: AppointmentChecking,
       requiredProps: [],
     },
     {
@@ -179,7 +179,7 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
       title: "Check-in lịch hẹn",
       icon: ScanQrCode,
       action: "dialog",
-      component: AppointmentCheckin,
+      component: AppointmentChecking,
       requiredProps: [],
     },
     {

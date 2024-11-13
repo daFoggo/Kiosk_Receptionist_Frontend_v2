@@ -54,7 +54,7 @@ const Home = () => {
   };
 
   const handleMenuItemClick = (item: IMenuItem) => {
-    console.log(item);
+    // Handle menu item click
   };
 
   return (

@@ -1,9 +1,11 @@
+import React from "react";
+import QRCode from "react-qr-code";
 import { IAppointmentCardProps } from "@/models/AppointmentTable/type";
 import { getStatusColor } from "@/utils/Helper/AppointmentTable";
 import { format, parseISO } from "date-fns";
-
 import { useForm } from "react-hook-form";
-import { Clock, MapPin, User } from "lucide-react";
+
+import { Clock, MapPin, User, Download, Share2, ZoomIn } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -19,13 +21,13 @@ import {
   Command,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList,
 } from "../ui/command";
-import { Popover, PopoverTrigger } from "../ui/popover";
+import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
 import { Button } from "../ui/button";
-import { PopoverContent } from "@radix-ui/react-popover";
+import { Separator } from "../ui/separator";
+import { Card, CardContent } from "@/components/ui/card";
 
 const AppointmentCard = ({
   appointment,
@@ -43,6 +45,23 @@ const AppointmentCard = ({
       nguoi_duoc_hen: appointment?.nguoi_duoc_hen || [],
     },
   });
+
+  // Function to generate QR code URL - replace with your actual QR code generation logic
+  const getQRCodeUrl = () => {
+    return `/api/placeholder/200/200`;
+  };
+
+  const getTemporaryQR = () => {
+    const qrData = {
+      id: appointment.id,
+      purpose: appointment.muc_dich,
+      startTime: appointment.ngay_gio_bat_dau,
+      endTime: appointment.ngay_gio_ket_thuc,
+      location: appointment.dia_diem,
+    };
+    return JSON.stringify(qrData);
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -68,140 +87,214 @@ const AppointmentCard = ({
       </DialogTrigger>
       <DialogContent
         onOpenAutoFocus={(e) => e.preventDefault()}
-        className="w-[95%] rounded-lg sm:max-w-[425px] md:max-w-[600px] lg:max-w-[800px]"
+        className="w-[95%] h-[95%] sm:h-auto rounded-lg sm:max-w-[425px] md:max-w-[600px] lg:max-w-[800px] overflow-y-auto"
       >
         <DialogHeader>
           <DialogTitle>{appointment.muc_dich}</DialogTitle>
           <DialogDescription>Thông tin chi tiết lịch hẹn</DialogDescription>
         </DialogHeader>
 
-        <Form {...form}>
-          <form className="space-y-6">
-            <FormField
-              name="nguoi_duoc_hen"
-              render={({ field }) => {
-                return (
+        <div className="flex flex-col-reverse sm:flex-row gap-6 justify-between">
+          {/* Info */}
+          <Form {...form}>
+            <form className="space-y-6 flex-1">
+              <FormField
+                name="trang_thai"
+                render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Người được hẹn</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          className="w-full justify-between"
-                        >
-                          {field.value?.length > 0
-                            ? `Đã chọn ${field.value.length} người`
-                            : `Chọn người cần hẹn`}
-                          <User className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent
-                        style={{
-                          width: "var(--radix-popper-anchor-width)",
-                          maxWidth: "var(--radix-popper-anchor-width)",
-                          minWidth: "var(--radix-popper-anchor-width)",
-                        }}
-                      >
-                        <Command className="w-full rounded-lg border">
-                          <CommandList>
-                            <CommandEmpty>
-                              Không có người được hẹn.
-                            </CommandEmpty>
-                            <CommandGroup heading="Danh sách người được hẹn">
-                              {field.value.map((person: any, index: any) => (
-                                <CommandItem
-                                  key={person.cccd || index}
-                                  className="flex items-center gap-2 py-2"
-                                >
-                                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
-                                    <User className="h-4 w-4 text-primary" />
-                                  </div>
-                                  <div className="flex flex-col">
-                                    <span className="font-medium">
-                                      {person.name}
-                                    </span>
-                                    {person.email && (
-                                      <span className="text-xs text-muted-foreground">
-                                        {person.email}
-                                      </span>
-                                    )}
-                                    {person.cccd && (
-                                      <span className="text-xs text-muted-foreground">
-                                        CCCD: {person.cccd}
-                                      </span>
-                                    )}
-                                  </div>
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
+                    <FormLabel>Trạng thái</FormLabel>
+                    <Badge
+                      className={`${getStatusColor(
+                        appointment.trang_thai
+                      )} ml-2`}
+                    >
+                      {field.value}
+                    </Badge>
                   </FormItem>
-                );
-              }}
-            />
-            <FormField
-              name="trang_thai"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Trạng thái</FormLabel>
-                  <Badge
-                    className={`${getStatusColor(appointment.trang_thai)} ml-2`}
-                  >
-                    {field.value}
-                  </Badge>
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="ngay_gio_bat_dau"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Ngày giờ bắt đầu</FormLabel>
-                  <Input
-                    {...field}
-                    value={format(parseISO(field.value), "dd/MM/yyyy HH:mm")}
-                    readOnly
-                  />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="ngay_gio_ket_thuc"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Ngày giờ kết thúc</FormLabel>
-                  <Input
-                    {...field}
-                    value={format(parseISO(field.value), "dd/MM/yyyy HH:mm")}
-                    readOnly
-                  />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="dia_diem"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Địa điểm</FormLabel>
-                  <Input {...field} readOnly />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="ghi_chu"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Ghi chú</FormLabel>
-                  <Input {...field} readOnly />
-                </FormItem>
-              )}
-            />
-          </form>
-        </Form>
+                )}
+              />
+              <FormField
+                name="nguoi_duoc_hen"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel>Người được hẹn</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            className="w-full justify-between"
+                          >
+                            {field.value?.length > 0
+                              ? `Đã chọn ${field.value.length} người`
+                              : `Chọn người cần hẹn`}
+                            <User className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent
+                          style={{
+                            width: "var(--radix-popper-anchor-width)",
+                            maxWidth: "var(--radix-popper-anchor-width)",
+                            minWidth: "var(--radix-popper-anchor-width)",
+                          }}
+                        >
+                          <Command className="w-full rounded-lg border">
+                            <CommandList>
+                              <CommandEmpty>
+                                Không có người được hẹn.
+                              </CommandEmpty>
+                              <CommandGroup heading="Danh sách người được hẹn">
+                                {field.value.map((person: any, index: any) => (
+                                  <CommandItem
+                                    key={person.cccd || index}
+                                    className="flex items-center gap-2 py-2"
+                                  >
+                                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
+                                      <User className="h-4 w-4 text-primary" />
+                                    </div>
+                                    <div className="flex flex-col">
+                                      <span className="font-semibold">
+                                        {person.name}
+                                      </span>
+                                      {person.email && (
+                                        <span className="text-xs text-muted-foreground">
+                                          {person.email}
+                                        </span>
+                                      )}
+                                      {person.cccd && (
+                                        <span className="text-xs text-muted-foreground">
+                                          CCCD: {person.cccd}
+                                        </span>
+                                      )}
+                                    </div>
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                    </FormItem>
+                  );
+                }}
+              />
+              <FormField
+                name="ngay_gio_bat_dau"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Ngày giờ bắt đầu</FormLabel>
+                    <Input
+                      {...field}
+                      value={format(parseISO(field.value), "dd/MM/yyyy HH:mm")}
+                      readOnly
+                    />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="ngay_gio_ket_thuc"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Ngày giờ kết thúc</FormLabel>
+                    <Input
+                      {...field}
+                      value={format(parseISO(field.value), "dd/MM/yyyy HH:mm")}
+                      readOnly
+                    />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="dia_diem"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Địa điểm</FormLabel>
+                    <Input {...field} readOnly />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="ghi_chu"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Ghi chú</FormLabel>
+                    <Input {...field} readOnly />
+                  </FormItem>
+                )}
+              />
+            </form>
+          </Form>
+          <Separator orientation="vertical" className="hidden sm:block" />
+
+          {/* QR Code Section */}
+          <div className="flex flex-col items-center gap-6 sm:w-2/5">
+            <Card className="w-full h-full">
+              <CardContent className="p-6 flex flex-col items-center gap-4">
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-primary rounded-lg blur-sm opacity-25 group-hover:opacity-40 transition duration-300" />
+                  <div className="relative bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+                    {/* Display QR code from API*/}
+                    {/* <img
+                      src={getQRCodeUrl()}
+                      alt="QR Code"
+                      className="w-full h-auto"
+                    /> */}
+                    <div className="bg-white p-2 rounded-lg">
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <QRCode
+                            value={getTemporaryQR()}
+                            size={180}
+                            style={{
+                              height: "auto",
+                              maxWidth: "100%",
+                              width: "100%",
+                            }}
+                            viewBox={`0 0 256 256`}
+                            className="dark:bg-white cursor-pointer"
+                          />
+                        </DialogTrigger>
+                        <DialogContent
+                          onOpenAutoFocus={(e) => e.preventDefault()}
+                        >
+                          <div className="p-6">
+                            <QRCode
+                              value={getTemporaryQR()}
+                              size={180}
+                              style={{
+                                height: "auto",
+                                maxWidth: "100%",
+                                width: "100%",
+                              }}
+                              viewBox={`0 0 256 256`}
+                              className="dark:bg-white"
+                            />
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-center space-y-2">
+                  <div className="font-semibold">QR lịch hẹn</div>
+                  <div className="text-sm text-muted-foreground">
+                    Scan mã QR này tại Kiosk để có thể liên hệ với bên cần hẹn
+                    khi bạn đến.
+                  </div>
+                </div>
+
+                <Button
+                  className="font-semibold"
+                  icon={<Download className="w-4 h-4" />}
+                >
+                  Tải xuống
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   );
