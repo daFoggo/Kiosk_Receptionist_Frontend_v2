@@ -63,26 +63,37 @@ const PersonalCalendar = ({
 
   useEffect(() => {
     getCalendarData();
+
+    return () => {
+      setIsLoading(false);
+      setCalendarData([]);
+    };
   }, [currentRole, currentCccd]);
 
-  const getCalendarData = async (startDate?: Date) => {
+  const getCalendarData = async (startDate: Date = new Date()) => {
     if (!currentRole || !currentCccd) return;
 
     try {
-      console.log("Getting schedule data...");
       setIsLoading(true);
-      let url =
-        currentRole === "student"
-          ? `${getStudentCalendarIp}?cccd_id=${currentCccd}&role=student`
-          : `${getInstructorCalendarIp}?cccd_id=${currentCccd}&role=officer`;
 
-      if (startDate) {
-        const endDate = new Date(startDate);
-        endDate.setDate(endDate.getDate() + 6);
-        const formattedStartDate = formatDateForApi(startDate);
-        const formattedEndDate = formatDateForApi(endDate);
-        url += `?ngaybatdau=${formattedStartDate}&ngayketthuc=${formattedEndDate}`;
-      }
+      const endDate = new Date(startDate);
+      endDate.setDate(endDate.getDate() + 6);
+      const formattedStartDate = formatDateForApi(startDate);
+      const formattedEndDate = formatDateForApi(endDate);
+
+      const baseUrl =
+        currentRole === "student"
+          ? getStudentCalendarIp
+          : getInstructorCalendarIp;
+
+      const url =
+        `${baseUrl}?` +
+        new URLSearchParams({
+          cccd_id: currentCccd,
+          role: currentRole === "student" ? "student" : "officer",
+          ngay_bat_dau: formattedStartDate,
+          ngay_ket_thuc: formattedEndDate,
+        }).toString();
 
       const response = await axios.get(url);
       setCalendarData(response.data.payload);
@@ -115,6 +126,7 @@ const PersonalCalendar = ({
   };
 
   const handleEventClick = (event: any) => {
+    console.log("Event clicked:", event);
     setSelectedEvent(event);
     setIsDialogOpen(true);
   };
@@ -144,7 +156,6 @@ const PersonalCalendar = ({
         <div className="flex justify-center items-center h-full">
           <div className="flex flex-col items-center gap-4">
             <Loader2 className="h-12 animate-spin text-primary" />
-            {}
             <p className="text-xl text-muted-foreground">Đang tải lịch...</p>
           </div>
         </div>
@@ -156,73 +167,61 @@ const PersonalCalendar = ({
           transition={{ duration: 0.3 }}
           className="pr-4"
         >
-          {hours?.map((hour) => (
-            <motion.div
-              key={hour}
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.3, delay: parseInt(hour) * 0.02 }}
-              className={`flex items-stretch text-xl ${
-                hour === hours[0] ? "" : "border-t-2"
-              } border-gray-300 h-20`}
-            >
-              <span
-                className={`w-24 text-muted-foreground py-2 sticky left-0  z-20 ${
-                  isCurrentHour(hour) ? "bg-primary/10" : "bg-background"
-                }`}
-              >
-                {hour}
-              </span>
-              <div className={`flex-1 relative`}>
-                {isCurrentHour(hour) && (
-                  <div className="absolute inset-0 bg-primary/10 z-0"></div>
-                )}
-
-                {calendarData
-                  ?.filter((course) => {
-                    const startDate = parseDate(course.startTime);
-                    return (
-                      startDate.getHours() === parseInt(hour) &&
-                      startDate.getDate() === currentDate.getDate() &&
-                      startDate.getMonth() === currentDate.getMonth() &&
-                      startDate.getFullYear() === currentDate.getFullYear()
-                    );
-                  })
-                  ?.map((course, index) => {
-                    const startDate = parseDate(course.startTime);
-                    const endDate = parseDate(course.endTime);
-                    const duration =
-                      (endDate.getTime() - startDate.getTime()) /
-                      (1000 * 60 * 60);
-                    return (
-                      <div
-                        key={index}
-                        className={`absolute left-0 right-0  border-l-8  p-2 rounded-md cursor-pointer  transition-colors overflow-hidden z-10 ${convertColor(
-                          course?.eventType,
-                          "div"
-                        )}`}
-                        style={{
-                          top: "0px",
-                          height: `${duration * 80}px`,
-                        }}
-                        onClick={() => handleEventClick(course)}
-                      >
-                        <p className="text-xl font-semibold truncate">
-                          {course.courseName}
-                        </p>
-                        <p className="text-md text-muted-foreground truncate">{`${startDate.getHours()}:${startDate
-                          .getMinutes()
-                          .toString()
-                          .padStart(2, "0")} - ${endDate.getHours()}:${endDate
-                          .getMinutes()
-                          .toString()
-                          .padStart(2, "0")}`}</p>
-                      </div>
-                    );
-                  })}
+          <div className="relative">
+            {hours?.map((hour) => (
+              <div key={hour} className="flex items-stretch border-t-2 h-20">
+                <span className="w-24 text-xl text-muted-foreground py-2 sticky left-0 bg-background z-20">
+                  {hour}
+                </span>
+                <div className="flex-1 relative min-w-[150px]">
+                  {isCurrentHour(hour) && (
+                    <div className="absolute inset-0 bg-primary/10 z-0"></div>
+                  )}
+                  {calendarData
+                    ?.filter((course) => {
+                      const startDate = parseDate(course.ngay_gio_bat_dau);
+                      return (
+                        startDate.getHours() === parseInt(hour) &&
+                        startDate.getDate() === currentDate.getDate() &&
+                        startDate.getMonth() === currentDate.getMonth() &&
+                        startDate.getFullYear() === currentDate.getFullYear()
+                      );
+                    })
+                    ?.map((course, index) => {
+                      const startDate = parseDate(course.ngay_gio_bat_dau);
+                      const endDate = parseDate(course.ngay_gio_ket_thuc);
+                      const duration =
+                        (endDate.getTime() - startDate.getTime()) /
+                        (1000 * 60 * 60);
+                      return (
+                        <div
+                          key={index}
+                          className={`absolute top-0 left-0 right-0 border-l-8 p-1 ml-1 rounded-md cursor-pointer transition-colors overflow-hidden z-10 ${convertColor(
+                            course?.loai_lich,
+                            "div"
+                          )}`}
+                          style={{
+                            height: `${duration * 80}px`,
+                          }}
+                          onClick={() => handleEventClick(course)}
+                        >
+                          <p className="text-md font-semibold truncate">
+                            {course.hoc_phan.ten_hoc_phan}
+                          </p>
+                          <p className="text-sm text-muted-foreground truncate">{`${startDate.getHours()}:${startDate
+                            .getMinutes()
+                            .toString()
+                            .padStart(2, "0")} - ${endDate.getHours()}:${endDate
+                            .getMinutes()
+                            .toString()
+                            .padStart(2, "0")}`}</p>
+                        </div>
+                      );
+                    })}
+                </div>
               </div>
-            </motion.div>
-          ))}
+            ))}
+          </div>
         </motion.div>
       )}
       <ScrollBar orientation="horizontal" />
@@ -260,7 +259,7 @@ const PersonalCalendar = ({
                 )}
                 {calendarData
                   ?.filter((course) => {
-                    const startDate = parseDate(course.startTime);
+                    const startDate = parseDate(course.ngay_gio_bat_dau);
                     return (
                       startDate.getHours() === parseInt(hour) &&
                       startDate.getDate() === day.getDate() &&
@@ -269,8 +268,8 @@ const PersonalCalendar = ({
                     );
                   })
                   ?.map((course, index) => {
-                    const startDate = parseDate(course.startTime);
-                    const endDate = parseDate(course.endTime);
+                    const startDate = parseDate(course.ngay_gio_bat_dau);
+                    const endDate = parseDate(course.ngay_gio_ket_thuc);
                     const duration =
                       (endDate.getTime() - startDate.getTime()) /
                       (1000 * 60 * 60);
@@ -278,7 +277,7 @@ const PersonalCalendar = ({
                       <div
                         key={index}
                         className={`absolute top-0 left-0 right-0 border-l-8 p-1 ml-1 rounded-md cursor-pointer  transition-colors overflow-hidden z-10 ${convertColor(
-                          course?.eventType,
+                          course?.loai_lich,
                           "div"
                         )}`}
                         style={{
@@ -287,7 +286,7 @@ const PersonalCalendar = ({
                         onClick={() => handleEventClick(course)}
                       >
                         <p className="text-md font-semibold truncate">
-                          {course.courseName}
+                          {course.hoc_phan.ten_hoc_phan}
                         </p>
                         <p className="text-sm text-muted-foreground truncate">{`${startDate.getHours()}:${startDate
                           .getMinutes()
@@ -307,7 +306,6 @@ const PersonalCalendar = ({
       <ScrollBar orientation="horizontal" />
     </ScrollArea>
   );
-
 
   return (
     <Card className="w-full h-full p-6">
@@ -434,45 +432,42 @@ const PersonalCalendar = ({
                   transition={{ duration: 0.3 }}
                 >
                   <DialogTitle className="text-primary text-3xl">
-                    {selectedEvent?.courseName}
+                    {selectedEvent.hoc_phan.ten_hoc_phan}
                   </DialogTitle>
                 </motion.div>
-                <DialogDescription>
-                  <motion.div
-                    className="mt-6 space-y-4 text-2xl"
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.3, delay: 0.1 }}
-                  >
-                    {/* Course info */}
-                    {renderField(
-                      <MapPin className="h-5 w-5" />,
-                      "Loại lịch",
-                      selectedEvent?.eventType
-                    )}
-                    {renderField(
-                      <MapPin className="h-5 w-5" />,
-                      "Phòng",
-                      selectedEvent?.room
-                    )}
-                    {renderField(
-                      <Clock className="h-5 w-5" />,
-                      "Thời gian",
-                      `${selectedEvent?.startTime} - ${selectedEvent?.endTime}`
-                    )}
-                    {renderField(
-                      <CalendarIcon className="h-5 w-5" />,
-                      "Lớp tín chỉ",
-                      selectedEvent?.creditClass
-                    )}
-                    {renderField(
-                      <User className="h-5 w-5" />,
-                      "Giảng viên",
-                      selectedEvent?.instructor
-                    )}
-                  </motion.div>
-                </DialogDescription>
               </DialogHeader>
+              <motion.div
+                className="mt-6 space-y-4 text-2xl"
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.3, delay: 0.1 }}
+              >
+                {renderField(
+                  <MapPin className="h-5 w-5" />,
+                  "Loại lịch",
+                  selectedEvent?.loai_lich
+                )}
+                {renderField(
+                  <MapPin className="h-5 w-5" />,
+                  "Phòng",
+                  selectedEvent?.phong
+                )}
+                {renderField(
+                  <Clock className="h-5 w-5" />,
+                  "Thời gian",
+                  `${selectedEvent?.ngay_gio_bat_dau} - ${selectedEvent?.ngay_gio_ket_thuc}`
+                )}
+                {renderField(
+                  <CalendarIcon className="h-5 w-5" />,
+                  "Lớp tín chỉ",
+                  selectedEvent?.nha
+                )}
+                {renderField(
+                  <User className="h-5 w-5" />,
+                  "Giảng viên",
+                  selectedEvent?.can_bo?.ho_ten
+                )}
+              </motion.div>
               <DialogFooter>
                 <motion.div
                   initial={{ y: 20, opacity: 0 }}

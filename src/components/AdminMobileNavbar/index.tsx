@@ -1,6 +1,4 @@
-;
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Menu,
   ChevronUp,
@@ -29,16 +27,25 @@ import { useNavigate } from "react-router-dom";
 const AdminMobileNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState({
-    id: "",
     username: "User name",
-    email: "",
-    fullName: "",
+    ho_ten: "",
+    gioi_tinh:  "",
+    vai_tro: "",
+    ngay_sinh: "",
   });
+  
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      setUser(JSON.parse(user));
+    }
+  }, []);
 
   const handleLogout = (e: any) => {
     e.preventDefault();
-    localStorage.removeItem("token");
+    localStorage.removeItem("access_token");
     navigate("/auth/admin/login");
     setIsOpen(false);
   };
@@ -83,7 +90,7 @@ const AdminMobileNavbar = () => {
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="w-full justify-start">
                       <User2 className="mr-2 h-4 w-4" />
-                      {user.username}
+                      {user.ho_ten}
                       <ChevronUp className="ml-auto h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>

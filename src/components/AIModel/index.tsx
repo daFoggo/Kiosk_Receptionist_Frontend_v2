@@ -1,27 +1,29 @@
-import { useRef, useEffect, useState, memo } from 'react'
-import { AspectRatio } from "@/components/ui/aspect-ratio"
-import { Card } from "@/components/ui/card"
+import { useRef, useEffect, useState, memo } from "react";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Card } from "@/components/ui/card";
+import { useAISpeech } from "@/contexts/AISpeechContext";
 
-interface IAIModelProps {
-  videoSrc: string
-}
-
-const AIModel = memo(({ videoSrc }: IAIModelProps) => {
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+const AIModel = memo(() => {
+  const { currentVideo, isPlaying } = useAISpeech();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const videoElement = videoRef.current
+    const videoElement = videoRef.current;
     if (videoElement) {
-      videoElement.addEventListener('loadeddata', () => setIsLoaded(true))
-      videoElement.addEventListener('error', () => setError('Failed to load video'))
+      videoElement.addEventListener("loadeddata", () => setIsLoaded(true));
+      videoElement.addEventListener("error", () =>
+        setError("Failed to load video")
+      );
       return () => {
-        videoElement.removeEventListener('loadeddata', () => setIsLoaded(true))
-        videoElement.removeEventListener('error', () => setError('Failed to load video'))
-      }
+        videoElement.removeEventListener("loadeddata", () => setIsLoaded(true));
+        videoElement.removeEventListener("error", () =>
+          setError("Failed to load video")
+        );
+      };
     }
-  }, [])
+  }, []);
 
   return (
     <Card className="overflow-hidden">
@@ -33,12 +35,12 @@ const AIModel = memo(({ videoSrc }: IAIModelProps) => {
         ) : (
           <video
             ref={videoRef}
-            src={videoSrc}
+            src={currentVideo}
             className={`w-full h-full object-cover rounded-lg transition-opacity duration-300 ${
-              isLoaded ? 'opacity-100' : 'opacity-0'
+              isLoaded ? "opacity-100" : "opacity-0"
             }`}
             loop
-            autoPlay
+            autoPlay={isPlaying}
             muted
             playsInline
             preload="metadata"
@@ -46,9 +48,9 @@ const AIModel = memo(({ videoSrc }: IAIModelProps) => {
         )}
       </AspectRatio>
     </Card>
-  )
-})
+  );
+});
 
-AIModel.displayName = 'AIModel'
+AIModel.displayName = "AIModel";
 
-export default AIModel
+export default AIModel;

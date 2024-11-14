@@ -1,3 +1,5 @@
+import { IOfficer } from "../DepartmentList/type";
+
 export interface IAppointment {
   id: string;
   cccd_nguoi_hen: string;
@@ -14,4 +16,5 @@ export interface ICreateModifyAppointmentProps {
   appointment?: Appointment;
   onSuccess?: () => void;
   trigger?: React.ReactNode;
+  officers?: IOfficer[];
 }

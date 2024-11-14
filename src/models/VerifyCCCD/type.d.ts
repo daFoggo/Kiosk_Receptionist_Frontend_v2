@@ -7,3 +7,10 @@ export type IFormData = {
   dateOfBirth: string;
   gender: string;
 };
+
+export interface ICCCDData {
+  "Identity Code": string;
+  Name: string;
+  DOB: string;
+  Gender: string;
+}

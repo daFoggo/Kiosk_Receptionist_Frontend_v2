@@ -20,13 +20,13 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useWebsocket } from "@/contexts/WebsocketContext";
 import { TRole, IFormData } from "@/models/VerifyCCCD/type";
 import { convertFormKey } from "@/utils/Helper/VerifyCCCD";
+import { ICCCDData } from "@/models/WebsocketContext/type";
 
 const VerifyCCCD = () => {
   const [step, setStep] = useState(0);
   const [capturedImages, setCapturedImages] = useState<string[]>([]);
-  const [isVerifying, setIsVerifying] = useState(false);
   const webcamRef = useRef<Webcam>(null);
-  const cccdData = useWebsocket();
+  const { cccdData } = useWebsocket();
   const { register, handleSubmit, setValue, watch } = useForm<IFormData>({
     defaultValues: {
       role: "",
@@ -60,7 +60,10 @@ const VerifyCCCD = () => {
   useEffect(() => {
     if (cccdData && step === 4) {
       extractedFields.forEach((field) => {
-        setValue(field.formKey as keyof IFormData, cccdData[field.key] || "");
+        setValue(
+          field.formKey as keyof IFormData,
+          cccdData[field.key as keyof ICCCDData] || ""
+        );
       });
     }
   }, [cccdData, step, setValue]);

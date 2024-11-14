@@ -1,30 +1,3 @@
-import { verifyTokenIp } from "../ip";
-import axios from "axios";
-
-export const isTokenValid = async (token?: string | null) => {
-  if (!token) {
-    return { success: false, message: "No token" };
-  }
-
-  try {
-    const response = await axios.get(`${verifyTokenIp}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    return {
-      success: true,
-      user: response.data.user,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      message: "Invalid token",
-    };
-  }
-};
-
 export const truncateText = (text: string, maxLength: number) => {
   if (text?.length > maxLength) {
     return text.slice(0, maxLength) + "...";

@@ -80,7 +80,7 @@ const WeeklySchedule = ({ works }: IInstitueCalendarTableProps) => {
     <div className="flex items-center space-x-2 font-semibold">
       <div className="text-primary">{icon}</div>
       <span className="text-muted-foregrounds">{label}:</span>
-      <span>{value}</span>
+      <span className="font-bold">{value}</span>
     </div>
   );
 

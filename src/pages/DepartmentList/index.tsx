@@ -1,9 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Search } from "lucide-react";
 import { useDebounce } from "use-debounce";
+import axios from "axios";
 
 import DepartmentCard from "@/components/DepartmentCard/";
 import ReuseBreadcrumb from "@/components/ReuseBreadcrumb";
@@ -12,10 +13,26 @@ import { Input } from "@/components/ui/input";
 
 import { departmentList } from "./constant";
 import { containerVariants, itemVariants } from "./motion";
+import { getOfficersIp } from "@/utils/ip";
 
 const DepartmentList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm] = useDebounce(searchTerm, 300);
+  const [officers, setOfficers] = useState([]);
+
+  useEffect(() => {
+    handleGetOfficers();
+  }, []);
+
+  const handleGetOfficers = async () => {
+    try {
+      const response = await axios.get(`${getOfficersIp}`);
+
+      setOfficers(response.data.payload);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const filteredDepartments = useMemo(() => {
     return departmentList.filter(
@@ -70,7 +87,7 @@ const DepartmentList = () => {
               variants={itemVariants}
               className="h-full"
             >
-              <DepartmentCard {...department} />
+              <DepartmentCard {...department} officers={officers} />
             </motion.div>
           ))}
         </motion.div>

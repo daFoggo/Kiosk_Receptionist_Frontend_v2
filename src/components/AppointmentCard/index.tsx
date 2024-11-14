@@ -146,7 +146,7 @@ const AppointmentCard = ({
                             className="w-full justify-between"
                           >
                             {field.value?.length > 0
-                              ? `Đã chọn ${field.value.length} người`
+                              ? `Đã chọn ${field.value?.length} người`
                               : `Chọn người cần hẹn`}
                             <User className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                           </Button>
@@ -166,7 +166,7 @@ const AppointmentCard = ({
                               <CommandGroup heading="Danh sách người được hẹn">
                                 {field.value.map((person: any, index: any) => (
                                   <CommandItem
-                                    key={person.cccd || index}
+                                    key={person.cccd_id || index}
                                     className="flex items-center gap-2 py-2"
                                   >
                                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
@@ -174,14 +174,14 @@ const AppointmentCard = ({
                                     </div>
                                     <div className="flex flex-col">
                                       <span className="font-semibold">
-                                        {person.name}
+                                        {person.ho_ten}
                                       </span>
                                       {person.email && (
                                         <span className="text-xs text-muted-foreground">
                                           {person.email}
                                         </span>
                                       )}
-                                      {person.cccd && (
+                                      {person.cccd_id && (
                                         <span className="text-xs text-muted-foreground">
                                           CCCD: {person.cccd}
                                         </span>

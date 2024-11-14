@@ -36,9 +36,17 @@ const AppointmentLogin = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const res = await axios.post(`${loginIp}`, values);
-      // localStorage.setItem("token", res.data.token);
-      // localStorage.setItem("user", JSON.stringify(res.data.data));
+      const formData = new FormData();
+      formData.append("username", values.username);
+      formData.append("password", values.password);
+
+      const res = await axios.post(`${loginIp}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      localStorage.setItem("access_token", res.data.access_token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
       navigate("/appointment");
     } catch (error) {
       console.error(error);
@@ -114,7 +122,7 @@ const AppointmentLogin = () => {
             </form>
           </Form>
 
-          <div className="flex items-center gap-2 mt-6 text-sm md:text-base">
+          {/* <div className="flex items-center gap-2 mt-6 text-sm md:text-base">
             <span>Chưa có tài khoản?</span>
             <Button
               onClick={() => navigate("/auth/appointment/register")}
@@ -123,7 +131,7 @@ const AppointmentLogin = () => {
             >
               Đăng ký
             </Button>
-          </div>
+          </div> */}
         </CardContent>
       </Card>
     </div>

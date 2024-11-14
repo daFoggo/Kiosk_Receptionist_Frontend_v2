@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-import EventBanner from "@/components/EventBanner/EventBanner";
+import EventBanner from "@/components/EventBanner";
 import LunarCalendar from "@/components/LunarCalendar/LunarCalendar";
 import RootNavbar from "@/components/RootNavbar";
 import Weather from "@/components/Weather/Weather";
@@ -20,10 +20,10 @@ const Home = () => {
   const [eventData, setEventData] = useState([
     {
       id: 1,
-      title: "Hội thảo Software Engineering",
-      start_time: "2021-10-01T00:00:00",
-      end_time: "2021-11-01T23:59:59",
-      location: "Hội trường 2 - T2",
+      title: "Hội nghị Khoa học Sinh viên lần thứ 16",
+      start_time: "2021-11-15T08:30:00",
+      end_time: "2021-11-15T11:15:00",
+      location: "Hội trường A2, Cơ sở Hà Đông, Học viện Công nghệ BCVT",
     },
   ]);
 
@@ -117,10 +117,10 @@ const Home = () => {
           variants={leftItemVariants}
         >
           {/* AI Video Container */}
-          <AIModel videoSrc="/src/assets/videos/default.mp4" />
+          <AIModel/>
 
           {/* AI Transcript Container */}
-          <AITranscript transcript="Chào mừng quý khách đến với Viện Khoa học Kỹ thuật Bưu điện" />
+          <AITranscript/>
         </motion.div>
 
         {/* Right side */}

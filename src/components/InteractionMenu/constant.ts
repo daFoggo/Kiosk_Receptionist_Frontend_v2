@@ -43,6 +43,7 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
       action: "drawer",
       component: Procedures,
       requiredProps: [],
+      disabled: true,
     },
   ],
   student: [
@@ -54,6 +55,7 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
       action: "sheet",
       component: GeneralCalendar,
       requiredProps: ["currentRole"],
+      disabled: true,
     },
     {
       id: 2,
@@ -72,6 +74,7 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
       action: "drawer",
       component: UserInfo,
       requiredProps: ["currentCccd"],
+      disabled: true,
     },
     {
       id: 4,
@@ -100,6 +103,7 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
       action: "drawer",
       component: Procedures,
       requiredProps: [],
+      disabled: true,
     },
   ],
   instructor: [
@@ -111,6 +115,7 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
       action: "sheet",
       component: GeneralCalendar,
       requiredProps: ["currentRole"],
+      disabled: true,
     },
     {
       id: 2,
@@ -129,6 +134,7 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
       action: "drawer",
       component: UserInfo,
       requiredProps: ["currentCccd"],
+      disabled: true,
     },
     {
       id: 4,
@@ -157,6 +163,7 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
       action: "drawer",
       component: Procedures,
       requiredProps: [],
+      disabled: true,
     },
   ],
   staff: [
@@ -168,6 +175,7 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
       action: "sheet",
       component: GeneralCalendar,
       requiredProps: ["currentRole"],
+      disabled: true,
     },
     {
       id: 2,
@@ -177,6 +185,7 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
       action: "sheet",
       component: PersonalCalendar,
       requiredProps: ["currentRole", "currentCccd"],
+      disabled: true,
     },
     {
       id: 3,
@@ -186,6 +195,7 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
       action: "drawer",
       component: UserInfo,
       requiredProps: ["currentCccd"],
+      disabled: true,
     },
     {
       id: 4,
@@ -204,6 +214,7 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
       action: "dialog",
       component: AppointmentChecking,
       requiredProps: [],
+      disabled: true,
     },
     {
       id: 6,
@@ -214,6 +225,7 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
       action: "drawer",
       component: Procedures,
       requiredProps: [],
+      
     },
   ],
 };

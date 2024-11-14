@@ -9,6 +9,7 @@ export interface IMenuItem {
   component?: React.ComponentType<any>;
   requiredProps?: string[];
   href?: string;
+  disabled?: boolean;
 }
 
 export interface IMenuState {

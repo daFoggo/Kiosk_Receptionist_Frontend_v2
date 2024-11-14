@@ -3,8 +3,8 @@ export const wsIp = import.meta.env.VITE_WEBSOCKET_IP;
 export const openWeatherIp = import.meta.env.VITE_OPENWEATHER_API;
 
 export const authIp = `${httpIp}/auth`;
-export const verifyTokenIp = `${authIp}/verify-token`;
 export const loginIp = `${authIp}/login`;
+export const registerIp = `${authIp}/register`;
 
 export const getIdentifyDataIp = `${httpIp}/identity-data/get`;
 export const updateIdentifyDataIp = `${httpIp}/identity-data/update`;
@@ -22,3 +22,8 @@ export const getInstructorCalendarIp = `${httpIp}/instructor-calendar/get/by-rol
 export const getAllStudentCalendarIp = `${httpIp}/all-class-calendar/get/by-role`;
 export const getAllInstructorCalendarIp = `${httpIp}/all-instructor-calendar/get/by-role`;
 
+export const getAppointmentsIp = `${httpIp}/appointments/stats/by-user`;
+export const createAppointmentIp = `${httpIp}/appointments/create`;
+export const updateAppointmentIp = `${httpIp}/appointments/update/by-user`;
+
+export const getOfficersIp = `${httpIp}/officer/get/by-departments`;

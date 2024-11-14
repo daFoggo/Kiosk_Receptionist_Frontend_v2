@@ -27,17 +27,11 @@ export const generateWeekDays = (date: Date) => {
   return week;
 };
 
-export const parseDate = (dateString: string) => {
-  const [time, date] = dateString.split(" ");
-  const [day, month, year] = date.split("/");
-  const [hour, minute] = time.split(":");
-  return new Date(
-    parseInt(year),
-    parseInt(month) - 1,
-    parseInt(day),
-    parseInt(hour),
-    parseInt(minute)
-  );
+export const parseDate = (dateStr: string): Date => {
+  const [datePart, timePart] = dateStr.split(' ');
+  const [day, month, year] = datePart.split('/').map(Number);
+  const [hours, minutes] = timePart.split('.').map(Number);
+  return new Date(year, month - 1, day, hours, minutes);
 };
 
 export const getWeekStartDate = (date: Date): Date => {

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -26,13 +27,22 @@ import {
 } from "@/models/InteractionMenu/type";
 import { interactionMenu } from "./constant";
 import { gridVariants, itemVariants, activeButtonVariants } from "./motion";
-import { DialogDescription } from "@radix-ui/react-dialog";
 
 const MenuItem = memo(({ item, onClick, isActive }: IMenuItemProps) => (
-  <motion.div key={`${item.id}`} variants={itemVariants} layout>
+  <motion.div
+    key={`${item.id}`}
+    variants={itemVariants}
+    layout
+    className="relative"
+    style={{
+      touchAction: "none",
+      WebkitTapHighlightColor: "transparent",
+    }}
+  >
     <motion.div
       animate={isActive ? "active" : "initial"}
       variants={activeButtonVariants}
+      className="w-full h-full z-50"
     >
       <Button
         variant="outline"
@@ -41,12 +51,18 @@ const MenuItem = memo(({ item, onClick, isActive }: IMenuItemProps) => (
             ? "bg-primary/30 border-2 border-primary hover:bg-primary/40 text-primary"
             : "bg-primary/20 hover:bg-primary/30 text-secondary-foreground"
         }`}
-        onClick={() => onClick(item)}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onClick(item);
+        }}
+        disabled={item.disabled}
       >
         <motion.div
           initial={{ scale: 1 }}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
+          className="pointer-events-none"
         >
           <item.icon className="w-6 h-6" />
         </motion.div>
@@ -54,7 +70,7 @@ const MenuItem = memo(({ item, onClick, isActive }: IMenuItemProps) => (
           initial={{ opacity: 0, y: 5 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="text-sm text-center"
+          className="text-sm text-center pointer-events-none"
         >
           {item.title}
         </motion.span>
@@ -180,7 +196,7 @@ const InteractionMenu = memo(
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-                className="grid grid-cols-3 gap-2"
+                className="grid grid-cols-3 gap-2 relative"
               >
                 {menuItems.map((item) => (
                   <MenuItem

@@ -1,4 +1,4 @@
-import { ChevronUp, LogOut, Sparkles, User2, } from "lucide-react";
+import { ChevronUp, LogOut, Sparkles, User2 } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -25,10 +25,11 @@ import { useEffect, useState } from "react";
 
 const AdminSidebar = () => {
   const [user, setUser] = useState({
-    id: "",
     username: "User name",
-    email: "",
-    fullName: "",
+    ho_ten: "",
+    gioi_tinh: "",
+    vai_tro: "",
+    ngay_sinh: "",
   });
 
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ const AdminSidebar = () => {
 
   const handleLogout = (e: any) => {
     e.preventDefault();
-    localStorage.removeItem("token");
+    localStorage.removeItem("access_token");
     navigate("/auth/appointment/login");
   };
 
@@ -91,7 +92,7 @@ const AdminSidebar = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
-                  <User2 /> {user.username}
+                  <User2 /> {user.ho_ten}
                   <ChevronUp className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>

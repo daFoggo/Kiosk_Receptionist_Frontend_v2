@@ -1,9 +1,40 @@
+import { useState, useEffect } from "react";
+import axios from "axios";
 import AppointmentTable from "@/components/AppointmentTable";
 import ReuseBreadcrumb from "@/components/ReuseBreadcrumb";
 import { Separator } from "@/components/ui/separator";
-import { appointments } from "./constant";
+import { getAppointmentsIp } from "@/utils/ip";
 
 const MyAppointment = () => {
+  const [appointments, setAppointments] = useState([]);
+  const [cccdNguoiHen, setCccdNguoiHen] = useState("");
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+
+    if (user) {
+      const userObj = JSON.parse(user);
+      setCccdNguoiHen(userObj.username);
+    }
+  }, []);
+
+  useEffect(() => {
+    handleGetAppointments();
+  }, [cccdNguoiHen]);
+
+  const handleGetAppointments = async () => {
+    try {
+      const response = await axios.get(getAppointmentsIp, {
+        params: {
+          cccd_id: cccdNguoiHen,
+        },
+      });
+      setAppointments(response.data.payload);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="flex flex-col">
       <div className="space-y-2 py-3 px-4 sm:p-0 sm:py-4">

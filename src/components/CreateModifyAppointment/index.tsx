@@ -6,6 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { vi } from "date-fns/locale";
 import { format } from "date-fns";
+import axios from "axios";
+import { toast } from "sonner";
 
 import { CalendarIcon, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -42,8 +44,8 @@ import {
   CommandList,
 } from "@/components/ui/command";
 
-import { peoples, user } from "./const";
 import { ICreateModifyAppointmentProps } from "@/models/CreateModifyAppointment/type";
+import { createAppointmentIp, updateAppointmentIp } from "@/utils/ip";
 
 const formSchema = z.object({
   cccd_nguoi_hen: z.string(),
@@ -60,14 +62,16 @@ const CreateModifyAppointment = ({
   appointment,
   onSuccess,
   trigger,
+  officers,
 }: ICreateModifyAppointmentProps) => {
   const [open, setOpen] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [currentCccd, setCurrentCccd] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      cccd_nguoi_hen: mode === "edit" ? appointment?.cccd_nguoi_hen : user.cccd,
+      cccd_nguoi_hen: currentCccd || "",
       cccd_nguoi_duoc_hen:
         mode === "edit" ? appointment?.cccd_nguoi_duoc_hen : [],
       dia_diem: mode === "edit" ? appointment?.dia_diem : "",
@@ -83,6 +87,20 @@ const CreateModifyAppointment = ({
           : undefined,
     },
   });
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      const parsedUser = JSON.parse(user);
+      const cccdValue =
+        mode === "edit" ? appointment?.cccd_nguoi_hen : parsedUser?.username;
+      setCurrentCccd(cccdValue);
+      form.setValue("cccd_nguoi_hen", parsedUser.username, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
+  }, [form]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (values.ngay_gio_ket_thuc <= values.ngay_gio_bat_dau) {
@@ -103,33 +121,26 @@ const CreateModifyAppointment = ({
     };
 
     try {
-      // let response;
-      // if (mode === "edit" && appointment?.id) {
-      //   response = await fetch(`/api/appointments/${appointment.id}`, {
-      //     method: "PUT",
-      //     headers: { "Content-Type": "application/json" },
-      //     body: JSON.stringify(formattedData),
-      //   });
-      // } else {
-      //   response = await fetch("/api/appointments/create", {
-      //     method: "POST",
-      //     headers: { "Content-Type": "application/json" },
-      //     body: JSON.stringify(formattedData),
-      //   });
-      // }
+      let response;
+      if (mode === "edit" && appointment?.id) {
+        response = await axios.put(
+          `${updateAppointmentIp}/${appointment.id}`,
+          formattedData
+        );
+      } else {
+        response = await axios.post(`${createAppointmentIp}`, formattedData);
+      }
 
-      // const data = await response.json();
-
-      // if (data.success) {
-      //   setOpen(false);
-      //   form.reset();
-      //   onSuccess?.();
-      // } else {
-      //   console.error("API Error:", data.error);
-      //   setFormError(data.error);
-      // }
-
-      console.log(formattedData);
+      if (response.data.success) {
+        toast.success("Đặt lịch hẹn thành công");
+        setOpen(false);
+        form.reset();
+        onSuccess?.();
+      } else {
+        toast.error("Có lỗi xảy ra. Vui lòng thử lại sau.");
+        console.error("API Error:", response.data.error);
+        setFormError(response.data.error);
+      }
     } catch (error) {
       console.error("Error handling appointment:", error);
       setFormError("Có lỗi xảy ra. Vui lòng thử lại sau.");
@@ -175,7 +186,7 @@ const CreateModifyAppointment = ({
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>{`Chọn người cần hẹn ( Có thể nhiều người )`}</FormLabel>
-                  <Popover>
+                  <Popover modal={true}>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
@@ -205,18 +216,23 @@ const CreateModifyAppointment = ({
                         <CommandList>
                           <CommandEmpty>Không tìm thấy người này.</CommandEmpty>
                           <CommandGroup>
-                            {peoples.map((person) => (
+                            {officers?.map((officer) => (
                               <CommandItem
-                                key={person.cccd}
+                                key={officer.cccd_id}
                                 onSelect={() => {
-                                  const currentValue = field.value || [];
-                                  const newValue = currentValue.includes(
-                                    person.cccd
-                                  )
-                                    ? currentValue.filter(
-                                        (value) => value !== person.cccd
+                                  const currentValues = field.value || [];
+                                  const isSelected =
+                                    Array.isArray(currentValues) &&
+                                    currentValues.some(
+                                      (id) => id === officer.cccd_id
+                                    );
+
+                                  const newValue = isSelected
+                                    ? currentValues.filter(
+                                        (id) => id !== officer.cccd_id
                                       )
-                                    : [...currentValue, person.cccd];
+                                    : [...currentValues, officer.cccd_id];
+
                                   form.setValue(
                                     "cccd_nguoi_duoc_hen",
                                     newValue,
@@ -227,10 +243,15 @@ const CreateModifyAppointment = ({
                                 }}
                               >
                                 <div className="flex items-center">
-                                  {person.name}
-                                  {field.value?.includes(person.cccd) && (
-                                    <span className="ml-auto">✓</span>
-                                  )}
+                                  {officer.ho_ten}
+                                  {Array.isArray(field.value) &&
+                                    field.value.some(
+                                      (id) => id === officer.cccd_id
+                                    ) && (
+                                      <span className="ml-2 text-green-500 font-semibold">
+                                        ✓
+                                      </span>
+                                    )}
                                 </div>
                               </CommandItem>
                             ))}
@@ -258,7 +279,7 @@ const CreateModifyAppointment = ({
                             className="w-full pl-3 text-left font-normal"
                           >
                             {field.value ? (
-                              format(field.value, "PPP HH:mm")
+                              format(field.value, "PPP HH:mm", { locale: vi })
                             ) : (
                               <span>Chọn ngày bắt đầu</span>
                             )}
@@ -307,7 +328,7 @@ const CreateModifyAppointment = ({
                             className="w-full pl-3 text-left font-normal"
                           >
                             {field.value ? (
-                              format(field.value, "PPP HH:mm")
+                              format(field.value, "PPP HH:mm", { locale: vi })
                             ) : (
                               <span>Chọn ngày kết thúc</span>
                             )}
