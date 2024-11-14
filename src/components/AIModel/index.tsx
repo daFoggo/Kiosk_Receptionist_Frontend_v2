@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState, memo } from "react";
+import { useAISpeech } from "@/contexts/AISpeechContext";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Card } from "@/components/ui/card";
-import { useAISpeech } from "@/contexts/AISpeechContext";
 
 const AIModel = memo(() => {
   const { currentVideo, isPlaying } = useAISpeech();
@@ -16,14 +16,23 @@ const AIModel = memo(() => {
       videoElement.addEventListener("error", () =>
         setError("Failed to load video")
       );
+      videoElement.play();
       return () => {
+        videoElement.pause();
         videoElement.removeEventListener("loadeddata", () => setIsLoaded(true));
         videoElement.removeEventListener("error", () =>
           setError("Failed to load video")
         );
       };
     }
-  }, []);
+  }, [isLoaded]);
+
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (videoElement) {
+      videoElement.paused ? videoElement.play() : videoElement.pause();
+    }
+  }, [isPlaying]);
 
   return (
     <Card className="overflow-hidden">
@@ -40,7 +49,7 @@ const AIModel = memo(() => {
               isLoaded ? "opacity-100" : "opacity-0"
             }`}
             loop
-            autoPlay={isPlaying}
+            autoPlay
             muted
             playsInline
             preload="metadata"

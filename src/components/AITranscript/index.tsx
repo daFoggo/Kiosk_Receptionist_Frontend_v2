@@ -8,7 +8,7 @@ const AITranscript = () => {
       <CardHeader className="p-0"></CardHeader>
       <CardContent className="p-0 flex justify-center items-center">
         <p className="text-justify text-2xl text-white font-semibold">
-          {currentTranscript}
+          {currentTranscript || "Chào mừng quý khách đến với Viện Khoa học Kỹ thuật Bưu điện"}
         </p>
       </CardContent>
     </Card>

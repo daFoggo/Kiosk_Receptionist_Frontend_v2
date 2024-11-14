@@ -18,8 +18,6 @@ const defaultState: IAIContextState = {
 };
 
 const AISpeechContext = createContext<IAIContextValue | undefined>(undefined);
-const DEFAULT_WELCOME_MESSAGE =
-  "Chào mừng quý khách đến với Viện khoa học Kĩ thuật Bưu điện";
 
 export const AISpeechProvider: React.FC<IAIProviderProps> = ({
   children,
@@ -141,12 +139,6 @@ export const AISpeechProvider: React.FC<IAIProviderProps> = ({
 
   return (
     <AISpeechContext.Provider value={value}>
-      <video
-        ref={videoRef}
-        src={state.currentVideo}
-        style={{ display: "none" }}
-        loop
-      />
       {children}
     </AISpeechContext.Provider>
   );
