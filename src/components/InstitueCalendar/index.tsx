@@ -31,11 +31,13 @@ import InstitueCalendarTable from "@/components/InstitueCalendarTable";
 import { getInstitueCalendarIp } from "@/utils/ip";
 import { truncateText } from "@/utils/Helper/common";
 import { Card, CardContent, CardFooter, CardTitle } from "../ui/card";
+import { useTranslation } from "react-i18next";
 
 const InstitueCalendar = memo(() => {
   const calendarRef = useRef<HTMLDivElement>(null);
   const [calendar, setCalendar] = useState<IInstitueCalendar | null>(null);
   const [fullCalendar, setFullCalendar] = useState<IInstitueCalendar[]>([]);
+  const { t } = useTranslation();
 
   // enable scroll
   useEffect(() => {
@@ -148,7 +150,7 @@ const InstitueCalendar = memo(() => {
     <Card className="h-full flex flex-col p-4 rounded-3xl" ref={calendarRef}>
       <CardTitle className="flex items-center gap-2 mb-4 text-2xl font-semibold">
         <BriefcaseBusiness />
-        Lịch công tác hôm nay
+        {t("instituecalendar.component")}
       </CardTitle>
       <CardContent className="p-0 mb-4">
         {calendar ? (
@@ -157,7 +159,7 @@ const InstitueCalendar = memo(() => {
           </h1>
         ) : (
           <p className="text-2xl text-left text-muted-foreground font-semibold">
-            Không có lịch công tác hôm nay
+            {t("instituecalendar.displaynone")}
           </p>
         )}
 
@@ -192,13 +194,13 @@ const InstitueCalendar = memo(() => {
               className="rounded-3xl text-lg font-semibold bg-secondary"
               iconPosition="right"
             >
-              Chi tiết
+              {t("instituecalendar.detail")}
             </Button>
           </SheetTrigger>
           <SheetContent className="sm:max-w-4xl [&>button]:hidden overflow-y-hidden h-dvh">
             <SheetHeader>
               <div className="flex justify-between items-center text-center mb-6">
-                <SheetTitle className="text-3xl">Chi tiết công tác</SheetTitle>
+                <SheetTitle className="text-3xl">{t("instituecalendar.dialog.title")}</SheetTitle>
                 <SheetClose>
                   <span className="text-muted-foreground">
                     <X />
@@ -246,7 +248,9 @@ const InstitueCalendar = memo(() => {
               </SheetDescription>
             </SheetHeader>
             <div className="mt-6 h-full">
-              <h1 className="text-2xl font-bold mb-4">Toàn bộ lịch công tác</h1>
+              <h1 className="text-2xl font-bold mb-4">
+                {t("instituecalendar.dialog.allCalendar")}
+              </h1>
               <div className="overflow-auto h-[80%]">
                 <InstitueCalendarTable
                   works={fullCalendar}

@@ -14,12 +14,14 @@ import VerifyCCCD from "../VerifyCCCD";
 import Procedures from "../Procedures";
 import AppointmentChecking from "../AppointmentChecking";
 
-export const interactionMenu: Record<string, IMenuItem[]> = {
+export const interactionMenu = (
+  t: (key: string) => string
+): Record<string, IMenuItem[]> => ({
   guest: [
     {
       id: 1,
-      title: "Xác thực thông tin",
-      description: "Xác thực thông tin căn cước công dân qua máy đọc",
+      title: t("interactionMenu.verifyInfo.title"),
+      description: t("interactionMenu.verifyInfo.description"),
       icon: IdCard,
       action: "dialog",
       component: VerifyCCCD,
@@ -27,18 +29,18 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     },
     {
       id: 2,
-      title: "Check-in lịch hẹn",
-      description: "Check-in lịch hẹn bạn đã đặt để liên hệ với bên cần hẹn",
+      title: t("interactionMenu.apppointmentCheckin.title"),
+      description: t("interactionMenu.apppointmentCheckin.description"),
       icon: ScanQrCode,
       action: "dialog",
       component: AppointmentChecking,
       requiredProps: [],
+      disabled: true,
     },
     {
       id: 3,
-      title: "Thủ tục hành chính",
-      description:
-        "Thông tin về các thủ tục hành chính cơ bản của Viện Khoa học Kĩ thuật Bưu điện",
+      title: t("interactionMenu.procedures.title"),
+      description: t("interactionMenu.procedures.description"),
       icon: Signature,
       action: "drawer",
       component: Procedures,
@@ -49,8 +51,8 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
   student: [
     {
       id: 1,
-      title: "Lịch học chung",
-      description: "Lịch học chung của tất cả sinh viên",
+      title: t("interactionMenu.generalSchedule.student.title"),
+      description: t("interactionMenu.generalSchedule.student.description"),
       icon: CalendarDays,
       action: "sheet",
       component: GeneralCalendar,
@@ -59,8 +61,8 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     },
     {
       id: 2,
-      title: "Lịch học của tôi",
-      description: "Lịch học cá nhân của sinh viên",
+      title: t("interactionMenu.personalCalendar.student.title"),
+      description: t("interactionMenu.personalCalendar.student.description"),
       icon: CalendarHeart,
       action: "sheet",
       component: PersonalCalendar,
@@ -68,8 +70,8 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     },
     {
       id: 3,
-      title: "Thông tin của tôi",
-      description: "Thông tin cá nhân của sinh viên",
+      title: t("interactionMenu.userInfo.title"),
+      description: t("interactionMenu.userInfo.description"),
       icon: FileUser,
       action: "drawer",
       component: UserInfo,
@@ -78,8 +80,8 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     },
     {
       id: 4,
-      title: "Xác thực thông tin",
-      description: "Xác thực thông tin căn cước công dân qua máy đọc",
+      title: t("interactionMenu.verifyInfo.title"),
+      description: t("interactionMenu.verifyInfo.description"),
       icon: IdCard,
       action: "dialog",
       component: VerifyCCCD,
@@ -87,18 +89,18 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     },
     {
       id: 5,
-      title: "Check-in lịch hẹn",
-      description: "Check-in lịch hẹn bạn đã đặt để liên hệ với bên cần hẹn",
+      title: t("interactionMenu.apppointmentCheckin.title"),
+      description: t("interactionMenu.apppointmentCheckin.description"),
       icon: ScanQrCode,
       action: "dialog",
       component: AppointmentChecking,
       requiredProps: [],
+      disabled: true,
     },
     {
       id: 6,
-      title: "Thủ tục hành chính",
-      description:
-        "Thông tin về các thủ tục hành chính cơ bản của Viện Khoa học Kĩ thuật Bưu điện",
+      title: t("interactionMenu.procedures.title"),
+      description: t("interactionMenu.procedures.description"),
       icon: Signature,
       action: "drawer",
       component: Procedures,
@@ -109,8 +111,8 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
   instructor: [
     {
       id: 1,
-      title: "Lịch giảng dạy chung",
-      description: "Lịch giảng dạy chung của tất cả giảng viên",
+      title: t("interactionMenu.generalSchedule.instructor.title"),
+      description: t("interactionMenu.generalSchedule.instructor.description"),
       icon: CalendarDays,
       action: "sheet",
       component: GeneralCalendar,
@@ -119,8 +121,8 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     },
     {
       id: 2,
-      title: "Lịch giảng dạy của tôi",
-      description: "Lịch giảng dạy cá nhân của giảng viên",
+      title: t("interactionMenu.personalCalendar.instructor.title"),
+      description: t("interactionMenu.personalCalendar.instructor.description"),
       icon: CalendarHeart,
       action: "sheet",
       component: PersonalCalendar,
@@ -128,8 +130,8 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     },
     {
       id: 3,
-      title: "Thông tin của tôi",
-      description: "Thông tin cá nhân của giảng viên",
+      title: t("interactionMenu.userInfo.title"),
+      description: t("interactionMenu.userInfo.description"),
       icon: FileUser,
       action: "drawer",
       component: UserInfo,
@@ -138,8 +140,8 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     },
     {
       id: 4,
-      title: "Xác thực thông tin",
-      description: "Xác thực thông tin căn cước công dân qua máy đọc",
+      title: t("interactionMenu.verifyInfo.title"),
+      description: t("interactionMenu.verifyInfo.description"),
       icon: IdCard,
       action: "dialog",
       component: VerifyCCCD,
@@ -147,18 +149,18 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     },
     {
       id: 5,
-      title: "Check-in lịch hẹn",
-      description: "Check-in lịch hẹn bạn đã đặt để liên hệ với bên cần hẹn",
+      title: t("interactionMenu.apppointmentCheckin.title"),
+      description: t("interactionMenu.apppointmentCheckin.description"),
       icon: ScanQrCode,
       action: "dialog",
       component: AppointmentChecking,
       requiredProps: [],
+      disabled: true,
     },
     {
       id: 6,
-      title: "Thủ tục hành chính",
-      description:
-        "Thông tin về các thủ tục hành chính cơ bản của Viện Khoa học Kĩ thuật Bưu điện",
+      title: t("interactionMenu.procedures.title"),
+      description: t("interactionMenu.procedures.description"),
       icon: Signature,
       action: "drawer",
       component: Procedures,
@@ -169,8 +171,8 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
   staff: [
     {
       id: 1,
-      title: "Lịch công tác chung",
-      description: "Lịch công tác chung của tất cả cán bộ",
+      title: t("interactionMenu.generalSchedule.instructor.title"),
+      description: t("interactionMenu.generalSchedule.instructor.description"),
       icon: CalendarDays,
       action: "sheet",
       component: GeneralCalendar,
@@ -179,8 +181,8 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     },
     {
       id: 2,
-      title: "Lịch công tác của tôi",
-      description: "Lịch công tác cá nhân của cán bộ",
+      title: t("interactionMenu.personalCalendar.instructor.title"),
+      description: t("interactionMenu.personalCalendar.instructor.description"),
       icon: CalendarHeart,
       action: "sheet",
       component: PersonalCalendar,
@@ -189,8 +191,8 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     },
     {
       id: 3,
-      title: "Thông tin của tôi",
-      description: "Thông tin cá nhân của cán bộ",
+      title: t("interactionMenu.userInfo.title"),
+      description: t("interactionMenu.userInfo.description"),
       icon: FileUser,
       action: "drawer",
       component: UserInfo,
@@ -199,8 +201,8 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     },
     {
       id: 4,
-      title: "Xác thực thông tin",
-      description: "Xác thực thông tin căn cước công dân qua máy đọc",
+      title: t("interactionMenu.verifyInfo.title"),
+      description: t("interactionMenu.verifyInfo.description"),
       icon: IdCard,
       action: "dialog",
       component: VerifyCCCD,
@@ -208,8 +210,8 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     },
     {
       id: 5,
-      title: "Check-in lịch hẹn",
-      description: "Check-in lịch hẹn bạn đã đặt để liên hệ với bên cần hẹn",
+      title: t("interactionMenu.apppointmentCheckin.title"),
+      description: t("interactionMenu.apppointmentCheckin.description"),
       icon: ScanQrCode,
       action: "dialog",
       component: AppointmentChecking,
@@ -218,14 +220,12 @@ export const interactionMenu: Record<string, IMenuItem[]> = {
     },
     {
       id: 6,
-      title: "Thủ tục hành chính",
-      description:
-        "Thông tin về các thủ tục hành chính cơ bản của Viện Khoa học Kĩ thuật Bưu điện",
+      title: t("interactionMenu.procedures.title"),
+      description: t("interactionMenu.procedures.description"),
       icon: Signature,
       action: "drawer",
       component: Procedures,
       requiredProps: [],
-      
     },
   ],
-};
+});

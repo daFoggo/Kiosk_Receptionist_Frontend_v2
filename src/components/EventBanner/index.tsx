@@ -18,13 +18,10 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import { IEvent, IEventBannerProps } from "@/models/EventBanner/EventBanner";
+import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 
 // Utility functions
 const dateUtils = {
@@ -47,112 +44,159 @@ const dateUtils = {
   },
 
   areDatesSame: (startDate: string, endDate: string) => {
-    return new Date(startDate).toDateString() === new Date(endDate).toDateString();
+    return (
+      new Date(startDate).toDateString() === new Date(endDate).toDateString()
+    );
   },
 };
 
 // Memoized components
-const ResponsiveBadge = memo(({ icon, text }: { icon: React.ReactNode; text: string }) => (
-  <Badge variant="secondary" className="px-2 py-1 max-w-[180px]" title={text}>
-    <div className="flex items-center gap-1 w-full">
-      {icon}
-      <span className="text-sm truncate">{text}</span>
-    </div>
-  </Badge>
-));
-ResponsiveBadge.displayName = 'ResponsiveBadge';
-
-const EventField = memo(({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) => (
-  <div className="flex items-center space-x-2 text-base font-semibold">
-    <span className="text-primary">{icon}</span>
-    <span className="text-muted-foreground">{label}:</span>
-    <span>{value}</span>
-  </div>
-));
-EventField.displayName = 'EventField';
-
-const NavigationButton = memo(({ direction, onClick }: { direction: 'left' | 'right'; onClick: () => void }) => (
-  <Button
-    variant="ghost"
-    size="icon"
-    className={`absolute ${direction === 'left' ? 'left-2' : 'right-2'} top-1/2 -translate-y-1/2 rounded-full bg-secondary/50 hover:bg-secondary`}
-    onClick={onClick}
-    aria-label={`${direction === 'left' ? 'Previous' : 'Next'} event`}
-  >
-    {direction === 'left' ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-  </Button>
-));
-NavigationButton.displayName = 'NavigationButton';
-
-const EventDialog = memo(({ 
-  isOpen, 
-  onClose, 
-  event 
-}: { 
-  isOpen: boolean; 
-  onClose: () => void; 
-  event: IEvent;
-}) => (
-  <Dialog open={isOpen} onOpenChange={onClose}>
-    <DialogContent 
-      className="max-w-[98%] rounded-xl sm:rounded-2xl sm:max-w-[70%]" 
-      onOpenAutoFocus={(e) => e.preventDefault()}
-    >
-      <DialogHeader>
-        <DialogTitle className="text-2xl font-semibold text-primary">
-          Chi tiết sự kiện
-        </DialogTitle>
-      </DialogHeader>
-      <div className="mt-6 space-y-4">
-        <EventField icon={<CalendarHeart />} label="Tên sự kiện" value={event.title} />
-        <EventField 
-          icon={<Clock />} 
-          label="Ngày diễn ra" 
-          value={dateUtils.formatDate(event.start_time)} 
-        />
-        <EventField 
-          icon={<ClockArrowUp />} 
-          label="Thời điểm bắt đầu" 
-          value={`${dateUtils.formatDate(event.start_time)} ${dateUtils.formatTime(event.start_time)}`} 
-        />
-        <EventField 
-          icon={<ClockArrowDown />} 
-          label="Thời điểm kết thúc" 
-          value={`${dateUtils.formatDate(event.end_time)} ${dateUtils.formatTime(event.end_time)}`} 
-        />
-        {event.location && (
-          <EventField icon={<MapPin />} label="Địa điểm" value={event.location} />
-        )}
+const ResponsiveBadge = memo(
+  ({ icon, text }: { icon: React.ReactNode; text: string }) => (
+    <Badge variant="secondary" className="px-2 py-1 max-w-[180px]" title={text}>
+      <div className="flex items-center gap-1 w-full">
+        {icon}
+        <span className="text-sm truncate">{text}</span>
       </div>
-      <DialogFooter>
-        <Button onClick={onClose}>Đóng</Button>
-      </DialogFooter>
-    </DialogContent>
-  </Dialog>
-));
-EventDialog.displayName = 'EventDialog';
+    </Badge>
+  )
+);
+ResponsiveBadge.displayName = "ResponsiveBadge";
 
-const EventTitle = memo(({ title, onClick }: { title: string; onClick: () => void }) => (
-  <motion.h2
-    initial={{ opacity: 0, x: 100 }}
-    animate={{ opacity: 1, x: 0 }}
-    exit={{ opacity: 0, x: -100 }}
-    transition={{ duration: 0.3 }}
-    className="text-2xl font-semibold text-primary absolute w-full cursor-pointer hover:text-ring"
-    onClick={onClick}
-  >
-    {title}
-  </motion.h2>
-));
-EventTitle.displayName = 'EventTitle';
+const EventField = memo(
+  ({
+    icon,
+    label,
+    value,
+  }: {
+    icon: React.ReactNode;
+    label: string;
+    value: string;
+  }) => (
+    <div className="flex items-center space-x-2 text-base font-semibold">
+      <span className="text-primary">{icon}</span>
+      <span className="text-muted-foreground">{label}:</span>
+      <span>{value}</span>
+    </div>
+  )
+);
+EventField.displayName = "EventField";
+
+const NavigationButton = memo(
+  ({
+    direction,
+    onClick,
+  }: {
+    direction: "left" | "right";
+    onClick: () => void;
+  }) => (
+    <Button
+      variant="ghost"
+      size="icon"
+      className={`absolute ${
+        direction === "left" ? "left-2" : "right-2"
+      } top-1/2 -translate-y-1/2 rounded-full bg-secondary/50 hover:bg-secondary`}
+      onClick={onClick}
+      aria-label={`${direction === "left" ? "Previous" : "Next"} event`}
+    >
+      {direction === "left" ? (
+        <ChevronLeft className="h-4 w-4" />
+      ) : (
+        <ChevronRight className="h-4 w-4" />
+      )}
+    </Button>
+  )
+);
+NavigationButton.displayName = "NavigationButton";
+
+const EventDialog = memo(
+  ({
+    isOpen,
+    onClose,
+    event,
+  }: {
+    isOpen: boolean;
+    onClose: () => void;
+    event: IEvent;
+  }) => (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent
+        className="max-w-[98%] rounded-xl sm:rounded-2xl sm:max-w-[70%]"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
+        <DialogHeader>
+          <DialogTitle className="text-2xl font-semibold text-primary">
+            {t("eventbanner.dialog.title")}
+          </DialogTitle>
+        </DialogHeader>
+        <div className="mt-6 space-y-4">
+          <EventField
+            icon={<CalendarHeart />}
+            label={t("eventbanner.dialog.field.title")}
+            value={event.title}
+          />
+          <EventField
+            icon={<Clock />}
+            label={t("eventbanner.dialog.field.date")}
+            value={dateUtils.formatDate(event.start_time)}
+          />
+          <EventField
+            icon={<ClockArrowUp />}
+            label={t("eventbanner.dialog.field.start_date")}
+            value={`${dateUtils.formatDate(
+              event.start_time
+            )} ${dateUtils.formatTime(event.start_time)}`}
+          />
+          <EventField
+            icon={<ClockArrowDown />}
+            label={t("eventbanner.dialog.field.end_date")}
+            value={`${dateUtils.formatDate(
+              event.end_time
+            )} ${dateUtils.formatTime(event.end_time)}`}
+          />
+          {event.location && (
+            <EventField
+              icon={<MapPin />}
+              label={t("eventbanner.dialog.field.location")}
+              value={event.location}
+            />
+          )}
+        </div>
+        <DialogFooter>
+          <Button onClick={onClose}>Đóng</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+);
+EventDialog.displayName = "EventDialog";
+
+const EventTitle = memo(
+  ({ title, onClick }: { title: string; onClick: () => void }) => (
+    <motion.h2
+      initial={{ opacity: 0, x: 100 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -100 }}
+      transition={{ duration: 0.3 }}
+      className="text-2xl font-semibold text-primary absolute w-full cursor-pointer hover:text-ring"
+      onClick={onClick}
+    >
+      {title}
+    </motion.h2>
+  )
+);
+EventTitle.displayName = "EventTitle";
 
 const EventBanner = ({ eventData }: IEventBannerProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const currentEvent = eventData[currentIndex];
+  const { t } = useTranslation();
 
   const handlePrevious = useCallback(() => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + eventData.length) % eventData.length);
+    setCurrentIndex(
+      (prevIndex) => (prevIndex - 1 + eventData.length) % eventData.length
+    );
   }, [eventData.length]);
 
   const handleNext = useCallback(() => {
@@ -167,7 +211,9 @@ const EventBanner = ({ eventData }: IEventBannerProps) => {
   }, [eventData.length, handleNext]);
 
   const renderDateBadges = useCallback(() => {
-    if (dateUtils.areDatesSame(currentEvent.start_time, currentEvent.end_time)) {
+    if (
+      dateUtils.areDatesSame(currentEvent.start_time, currentEvent.end_time)
+    ) {
       return (
         <>
           <ResponsiveBadge
@@ -177,9 +223,9 @@ const EventBanner = ({ eventData }: IEventBannerProps) => {
           {dateUtils.formatTime(currentEvent.start_time) && (
             <ResponsiveBadge
               icon={<Clock />}
-              text={`${dateUtils.formatTime(currentEvent.start_time)} - ${dateUtils.formatTime(
-                currentEvent.end_time
-              )}`}
+              text={`${dateUtils.formatTime(
+                currentEvent.start_time
+              )} - ${dateUtils.formatTime(currentEvent.end_time)}`}
             />
           )}
         </>
@@ -190,15 +236,15 @@ const EventBanner = ({ eventData }: IEventBannerProps) => {
       <>
         <ResponsiveBadge
           icon={<ClockArrowUp />}
-          text={`${dateUtils.formatDate(currentEvent.start_time)} ${dateUtils.formatTime(
+          text={`${dateUtils.formatDate(
             currentEvent.start_time
-          )}`}
+          )} ${dateUtils.formatTime(currentEvent.start_time)}`}
         />
         <ResponsiveBadge
           icon={<ClockArrowDown />}
-          text={`${dateUtils.formatDate(currentEvent.end_time)} ${dateUtils.formatTime(
+          text={`${dateUtils.formatDate(
             currentEvent.end_time
-          )}`}
+          )} ${dateUtils.formatTime(currentEvent.end_time)}`}
         />
       </>
     );
@@ -208,16 +254,16 @@ const EventBanner = ({ eventData }: IEventBannerProps) => {
     <Card className="relative h-full flex flex-col p-4 rounded-3xl overflow-hidden">
       <CardTitle className="flex items-center gap-2 text-2xl font-semibold mb-4">
         <CalendarHeart />
-        Sự kiện
+        {t("eventbanner.component")}
       </CardTitle>
 
       <CardContent className="p-0 flex-grow flex flex-col">
         <div className="h-[2.5rem] relative">
           <AnimatePresence mode="wait">
-            <EventTitle 
-              key={currentEvent.id} 
-              title={currentEvent.title} 
-              onClick={() => setIsDialogOpen(true)} 
+            <EventTitle
+              key={currentEvent.id}
+              title={currentEvent.title}
+              onClick={() => setIsDialogOpen(true)}
             />
           </AnimatePresence>
         </div>
@@ -237,10 +283,10 @@ const EventBanner = ({ eventData }: IEventBannerProps) => {
         </>
       )}
 
-      <EventDialog 
-        isOpen={isDialogOpen} 
-        onClose={() => setIsDialogOpen(false)} 
-        event={currentEvent} 
+      <EventDialog
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        event={currentEvent}
       />
     </Card>
   );

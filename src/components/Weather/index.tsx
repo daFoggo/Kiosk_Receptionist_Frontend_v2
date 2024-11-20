@@ -22,6 +22,7 @@ import {
 } from "react-icons/wi";
 
 import { IWeatherIconProps, IWeatherData } from "@/models/Weather/type";
+import { useTranslation } from "react-i18next";
 import { openWeatherIp } from "@/utils/ip";
 
 const WeatherIcon = ({ icon, className }: IWeatherIconProps) => {
@@ -47,15 +48,17 @@ const WeatherIcon = ({ icon, className }: IWeatherIconProps) => {
 const Weather = () => {
   const [weatherData, setWeatherData] = useState<IWeatherData | null>(null);
   const [loading, setLoading] = useState(true);
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     getWeatherData();
-  }, []);
+  }, [i18n.language]);
 
   const getWeatherData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(openWeatherIp);
+      const weatherUrl = `${openWeatherIp}&lang=${i18n.language}`;
+      const response = await axios.get(weatherUrl);
 
       const weather: IWeatherData = {
         temperature: response.data.main.temp,
@@ -94,7 +97,9 @@ const Weather = () => {
   return (
     <Card className="h-full rounded-3xl p-4 aspect-square flex flex-col justify-between">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 p-0">
-        <CardTitle className="text-2xl font-semibold">Hôm nay</CardTitle>
+        <CardTitle className="text-2xl font-semibold">
+          {t("weather.today")}
+        </CardTitle>
         <WeatherIcon icon={icon} className="text-4xl" />
       </CardHeader>
 
@@ -102,7 +107,7 @@ const Weather = () => {
         <div className="flex items-baseline gap-2">
           <p className="text-7xl font-bold">{Math.round(temperature)}°</p>
           <p className="text-xl text-muted-foreground font-semibold">
-            CG {Math.round(feels_like)}°
+            {t("weather.feeling")} {Math.round(feels_like)}°
           </p>
         </div>
       </CardContent>

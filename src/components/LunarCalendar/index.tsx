@@ -1,8 +1,7 @@
-;
 import { SolarDate } from "@nghiavuive/lunar_date_vi";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
-import { vi } from "date-fns/locale";
+import { vi, enUS, ko } from "date-fns/locale"; // Import thêm locale enUS
 import { Calendar as CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -14,12 +13,27 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Card, CardContent, CardTitle } from "../ui/card";
+import { useTranslation } from "react-i18next";
 
 const LunarCalendar = () => {
   const [date, setDate] = useState<Date>(new Date());
   const [startOfWeek, setStartOfWeek] = useState(new Date());
   const today = new Date();
-  const weekDays = ["Th2", "Th3", "Th4", "Th5", "Th6", "Th7", "CN"];
+  const { t, i18n } = useTranslation();
+
+  const getWeekDays = () => {
+    if (i18n.language === "vi") {
+      return ["Th2", "Th3", "Th4", "Th5", "Th6", "Th7", "CN"];
+    } else if (i18n.language === "en") {
+      return ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    } else if (i18n.language === "kr") {
+      return ["월", "화", "수", "목", "금", "토", "일"];
+    }
+  };
+
+  const getLocale = () => {
+    return i18n.language === "vi" ? vi : i18n.language === "en" ? enUS : ko;
+  };
 
   useEffect(() => {
     const updatedStartOfWeek = new Date(date);
@@ -42,7 +56,9 @@ const LunarCalendar = () => {
 
   // Render Functions
   const renderCalendar = () => {
-    return weekDays.map((day, index) => {
+    const weekDays = getWeekDays();
+
+    return weekDays?.map((day, index) => {
       const currentDate = new Date(startOfWeek);
       currentDate.setDate(startOfWeek.getDate() + index);
 
@@ -77,7 +93,7 @@ const LunarCalendar = () => {
               isToday ? "text-primary-foreground" : "text-muted-foreground"
             }`}
           >
-            {lunarDate.get().day} AL
+            {lunarDate.get().day} {t("lunarcalendar.suffix")}
           </div>
         </div>
       );
@@ -87,21 +103,25 @@ const LunarCalendar = () => {
   return (
     <Card className="p-4 rounded-3xl h-full">
       <div className="flex justify-between items-center mb-4">
-        <CardTitle className="text-2xl font-semibold">Lịch</CardTitle>
+        <CardTitle className="text-2xl font-semibold">
+          {t("lunarcalendar.component")}
+        </CardTitle>
         <div className="flex items-center justify-between">
           <Popover>
             <PopoverTrigger asChild>
               <Button
                 variant={"outline"}
                 className={cn(
-                  "w-fit justify-start text-left font-semibold rounded-xl text-xl ",
+                  "w-fit justify-start text-left font-semibold rounded-xl text-xl",
                   !date && "text-muted-foreground"
                 )}
                 icon={<CalendarIcon />}
               >
                 {date &&
-                  format(date, "MMMM", { locale: vi }).charAt(0).toUpperCase() +
-                    format(date, "MMMM", { locale: vi }).slice(1)}
+                  format(date, "MMMM", { locale: getLocale() })
+                    .charAt(0)
+                    .toUpperCase() +
+                    format(date, "MMMM", { locale: getLocale() }).slice(1)}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto">
@@ -111,7 +131,7 @@ const LunarCalendar = () => {
                 onSelect={handleSelectDate}
                 initialFocus
                 className="text-3xl"
-                locale={vi}
+                locale={getLocale()}
                 classNames={{
                   day_selected:
                     "bg-primary text-white hover:bg-primary hover:text-white",

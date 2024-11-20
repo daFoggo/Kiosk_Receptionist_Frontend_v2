@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 import WelcomeBanner from "@/components/WelcomeBanner";
 import EventBanner from "@/components/EventBanner";
-import LunarCalendar from "@/components/LunarCalendar/LunarCalendar";
+import LunarCalendar from "@/components/LunarCalendar";
 import RootNavbar from "@/components/RootNavbar";
 import Weather from "@/components/Weather";
 import InstitueCalendar from "@/components/InstitueCalendar";
@@ -21,10 +21,10 @@ const Home = () => {
   const [eventData, setEventData] = useState([
     {
       id: 1,
-      title: "Hội nghị Khoa học Sinh viên lần thứ 16",
-      start_time: "2021-11-15T08:30:00",
-      end_time: "2021-11-15T11:15:00",
-      location: "Hội trường A2, Cơ sở Hà Đông, Học viện Công nghệ BCVT",
+      title: "Opening Ceremony Vietnam - Korea center",
+      start_time: "2024-11-20T09:00:00",
+      end_time: "2024-11-20T09:30:00",
+      location: "RIPT",
     },
   ]);
 
@@ -154,3 +154,6 @@ const Home = () => {
 };
 
 export default Home;
+function useAIContext(): { speak: any; stopSpeaking: any } {
+  throw new Error("Function not implemented.");
+}

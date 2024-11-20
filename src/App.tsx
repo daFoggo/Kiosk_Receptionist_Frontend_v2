@@ -1,5 +1,6 @@
 import "./App.css";
 import "./index.css";
+import "./i18n/i18n";
 import { RouterProvider } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { WebsocketProvider } from "./contexts/WebsocketContext";

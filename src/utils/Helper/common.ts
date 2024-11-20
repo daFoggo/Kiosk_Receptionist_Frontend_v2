@@ -12,17 +12,21 @@ export const generateHours = (length: number) => {
   });
 };
 
-export const convertRole = (role: string) => {
+export const convertRole = (role: string, i18n: string) => {
   switch (role) {
-    case "guest":
-      return "Khách";
     case "student":
-      return "Sinh viên";
-    case "instructor":
-      return "Giảng viên";
-    case "staff":
-      return "Cán bộ";
+      return i18n === "en" ? "Student" : i18n === "kr" ? "학생" : "Sinh viên";
+    case "teacher":
+      return i18n === "en"
+        ? "Teacher"
+        : i18n === "kr"
+        ? "선생님"
+        : "Giảng viên";
+    case "officer":
+      return i18n === "en" ? "Officer" : i18n === "kr" ? "직원" : "Cán bộ";
+    case "guest":
+      return i18n === "en" ? "Guest" : i18n === "kr" ? "손님" : "Khách";
     default:
-      return "Không xác định";
+      return role;
   }
-}
+};

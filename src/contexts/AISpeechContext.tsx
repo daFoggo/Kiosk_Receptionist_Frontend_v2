@@ -32,16 +32,29 @@ export const AISpeechProvider: React.FC<IAIProviderProps> = ({
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  const getVietnameseVoice = useCallback(() => {
-    const voices = speechSynthesis.getVoices();
-    console.log(voices);
-    const vietnameseVoice = voices.find(
-      (voice) =>
-        voice.lang.includes("vi-VN") &&
-        voice.name.toLowerCase().includes("female")
-    );
-    return vietnameseVoice || null;
-  }, [speechSynthesis]);
+  const getVoiceByLanguage = useCallback(
+    (lang: string) => {
+      const voices = speechSynthesis.getVoices();
+
+      if (lang === "ko-KR") {
+        const sunHiVoice = voices.find(
+          (voice) =>
+            voice.name === "Microsoft SunHi Online (Natural) - Korean (Korea)"
+        );
+        console.log(sunHiVoice);
+        return sunHiVoice || null;
+      } else if (lang === "vi-VN") {
+        const hoaiMyVoice = voices.find(
+          (voice) =>
+            voice.name ===
+            "Microsoft HoaiMy Online (Natural) - Vietnamese (Vietnam)"
+        );
+        console.log(hoaiMyVoice);
+        return hoaiMyVoice || null;
+      }
+    },
+    [speechSynthesis]
+  );
 
   const stopSpeaking = useCallback(() => {
     if (utteranceRef.current) {
@@ -59,42 +72,62 @@ export const AISpeechProvider: React.FC<IAIProviderProps> = ({
   }, [speechSynthesis]);
 
   const speak = useCallback(
-    async (text: string, videoSrc?: string) => {
-      // stop current speak
-      stopSpeaking();
-
-      // update state
+    async (englishText: string, koreanText: string, videoSrc?: string) => {
       setState((prev) => ({
         ...prev,
         isPlaying: true,
-        currentTranscript: text,
+        currentTranscript: englishText,
         currentVideo: videoSrc || prev.currentVideo,
       }));
 
-      // speech config
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = "vi-VN";
-
-      // Get and set Vietnamese voice
-      const vietnameseVoice = getVietnameseVoice();
-      if (vietnameseVoice) {
-        utterance.voice = vietnameseVoice;
-      } else {
-        console.warn("Vietnamese female voice not found, using default voice");
+      // Create English utterance
+      const englishUtterance = new SpeechSynthesisUtterance(englishText);
+      englishUtterance.lang = "vi-VN";
+      const englishVoice = getVoiceByLanguage("vi-VN");
+      if (englishVoice) {
+        englishUtterance.voice = englishVoice;
       }
+      englishUtterance.rate = 0.9;
+      englishUtterance.pitch = 1.0;
+      englishUtterance.volume = 1.0;
 
-      // Adjust speech parameters for clearer Vietnamese pronunciation
-      utterance.rate = 0.9; // Slightly slower for better clarity
-      utterance.pitch = 1.2; // Slightly higher pitch for female voice
-      utterance.volume = 1.0;
+      // Create Korean utterance
+      const koreanUtterance = new SpeechSynthesisUtterance(koreanText);
+      koreanUtterance.lang = "ko-KR";
+      const koreanVoice = getVoiceByLanguage("ko-KR");
+      if (koreanVoice) {
+        koreanUtterance.voice = koreanVoice;
+      }
+      koreanUtterance.rate = 0.9;
+      koreanUtterance.pitch = 1.0;
+      koreanUtterance.volume = 1.0;
 
-      utteranceRef.current = utterance;
+      // Error handling
+      const handleError = (event: SpeechSynthesisErrorEvent) => {
+        console.error("Speech synthesis error:", event);
+        stopSpeaking();
+      };
 
-      // handle end speech
-      utterance.onend = () => {
+      englishUtterance.onerror = handleError;
+      koreanUtterance.onerror = handleError;
+
+      // Set up sequential speaking
+      englishUtterance.onend = () => {
+        // Update transcript to Korean
+        setState((prev) => ({
+          ...prev,
+          currentTranscript: koreanText,
+        }));
+
+        // Speak Korean after English
+        speechSynthesis.speak(koreanUtterance);
+      };
+
+      koreanUtterance.onend = () => {
         setState((prev) => ({
           ...prev,
           isPlaying: false,
+          currentTranscript: "",
         }));
         if (videoRef.current) {
           videoRef.current.pause();
@@ -102,14 +135,8 @@ export const AISpeechProvider: React.FC<IAIProviderProps> = ({
         }
       };
 
-      // Error handling for speech synthesis
-      utterance.onerror = (event) => {
-        console.error("Speech synthesis error:", event);
-        stopSpeaking();
-      };
-
-      // start speech
-      speechSynthesis.speak(utterance);
+      // Start with English speech
+      speechSynthesis.speak(englishUtterance);
 
       // start video
       if (videoRef.current) {
@@ -120,7 +147,7 @@ export const AISpeechProvider: React.FC<IAIProviderProps> = ({
         }
       }
     },
-    [speechSynthesis, stopSpeaking, getVietnameseVoice]
+    [speechSynthesis, stopSpeaking, getVoiceByLanguage]
   );
 
   const updateDefaultVideo = useCallback((videoSrc: string) => {

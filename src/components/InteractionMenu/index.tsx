@@ -1,6 +1,5 @@
 import { useState, useCallback, useMemo, memo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { BookMarked } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,6 +26,8 @@ import {
 } from "@/models/InteractionMenu/type";
 import { interactionMenu } from "./constant";
 import { gridVariants, itemVariants, activeButtonVariants } from "./motion";
+import LanguageSelector from "../LanguageSelector";
+import { useTranslation } from "react-i18next";
 
 const MenuItem = memo(({ item, onClick, isActive }: IMenuItemProps) => (
   <motion.div
@@ -81,6 +82,7 @@ const MenuItem = memo(({ item, onClick, isActive }: IMenuItemProps) => (
 
 const InteractionMenu = memo(
   ({ userRole, onMenuItemClick, itemsData }: IInteractionMenuProps) => {
+    const { t } = useTranslation();
     const [activingButton, setActivingButton] = useState<number | null>(null);
     const [menuState, setMenuState] = useState<IMenuState>({
       isDialogOpen: false,
@@ -91,8 +93,8 @@ const InteractionMenu = memo(
     });
     const [previousRole, setPreviousRole] = useState<string>(userRole);
     const menuItems = useMemo(
-      () => interactionMenu[userRole] || [],
-      [userRole]
+      () => interactionMenu(t)[userRole] || [],
+      [userRole, t]
     );
 
     const handleItemClick = useCallback(
@@ -180,7 +182,6 @@ const InteractionMenu = memo(
       };
     }, [activeItem, itemsData, closeAll]);
 
-    // Update previous role when role changes
     if (previousRole !== userRole) {
       setPreviousRole(userRole);
     }
@@ -211,15 +212,7 @@ const InteractionMenu = memo(
           </CardContent>
           <CardFooter className="p-0 flex items-center justify-between">
             <div></div>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                variant="outline"
-                size="icon"
-                className="bg-primary/20 font-semibold p-2 hover:bg-primary/30"
-              >
-                <BookMarked className="w-6 h-6" />
-              </Button>
-            </motion.div>
+            <LanguageSelector />
           </CardFooter>
         </Card>
 

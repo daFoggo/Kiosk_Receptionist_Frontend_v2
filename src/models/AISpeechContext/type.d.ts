@@ -5,7 +5,7 @@ export interface IAIContextState {
 }
 
 export interface IAIContextValue extends IAIContextState {
-  speak: (text: string, videoSrc?: string) => Promise<void>;
+  speak: (englishText: string, koreanText: string, videoSrc?: string) => Promise<void>;
   stopSpeaking: () => void;
   updateDefaultVideo: (videoSrc: string) => void;
 }

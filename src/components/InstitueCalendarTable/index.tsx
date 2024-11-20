@@ -1,4 +1,3 @@
-;
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -27,6 +26,7 @@ import {
   IInstitueCalendarTableProps,
   IWork,
 } from "@/models/InstitueCalendarTable/type";
+import { useTranslation } from "react-i18next";
 
 const WeeklySchedule = ({ works }: IInstitueCalendarTableProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -35,6 +35,7 @@ const WeeklySchedule = ({ works }: IInstitueCalendarTableProps) => {
   const [selectedWork, setSelectedWork] = useState<IWork | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const hours = generateHours(14);
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -64,6 +65,14 @@ const WeeklySchedule = ({ works }: IInstitueCalendarTableProps) => {
     if (newDate >= monday && newDate <= sunday) {
       setCurrentDate(newDate);
     }
+  };
+
+  const getLocale = () => {
+    return i18n.language === "vi"
+      ? "vi"
+      : i18n.language === "en"
+      ? "en-US"
+      : "ko";
   };
 
   const goToday = () => {
@@ -170,7 +179,7 @@ const WeeklySchedule = ({ works }: IInstitueCalendarTableProps) => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-2xl text-muted-foreground"
           >
-            {currentDate.toLocaleDateString("vi-VN", {
+            {currentDate.toLocaleDateString(getLocale(), {
               weekday: "long",
               year: "numeric",
               month: "long",
@@ -197,7 +206,7 @@ const WeeklySchedule = ({ works }: IInstitueCalendarTableProps) => {
             onClick={goToday}
             disabled={!isCurrentWeek}
           >
-            Hôm nay
+            {t("instituecalendar.table.today")}
           </Button>
           <Button
             className="font-semibold"
@@ -214,7 +223,10 @@ const WeeklySchedule = ({ works }: IInstitueCalendarTableProps) => {
       <AnimatePresence>
         {isDialogOpen && (
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogContent className="max-w-[98%] rounded-xl sm:rounded-2xl sm:max-w-[70%]" onOpenAutoFocus={(e) => e.preventDefault()}>
+            <DialogContent
+              className="max-w-[98%] rounded-xl sm:rounded-2xl sm:max-w-[70%]"
+              onOpenAutoFocus={(e) => e.preventDefault()}
+            >
               <DialogHeader>
                 <motion.div
                   initial={{ y: -20, opacity: 0 }}
@@ -234,25 +246,25 @@ const WeeklySchedule = ({ works }: IInstitueCalendarTableProps) => {
                   >
                     {renderField(
                       <MapPin className="h-5 w-5" />,
-                      "Địa điểm",
+                      t("instituecalendar.table.field.location"),
                       selectedWork?.location || ""
                     )}
                     {renderField(
                       <Clock className="h-5 w-5" />,
-                      "Thời gian",
+                      t("instituecalendar.table.field.time"),
                       new Date(selectedWork?.iso_datetime || "").toLocaleString(
                         "vi-VN"
                       )
                     )}
                     {renderField(
                       <User className="h-5 w-5" />,
-                      "Thành phần",
+                      t("instituecalendar.table.field.attendances"),
                       selectedWork?.attendees || ""
                     )}
                     {selectedWork?.preparation &&
                       renderField(
                         <CalendarIcon className="h-5 w-5" />,
-                        "Chuẩn bị",
+                        t("instituecalendar.table.field.preparation"),
                         selectedWork.preparation
                       )}
                   </motion.div>
@@ -268,7 +280,7 @@ const WeeklySchedule = ({ works }: IInstitueCalendarTableProps) => {
                     onClick={() => setIsDialogOpen(false)}
                     className="font-semibold bg-primary hover:bg-primary/90 text-xl p-4"
                   >
-                    Đóng
+                    {t("instituecalendar.table.close")}
                   </Button>
                 </motion.div>
               </DialogFooter>
