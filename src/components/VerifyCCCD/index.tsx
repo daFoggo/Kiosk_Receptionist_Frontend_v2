@@ -26,12 +26,15 @@ import { convertFormKey } from "@/utils/Helper/VerifyCCCD";
 import { ICCCDData } from "@/models/WebsocketContext/type";
 import { extractedFields, captureSteps } from "./constant";
 import { updateIdentifyDataIp } from "@/utils/ip";
+import { useTranslation } from "react-i18next";
+import { verify } from "crypto";
 
 interface VerifyCCCDProps {
   onClose?: () => void;
 }
 
 const VerifyCCCD = ({ onClose }: VerifyCCCDProps) => {
+  const { t } = useTranslation();
   const [step, setStep] = useState(0);
   const [capturedImages, setCapturedImages] = useState<string[]>([]);
   const webcamRef = useRef<Webcam>(null);
@@ -134,7 +137,7 @@ const VerifyCCCD = ({ onClose }: VerifyCCCDProps) => {
         return (
           <Card className="py-6 px-12 space-y-6 rounded-2xl">
             <h2 className="text-3xl font-bold text-center">
-              Chọn vai trò của bạn
+              {t("verify.step1.title")}
             </h2>
             <RadioGroup
               className="grid grid-cols-3 gap-6"
@@ -146,21 +149,21 @@ const VerifyCCCD = ({ onClose }: VerifyCCCDProps) => {
                 <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
                   <UserCircle2 className="w-12 h-12 text-primary" />
                 </div>
-                <span>Khách</span>
+                <span>{t("verify.step1.guest")}</span>
               </Label>
               <Label className="flex flex-col items-center space-y-2 cursor-pointer text-xl">
                 <RadioGroupItem value="student" className="sr-only" />
                 <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
                   <GraduationCap className="w-12 h-12 text-primary" />
                 </div>
-                <span>Sinh viên</span>
+                <span>{t("verify.step1.student")}</span>
               </Label>
               <Label className="flex flex-col items-center space-y-2 cursor-pointer text-xl">
                 <RadioGroupItem value="staff" className="sr-only" />
                 <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
                   <Briefcase className="w-12 h-12 text-primary" />
                 </div>
-                <span>Cán bộ</span>
+                <span>{t("verify.step1.staff")}</span>
               </Label>
             </RadioGroup>
           </Card>
@@ -203,10 +206,10 @@ const VerifyCCCD = ({ onClose }: VerifyCCCDProps) => {
                 icon={<ArrowLeft />}
                 className="p-6"
               >
-                Quay lại
+                {t("verify.back")}
               </Button>
               <Button onClick={capturePhoto} icon={<Camera />} className="p-6">
-                Chụp ảnh
+                {t("verify.capture")}
               </Button>
             </div>
           </>
@@ -242,7 +245,7 @@ const VerifyCCCD = ({ onClose }: VerifyCCCDProps) => {
                 icon={<ArrowLeft />}
                 className="p-6 "
               >
-                Quay lại
+                {t("verify.back")}
               </Button>
               <Button
                 onClick={() => setStep(5)}
@@ -251,7 +254,7 @@ const VerifyCCCD = ({ onClose }: VerifyCCCDProps) => {
                   (field) => !watch(field.formKey as keyof IFormData)
                 )}
               >
-                Xác nhận
+                {t("verify.confirm")}
               </Button>
             </div>
           </motion.div>
@@ -264,9 +267,9 @@ const VerifyCCCD = ({ onClose }: VerifyCCCDProps) => {
             animate={{ opacity: 1, y: 0 }}
           >
             <div className="text-center space-y-2 font-semibold">
-              <h2 className="text-3xl text-center">Xác nhận thông tin</h2>
+              <h2 className="text-3xl text-center">{t("verify.step4.title")}</h2>
               <p className="text-xl text-muted-foreground">
-                Tổng hợp thông tin của bạn từ các bước trên
+                {t("verify.step4.description")}
               </p>
             </div>
             {Object.entries(watch()).map(([key, value]) => (
@@ -303,7 +306,7 @@ const VerifyCCCD = ({ onClose }: VerifyCCCDProps) => {
                 icon={<ArrowLeft />}
                 className="p-6"
               >
-                Quay lại
+                {t("verify.back")}
               </Button>
               <Button
                 onClick={handleSubmit(onSubmit)}
