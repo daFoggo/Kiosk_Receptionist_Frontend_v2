@@ -19,3 +19,5 @@ export const extractedFields = [
   { key: "DOB", label: "Ngày sinh", formKey: "dateOfBirth" },
   { key: "Gender", label: "Giới tính", formKey: "gender" },
 ];
+
+

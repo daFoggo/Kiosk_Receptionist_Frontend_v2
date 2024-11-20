@@ -38,6 +38,10 @@ export const WebsocketProvider = ({ children }: IWebsocketProviderProps) => {
   const [webcamData, setWebcamData] = useState<IWebcamData | null>(null);
   const [cccdData, setCccdData] = useState<ICCCDData | null>(null);
 
+  const resetCCCDData = useCallback(() => {
+    setCccdData(null);
+  }, []);
+
   const connectWebsocket = useCallback(() => {
     if (wsRef.current?.readyState === WebSocketState.OPEN) {
       console.log("Websocket is already connected");
@@ -137,6 +141,7 @@ export const WebsocketProvider = ({ children }: IWebsocketProviderProps) => {
     cccdData,
     sendFrame,
     connectWebsocket,
+    resetCCCDData,
   };
 
   return (

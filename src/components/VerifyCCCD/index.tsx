@@ -2,6 +2,9 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Webcam from "react-webcam";
 import { motion } from "framer-motion";
+import axios from "axios";
+import { toast } from "sonner";
+
 import {
   Camera,
   Scan,
@@ -21,41 +24,28 @@ import { useWebsocket } from "@/contexts/WebsocketContext";
 import { TRole, IFormData } from "@/models/VerifyCCCD/type";
 import { convertFormKey } from "@/utils/Helper/VerifyCCCD";
 import { ICCCDData } from "@/models/WebsocketContext/type";
+import { extractedFields, captureSteps } from "./constant";
+import { updateIdentifyDataIp } from "@/utils/ip";
 
-const VerifyCCCD = () => {
+interface VerifyCCCDProps {
+  onClose?: () => void;
+}
+
+const VerifyCCCD = ({ onClose }: VerifyCCCDProps) => {
   const [step, setStep] = useState(0);
   const [capturedImages, setCapturedImages] = useState<string[]>([]);
   const webcamRef = useRef<Webcam>(null);
-  const { cccdData } = useWebsocket();
-  const { register, handleSubmit, setValue, watch } = useForm<IFormData>({
-    defaultValues: {
-      role: "",
-    },
-  });
+  const { cccdData, resetCCCDData } = useWebsocket();
+  const { register, handleSubmit, setValue, watch, reset } = useForm<IFormData>(
+    {
+      defaultValues: {
+        role: "",
+      },
+    }
+  );
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const role = watch("role");
-
-  const captureSteps = [
-    {
-      label: "Hướng thẳng mặt về Camera",
-      instruction: "Đặt mặt bạn ở trong phần khung trắng",
-    },
-    {
-      label: "Hơi nghiêng mặt sang phải",
-      instruction: "Đặt mặt bạn ở trong phần khung trắng",
-    },
-    {
-      label: "Hơi nghiêng mặt sang trái",
-      instruction: "Đặt mặt bạn ở trong phần khung trắng",
-    },
-  ];
-
-  const extractedFields = [
-    { key: "Identity Code", label: "Mã số CCCD", formKey: "idNumber" },
-    { key: "Name", label: "Họ và tên", formKey: "fullName" },
-    { key: "DOB", label: "Ngày sinh", formKey: "dateOfBirth" },
-    { key: "Gender", label: "Giới tính", formKey: "gender" },
-  ];
 
   useEffect(() => {
     if (cccdData && step === 4) {
@@ -67,6 +57,15 @@ const VerifyCCCD = () => {
       });
     }
   }, [cccdData, step, setValue]);
+
+  const resetForm = useCallback(() => {
+    reset();
+    setCapturedImages([]);
+    extractedFields.forEach((field) => {
+      setValue(field.formKey as keyof IFormData, "");
+    });
+    setStep(0);
+  }, [reset]);
 
   const capturePhoto = useCallback(() => {
     const imageSrc = webcamRef.current?.getScreenshot();
@@ -100,7 +99,7 @@ const VerifyCCCD = () => {
     setStep((prev) => prev - 1);
   };
 
-  const onSubmit = (data: IFormData) => {
+  const onSubmit = async (data: IFormData) => {
     const formDataWithImages = {
       b64_img: capturedImages,
       cccd: {
@@ -111,7 +110,22 @@ const VerifyCCCD = () => {
       },
       role: data.role,
     };
-    console.log("Form submitted:", formDataWithImages);
+
+    try {
+      setIsSubmitting(true);
+      await axios.post(updateIdentifyDataIp, formDataWithImages);
+      toast.success("Xác thực thành công");
+      resetForm();
+      resetCCCDData();
+      if (onClose) {
+        onClose();
+      }
+    } catch (error) {
+      console.error("Error submitting form: ", error);
+      toast.error("Có lỗi xảy ra khi xác thực");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const renderStep = () => {
@@ -230,7 +244,13 @@ const VerifyCCCD = () => {
               >
                 Quay lại
               </Button>
-              <Button onClick={() => setStep(5)} className="flex-1 p-6">
+              <Button
+                onClick={() => setStep(5)}
+                className="flex-1 p-6"
+                disabled={extractedFields.some(
+                  (field) => !watch(field.formKey as keyof IFormData)
+                )}
+              >
                 Xác nhận
               </Button>
             </div>
@@ -285,8 +305,12 @@ const VerifyCCCD = () => {
               >
                 Quay lại
               </Button>
-              <Button onClick={handleSubmit(onSubmit)} className="flex-1 p-6">
-                Hoàn tất xác thực
+              <Button
+                onClick={handleSubmit(onSubmit)}
+                className="flex-1 p-6"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Đang xử lý..." : "Xác nhận"}
               </Button>
             </div>
           </motion.div>

@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
+import WelcomeBanner from "@/components/WelcomeBanner";
 import EventBanner from "@/components/EventBanner";
 import LunarCalendar from "@/components/LunarCalendar/LunarCalendar";
 import RootNavbar from "@/components/RootNavbar";
-import Weather from "@/components/Weather/Weather";
+import Weather from "@/components/Weather";
 import InstitueCalendar from "@/components/InstitueCalendar";
 import AIModel from "@/components/AIModel";
 
@@ -63,8 +64,9 @@ const Home = () => {
         initial="hidden"
         animate="visible"
         variants={navbarVariants}
-        className="w-full"
+        className="w-full flex flex-col gap-6"
       >
+        <WelcomeBanner />
         <RootNavbar />
       </motion.div>
 
@@ -117,10 +119,10 @@ const Home = () => {
           variants={leftItemVariants}
         >
           {/* AI Video Container */}
-          <AIModel/>
+          <AIModel />
 
           {/* AI Transcript Container */}
-          <AITranscript/>
+          <AITranscript />
         </motion.div>
 
         {/* Right side */}
@@ -146,7 +148,7 @@ const Home = () => {
       </div>
 
       {/* Footer */}
-      <div className="absolute bottom-0 left-0 right-0 h-2/5 bg-gradient-to-t from-primary/20 to-transparent clip-path-wave" />
+      {/* <div className="absolute bottom-0 left-0 right-0 h-2/5 bg-gradient-to-t from-primary/20 to-transparent clip-path-wave -z-10" /> */}
     </div>
   );
 };

@@ -8,6 +8,7 @@ export interface IWebsocketContext {
   cccdData: ICCCDData | null;
   sendFrame: (frameData: string) => void;
   connectWebsocket: () => void;
+  resetCCCDData: () => void;
   [key: string]: any;
 }
 
