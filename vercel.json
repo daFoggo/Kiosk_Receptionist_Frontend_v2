@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://kiosk-be.ript.vn/api/:path*"
+    }
+  ]
+}

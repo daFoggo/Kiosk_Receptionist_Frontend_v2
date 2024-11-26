@@ -50,7 +50,7 @@ const DepartmentList = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="space-y-2 py-3 px-4 sm:p-0 sm:py-4">
+      <div className="sticky top-0 space-y-2 py-2">
         <ReuseBreadcrumb
           origin={{ name: "Chính", link: "/appointment/my-appointments" }}
           pageList={[
@@ -60,12 +60,12 @@ const DepartmentList = () => {
             },
           ]}
         />
-        <h1 className="font-semibold text-lg sm:text-xl">
+        <Separator />
+      </div>
+      <div className="flex flex-col gap-4 mt-2">
+        <h1 className="font-semibold text-lg sm:text-2xl">
           Danh sách phòng ban
         </h1>
-      </div>
-      <Separator className="my-1 sm:my-2" />
-      <div className="flex flex-col gap-3 sm:gap-6 mt-3 sm:mt-4">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
           <Input

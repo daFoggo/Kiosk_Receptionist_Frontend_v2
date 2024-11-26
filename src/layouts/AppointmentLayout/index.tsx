@@ -22,7 +22,7 @@ const AppointmentLayout = () => {
       <div className="flex flex-col md:flex-row min-h-screen w-full">
         <AppointmentMobileNavbar />
         <AppointmentSidebar />
-        <main className="flex-grow w-full p-6">
+        <main className="flex-grow w-full px-6">
           <div className="w-full">
             <Outlet />
           </div>

@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { ITimeSelectorProps } from "@/models/TimeSelector";
 import { TIMEOPTIONS } from "@/utils/constant";
 
-export function TimeSelector({ value, onChange }: ITimeSelectorProps) {
+const TimeSelector = ({ value, onChange }: ITimeSelectorProps) => {
   const [customHour, setCustomHour] = useState(value.split(":")[0]);
   const [customMinute, setCustomMinute] = useState(value.split(":")[1]);
   const [isCustom, setIsCustom] = useState(false);
@@ -90,4 +90,6 @@ export function TimeSelector({ value, onChange }: ITimeSelectorProps) {
       )}
     </div>
   );
-}
+};
+
+export default TimeSelector;

@@ -43,10 +43,10 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import TimeSelector from "../ui/time-selector";
 
 import { ICreateModifyAppointmentProps } from "@/models/CreateModifyAppointment/type";
 import { createAppointmentIp, updateAppointmentIp } from "@/utils/ip";
-import { TimeSelector } from "../ui/time-selector";
 
 const formSchema = z.object({
   cccd_nguoi_hen: z.string(),

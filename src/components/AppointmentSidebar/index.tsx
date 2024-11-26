@@ -26,7 +26,7 @@ import { useEffect, useState } from "react";
 const AdminSidebar = () => {
   const [user, setUser] = useState({
     username: "User name",
-    ho_ten: "",
+    ho_ten: "User name",
     gioi_tinh: "",
     vai_tro: "",
     ngay_sinh: "",
