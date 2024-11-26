@@ -66,7 +66,7 @@ const Home = () => {
         variants={navbarVariants}
         className="w-full flex flex-col gap-6"
       >
-        <WelcomeBanner />
+        {/* <WelcomeBanner /> */}
         <RootNavbar />
       </motion.div>
 

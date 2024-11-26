@@ -6,7 +6,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { kioskId, WebSocketState } from "@/utils/constant";
+import { kioskId, WEBSOCKETSTATE } from "@/utils/constant";
 import { wsIp } from "@/utils/ip";
 import {
   ICCCDData,
@@ -43,7 +43,7 @@ export const WebsocketProvider = ({ children }: IWebsocketProviderProps) => {
   }, []);
 
   const connectWebsocket = useCallback(() => {
-    if (wsRef.current?.readyState === WebSocketState.OPEN) {
+    if (wsRef.current?.readyState === WEBSOCKETSTATE.OPEN) {
       console.log("Websocket is already connected");
       return;
     }
@@ -114,7 +114,7 @@ export const WebsocketProvider = ({ children }: IWebsocketProviderProps) => {
 
   const sendFrame = useCallback(
     (frameData: string) => {
-      if (wsRef.current?.readyState === WebSocketState.OPEN) {
+      if (wsRef.current?.readyState === WEBSOCKETSTATE.OPEN) {
         wsRef.current.send(frameData);
         console.log("Frame sent");
       } else {

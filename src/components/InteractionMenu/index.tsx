@@ -218,7 +218,6 @@ const InteractionMenu = memo(
 
         <Dialog open={menuState.isDialogOpen} onOpenChange={closeAll}>
           <DialogContent
-            onOpenAutoFocus={(e) => e.preventDefault()}
             className="max-w-[80%] h-auto rounded-3xl p-6"
           >
             <DialogHeader className="mb-6">

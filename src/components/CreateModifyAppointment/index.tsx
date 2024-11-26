@@ -46,6 +46,7 @@ import {
 
 import { ICreateModifyAppointmentProps } from "@/models/CreateModifyAppointment/type";
 import { createAppointmentIp, updateAppointmentIp } from "@/utils/ip";
+import { TimeSelector } from "../ui/time-selector";
 
 const formSchema = z.object({
   cccd_nguoi_hen: z.string(),
@@ -296,15 +297,20 @@ const CreateModifyAppointment = ({
                           locale={vi}
                         />
                         <div className="p-3 border-t">
-                          <Input
-                            type="time"
-                            onChange={(e) => {
-                              const date = new Date(field.value);
-                              const [hours, minutes] =
-                                e.target.value.split(":");
-                              date.setHours(parseInt(hours));
-                              date.setMinutes(parseInt(minutes));
-                              field.onChange(date);
+                          <TimeSelector
+                            value={
+                              field.value ? format(field.value, "HH:mm") : ""
+                            }
+                            onChange={(time) => {
+                              const [hours, minutes] = time.split(":");
+                              const newDate = new Date(
+                                field.value || new Date()
+                              );
+                              newDate.setHours(
+                                parseInt(hours),
+                                parseInt(minutes)
+                              );
+                              field.onChange(newDate);
                             }}
                           />
                         </div>
@@ -345,15 +351,20 @@ const CreateModifyAppointment = ({
                           initialFocus
                         />
                         <div className="p-3 border-t">
-                          <Input
-                            type="time"
-                            onChange={(e) => {
-                              const date = new Date(field.value);
-                              const [hours, minutes] =
-                                e.target.value.split(":");
-                              date.setHours(parseInt(hours));
-                              date.setMinutes(parseInt(minutes));
-                              field.onChange(date);
+                          <TimeSelector
+                            value={
+                              field.value ? format(field.value, "HH:mm") : ""
+                            }
+                            onChange={(time) => {
+                              const [hours, minutes] = time.split(":");
+                              const newDate = new Date(
+                                field.value || new Date()
+                              );
+                              newDate.setHours(
+                                parseInt(hours),
+                                parseInt(minutes)
+                              );
+                              field.onChange(newDate);
                             }}
                           />
                         </div>
