@@ -33,13 +33,11 @@ const columns: ColumnDef<IIdentifyDataManagement>[] = [
       let role = row.getValue("role");
       console.log(role);
       switch (role) {
-        case "GUEST":
+        case "guest":
           return "Khách";
-        case "STUDENT":
+        case "student":
           return "Sinh viên";
-        case "INSTRUCTOR":
-          return "Giảng viên";
-        case "STAFF":
+        case "officer":
           return "Cán bộ";
         default:
           return "Không xác định";

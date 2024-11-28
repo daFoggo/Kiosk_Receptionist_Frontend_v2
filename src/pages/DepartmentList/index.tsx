@@ -7,8 +7,6 @@ import { useDebounce } from "use-debounce";
 import axios from "axios";
 
 import DepartmentCard from "@/components/DepartmentCard/";
-import ReuseBreadcrumb from "@/components/ReuseBreadcrumb";
-import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 
 import { departmentList } from "./constant";
@@ -50,18 +48,6 @@ const DepartmentList = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="sticky top-0 space-y-2 py-2">
-        <ReuseBreadcrumb
-          origin={{ name: "Chính", link: "/appointment/my-appointments" }}
-          pageList={[
-            {
-              name: "Danh sách phòng ban",
-              link: "/appointment/department-list",
-            },
-          ]}
-        />
-        <Separator />
-      </div>
       <div className="flex flex-col gap-4 mt-2">
         <h1 className="font-semibold text-lg sm:text-2xl">
           Danh sách phòng ban

@@ -1,23 +1,28 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+"use client";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { IStatisticBlockProps } from "@/models/StatisticBlock/type";
+import CountUp from "react-countup";
 
 const StatisticBlock = ({
-  title,
   icon,
-  displayData,
+  title,
+  value,
   description,
 }: IStatisticBlockProps) => {
   return (
-    <Card className="shadow-sm rounded-lg">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-semibold">{title}</CardTitle>
-        {icon}
+    <Card className="p-4">
+      <CardHeader className="flex flex-row justify-between items-center font-semibold p-0 ">
+        {title}
+        <Button size="icon" variant="outline" className="text-muted-foreground">
+          {icon}
+        </Button>
       </CardHeader>
-      <CardContent>
-        <div className="text-3xl font-bold">{displayData}</div>
-        <p className="mt-2 text-xs font-semibold text-muted-foreground">
-          {description}
-        </p>
+      <CardContent className="p-0">
+        <div className="text-4xl font-bold">
+          <CountUp end={Number(value)} duration={2.5} separator="," />
+        </div>
+        <div className="text-xs text-muted-foreground">{description}</div>
       </CardContent>
     </Card>
   );

@@ -30,7 +30,7 @@ const AppointmentLayout = () => {
         </main>
         <footer className="mt-auto py-4 px-6 border-t bg-background z-10"></footer>
       </div>
-    </SidebarProvider>
+  </SidebarProvider>
   );
 };
 

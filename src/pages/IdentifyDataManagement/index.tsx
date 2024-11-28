@@ -1,4 +1,3 @@
-import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -11,22 +10,6 @@ import {
 } from "@tanstack/react-table";
 
 import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import {
   Table,
   TableBody,
   TableCell,
@@ -34,12 +17,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import ReuseBreadcrumb from "@/components/ReuseBreadcrumb";
-import { Separator } from "@/components/ui/separator";
 import { getIdentifyDataIp } from "@/utils/ip";
 import { IIdentifyDataManagement } from "@/models/IdentifyDataManage/type";
 import columns from "@/models/IdentifyDataManage/columns";
 import { Button } from "@/components/ui/button";
+import StatisticBlock from "@/components/StatisticBlock";
+import { Users } from "lucide-react";
 
 const IdentifyDataManagement = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -67,7 +50,7 @@ const IdentifyDataManagement = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(getIdentifyDataIp);
-      setIdentifyData(response.data);
+      setIdentifyData(response.data.payload);
       toast.success("Lấy dữ liệu thành công");
     } catch (error) {
       toast.error("Lấy dữ liệu thất bại");
@@ -77,69 +60,75 @@ const IdentifyDataManagement = () => {
     }
   };
 
-  if (isLoading) {
-    return <div>Đang tải...</div>;
-  }
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="space-y-2 py-3 px-4 sm:p-0 sm:py-4">
-        <ReuseBreadcrumb
-          origin={{ name: "Chính", link: "/admin/identify-data" }}
-          pageList={[
-            { name: "Dữ liệu nhận diện", link: "/admin/identify-data" },
-          ]}
-        />
+      <div className="flex flex-col gap-4 mt-2">
         <h1 className="font-semibold text-lg sm:text-xl">Dữ liệu nhận diện</h1>
-      </div>
-      <Separator className="my-1 sm:my-2" />
 
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Trang trước
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Trang sau
-        </Button>
+        {isLoading ? (
+          <div>Đang tải dữ liệu...</div>
+        ) : (
+          <div className="flex flex-col space-y-4">
+            <div className="w-full grid grid-cols-4 gap-4">
+              <StatisticBlock
+                icon={<Users className="size-4" />}
+                title="Tổng số"
+                value={identifyData.length.toString()}
+                description="người dùng đã xác nhận dữ liệu"
+              />
+            </div>
+            <div className="rounded-md border">
+              <Table>
+                <TableHeader>
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <TableRow key={headerGroup.id}>
+                      {headerGroup.headers.map((header) => (
+                        <TableHead key={header.id}>
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                        </TableHead>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableHeader>
+                <TableBody>
+                  {table.getRowModel().rows.map((row) => (
+                    <TableRow key={row.id}>
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+            <div className="flex items-center justify-end space-x-2 py-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              >
+                Trang trước
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
+                Trang sau
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

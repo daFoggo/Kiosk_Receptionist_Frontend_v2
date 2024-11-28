@@ -1,5 +1,3 @@
-;
-
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "sonner";
@@ -46,8 +44,6 @@ import {
   deleteEventIp,
 } from "@/utils/ip";
 import { DateTimePicker } from "@/components/ui/date-time-picker";
-import ReuseBreadcrumb from "@/components/ReuseBreadcrumb";
-import { Separator } from "@/components/ui/separator";
 
 import { IEventManagement, IFormData } from "@/models/EventManagement/type";
 import createColumns from "@/models/EventManagement/columns";
@@ -185,54 +181,49 @@ const EventManagement = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="space-y-2 py-3 px-4 sm:p-0 sm:py-4">
-        <ReuseBreadcrumb
-          origin={{ name: "Chính", link: "/admin/identify-data" }}
-          pageList={[
-            { name: "Quản lý sự kiện", link: "/admin/event-management" },
-          ]}
-        />
+      <div className="flex flex-col gap-4 mt-2">
         <h1 className="font-semibold text-lg sm:text-xl">Quản lý sự kiện</h1>
-      </div>
-      <Separator className="my-1 sm:my-2" />
 
-      <div className="p-4">
-        <Button onClick={handleAddEvent} className="mb-4">
+        <Button onClick={handleAddEvent} className="mb-4 w-fit">
           Tạo sự kiện
         </Button>
 
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id}>
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+        {isLoading ? (
+          <div>Đang tải dữ liệu...</div>
+        ) : (
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableHead key={header.id}>
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                      </TableHead>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows.map((row) => (
+                  <TableRow key={row.id}>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
 
         <div className="flex items-center justify-end space-x-2 py-4">
           <Button
@@ -255,7 +246,10 @@ const EventManagement = () => {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="w-[90%] rounded-xl sm:w-full" onOpenAutoFocus={(e) => e.preventDefault()}>
+        <DialogContent
+          className="w-[90%] rounded-xl sm:w-full"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
           <DialogHeader>
             <DialogTitle>
               {editingEvent ? "Chỉnh sửa sự kiện" : "Thêm sự kiện mới"}
@@ -350,6 +344,6 @@ const EventManagement = () => {
       </Dialog>
     </div>
   );
-}
+};
 
 export default EventManagement;

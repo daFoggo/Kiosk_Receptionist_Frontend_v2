@@ -1,6 +1,6 @@
 export interface IStatisticBlockProps {
+  icon: React.ReactNode;
   title: string;
-  icon: any;
-  displayData: number;
+  value: string;
   description: string;
 }

@@ -1,5 +1,3 @@
-;
-
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useState, useEffect } from "react";
@@ -35,8 +33,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import ReuseBreadcrumb from "@/components/ReuseBreadcrumb";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -133,60 +129,51 @@ const InstitueCalendarManagement = () => {
     }
   };
 
-  if (isLoading) {
-    return <div>Đang tải...</div>;
-  }
-
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="space-y-2 py-3 px-4 sm:p-0 sm:py-4">
-        <ReuseBreadcrumb
-          origin={{ name: "Chính", link: "/admin/identify-data" }}
-          pageList={[
-            { name: "Lịch công tác viện", link: "/admin/institue-calendar" },
-          ]}
-        />
+      <div className="flex flex-col gap-4 mt-2">
         <h1 className="font-semibold text-lg sm:text-xl">Lịch công tác viện</h1>
-      </div>
-      <Separator className="my-1 sm:my-2" />
 
-      <div className="p-4">
-        <Button onClick={handleUpdateInstitueCalendar} className="mb-4">
+        <Button onClick={handleUpdateInstitueCalendar} className="mb-4 w-fit">
           Cập nhật lịch tuần
         </Button>
 
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id}>
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+        {isLoading ? (
+          <div>Đang tải dữ liệu...</div>
+        ) : (
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableHead key={header.id}>
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                      </TableHead>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows.map((row) => (
+                  <TableRow key={row.id}>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
 
         <div className="flex items-center justify-end space-x-2 py-4">
           <Button
@@ -209,7 +196,10 @@ const InstitueCalendarManagement = () => {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="w-[90%] rounded-xl sm:w-full" onOpenAutoFocus={(e) => e.preventDefault()}>
+        <DialogContent
+          className="w-[90%] rounded-xl sm:w-full"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
           <DialogHeader>
             <DialogTitle>Tải lên lịch tuần mới</DialogTitle>
             <DialogDescription>Chỉ chấp nhận tệp .docx.</DialogDescription>
