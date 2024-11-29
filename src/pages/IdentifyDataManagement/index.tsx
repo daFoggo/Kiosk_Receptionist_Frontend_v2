@@ -7,6 +7,10 @@ import {
   getCoreRowModel,
   getPaginationRowModel,
   flexRender,
+  getFilteredRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFacetedMinMaxValues,
 } from "@tanstack/react-table";
 
 import {
@@ -29,17 +33,26 @@ const IdentifyDataManagement = () => {
   const [identifyData, setIdentifyData] = useState<IIdentifyDataManagement[]>(
     []
   );
+  const [columnVisibility, setColumnVisibility] = useState({});
 
   const table = useReactTable({
     data: identifyData,
     columns,
-    getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
       pagination: {
         pageSize: 10,
       },
     },
+    state: {
+      columnVisibility,
+    },
+    onColumnVisibilityChange: setColumnVisibility,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+    getFacetedMinMaxValues: getFacetedMinMaxValues(),
   });
 
   useEffect(() => {
@@ -83,7 +96,7 @@ const IdentifyDataManagement = () => {
                   {table.getHeaderGroups().map((headerGroup) => (
                     <TableRow key={headerGroup.id}>
                       {headerGroup.headers.map((header) => (
-                        <TableHead key={header.id}>
+                        <TableHead key={header.id}  className="text-left">
                           {flexRender(
                             header.column.columnDef.header,
                             header.getContext()
@@ -97,7 +110,7 @@ const IdentifyDataManagement = () => {
                   {table.getRowModel().rows.map((row) => (
                     <TableRow key={row.id}>
                       {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
+                        <TableCell key={cell.id} className="text-left">
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()

@@ -22,6 +22,9 @@ export const getInstructorCalendarIp = `${httpIp}/instructor-calendar/get/by-rol
 export const getAllStudentCalendarIp = `${httpIp}/all-class-calendar/get/by-role`;
 export const getAllInstructorCalendarIp = `${httpIp}/all-instructor-calendar/get/by-role`;
 
+export const getDepartmentIp = `${httpIp}/departments/get`;
+export const getClassIp =  `${httpIp}/administrative-class/get`;
+
 export const getAppointmentsIp = `${httpIp}/appointments/stats/by-user`;
 export const createAppointmentIp = `${httpIp}/appointments/create`;
 export const updateAppointmentIp = `${httpIp}/appointments/update/by-user`;

@@ -60,55 +60,58 @@ const DayView = ({
   };
 
   return (
-    <div className="overflow-x-auto">
-      <div className="grid grid-cols-[100px_1fr] gap-2 min-w-[600px]">
-        <div className="sticky left-0 bg-background z-10">
-          <div className="h-16"></div>
-          {hours.map((hour) => (
-            <div
-              key={hour.toString()}
-              className="h-20 border-b text-sm text-muted-foreground py-1"
-            >
-              {format(hour, "HH:mm")}
-            </div>
-          ))}
+    <div className="relative">
+      <div className="sticky top-0 left-0 right-0 z-50 bg-background">
+        <div
+          className={`h-16 flex items-center justify-center text-center p-1 md:p-2 font-semibold text-sm rounded-lg ${
+            isToday(date) ? "bg-primary text-primary-foreground" : "bg-muted"
+          }`}
+        >
+          {format(date, "EEEE", { locale: vi })}
+          <br />
+          {format(date, "dd/MM")}
         </div>
-        <div>
-          <div
-            className={`h-16 flex items-center justify-center text-center p-1 md:p-2 font-semibold text-sm rounded-lg ${
-              isToday(date) ? "bg-primary text-primary-foreground" : "bg-muted"
-            }`}
-          >
-            {format(date, "EEEE", { locale: vi })}
-            <br />
-            {format(date, "dd/MM")}
-          </div>
-          <div
-            className="relative"
-            style={{ height: `${hours.length * 80}px` }}
-          >
-            {hours.map((hour, index) => (
+      </div>
+      <div className="overflow-x-auto">
+        <div className="grid grid-cols-[100px_1fr] gap-2 min-w-[600px]">
+          <div className="sticky left-0 bg-background z-10">
+            {hours.map((hour) => (
               <div
                 key={hour.toString()}
-                className="absolute w-full border-b border-border"
-                style={{ top: `${index * 80}px`, height: "80px" }}
-              ></div>
+                className="h-20 border-b text-sm text-muted-foreground py-1"
+              >
+                {format(hour, "HH:mm")}
+              </div>
             ))}
-            {getAppointmentsForDay().map((apt) => {
-              const { top, height } = calculateAppointmentPosition(apt);
-              return (
+          </div>
+          <div>
+            <div
+              className="relative"
+              style={{ height: `${hours.length * 80}px` }}
+            >
+              {hours.map((hour, index) => (
                 <div
-                  key={apt.id}
-                  className="absolute left-0 right-0 px-1"
-                  style={{ top: `${top}px`, height: `${height}px` }}
-                >
-                  <AppointmentCard
-                    appointment={apt}
-                    style={{ height: "100%" }}
-                  />
-                </div>
-              );
-            })}
+                  key={hour.toString()}
+                  className="absolute w-full border-b border-border"
+                  style={{ top: `${index * 80}px`, height: "80px" }}
+                ></div>
+              ))}
+              {getAppointmentsForDay().map((apt) => {
+                const { top, height } = calculateAppointmentPosition(apt);
+                return (
+                  <div
+                    key={apt.id}
+                    className="absolute left-0 right-0 px-1"
+                    style={{ top: `${top}px`, height: `${height}px` }}
+                  >
+                    <AppointmentCard
+                      appointment={apt}
+                      style={{ height: "100%" }}
+                    />
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
@@ -149,7 +152,7 @@ const WeekView = ({
   };
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto relative">
       <div className="grid grid-cols-8 gap-2 min-w-[800px]">
         <div className="sticky left-0 bg-background z-10">
           <div className="h-16"></div>
