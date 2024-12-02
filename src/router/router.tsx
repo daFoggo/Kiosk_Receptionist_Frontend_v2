@@ -4,11 +4,9 @@ import routes from "./routerConfig";
 import RootLayout from "@/layouts/RootLayout";
 import ManageLayout from "@/layouts/ManageLayout";
 import AppointmentLayout from "@/layouts/AppointmentLayout";
-import DataCollectLayout from "@/layouts/DataCollectLayout";
 import AuthLayout from "@/layouts/AuthLayout";
 
 import Home from "@/pages/Home";
-import ImageUpload from "@/pages/ImageUpload";
 import IdentifyDataManagement from "@/pages/IdentifyDataManagement";
 import InstitueCalendarManagement from "@/pages/InstitueCalendarManagement";
 import EventManagement from "@/pages/EventManagement";
@@ -17,6 +15,7 @@ import AppointmentRegister from "@/pages/AppointmentRegister";
 import AdminLogin from "@/pages/AdminLogin";
 import MyAppointment from "@/pages/MyAppointment";
 import DepartmentList from "@/pages/DepartmentList/";
+import AppointmentStatistics from "@/pages/AppointmentStatistics";
 
 const routeLayout: RouteObject[] = [
   {
@@ -45,16 +44,10 @@ const routeLayout: RouteObject[] = [
         path: routes.eventManagement,
         element: <EventManagement />,
       },
-    ],
-  },
-  {
-    path: "/data-collect",
-    element: <DataCollectLayout />,
-    children: [
       {
-        path: routes.imageUpload,
-        element: <ImageUpload />,
-      },
+        path: routes.appointmentStatistics,
+        element: <AppointmentStatistics />,
+      }
     ],
   },
   {

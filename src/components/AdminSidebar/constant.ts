@@ -1,4 +1,4 @@
-import { ScanFace, CalendarDays, Theater } from "lucide-react";
+import { ScanFace, CalendarDays, Theater, ChartColumn } from "lucide-react";
 
 const prefix = "/admin";
 export const menuItems = [
@@ -17,4 +17,9 @@ export const menuItems = [
     url: `${prefix}/event-management`,
     icon: Theater,
   },
+  {
+    title: "Thống kê lịch hẹn",
+    url: `${prefix}/appointment-statistics`,
+    icon: ChartColumn,
+  }
 ];
