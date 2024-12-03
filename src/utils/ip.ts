@@ -24,9 +24,9 @@ export const getAllInstructorCalendarIp = `${httpIp}/all-instructor-calendar/get
 
 export const getDepartmentIp = `${httpIp}/departments/get`;
 export const getClassIp =  `${httpIp}/administrative-class/get`;
+export const getOfficerIp = `${httpIp}/officer/get/by-departments`;
 
 export const getAppointmentsIp = `${httpIp}/appointments/stats/by-user`;
 export const createAppointmentIp = `${httpIp}/appointments/create`;
 export const updateAppointmentIp = `${httpIp}/appointments/update/by-user`;
 
-export const getOfficersIp = `${httpIp}/officer/get/by-departments`;

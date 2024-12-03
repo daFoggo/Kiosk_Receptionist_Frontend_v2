@@ -9,42 +9,60 @@ import axios from "axios";
 import DepartmentCard from "@/components/DepartmentCard/";
 import { Input } from "@/components/ui/input";
 
-import { departmentList } from "./constant";
 import { containerVariants, itemVariants } from "./motion";
-import { getOfficersIp } from "@/utils/ip";
+import { getDepartmentIp } from "@/utils/ip";
+import { IDepartment } from "@/models/DepartmentList/type";
 
 const DepartmentList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm] = useDebounce(searchTerm, 300);
-  const [officers, setOfficers] = useState([]);
+  const [departments, setDepartments] = useState<IDepartment[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    handleGetOfficers();
-  }, []);
-
-  const handleGetOfficers = async () => {
+  const handleGetDepartments = async () => {
     try {
-      const response = await axios.get(`${getOfficersIp}`);
-
-      setOfficers(response.data.payload);
+      setIsLoading(true);
+      const response = await axios.get(`${getDepartmentIp}`);
+      setDepartments(response.data.payload);
+      setError(null);
     } catch (error) {
       console.error(error);
+      setError("Failed to fetch departments");
+      setDepartments([]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  useEffect(() => {
+    handleGetDepartments();
+  }, []);
+
   const filteredDepartments = useMemo(() => {
-    return departmentList.filter(
-      (dept) =>
-        dept.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-        dept.description
-          .toLowerCase()
-          .includes(debouncedSearchTerm.toLowerCase())
+    return departments?.filter((dept) =>
+      dept.ten_phong_ban
+        .toLowerCase()
+        .includes(debouncedSearchTerm.toLowerCase())
     );
-  }, [debouncedSearchTerm]);
+  }, [departments, debouncedSearchTerm]);
+
+  const convertDepartmentIdToName = (id: number) => {
+    const department = departments.find((dept) => dept.id === id);
+    return department?.ten_phong_ban || 'Không xác định';
+  };
 
   const handleSearch = (value: string) => {
     setSearchTerm(value);
   };
+
+  if (isLoading) {
+    return <div>Loading departments...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className="flex flex-col">
@@ -61,22 +79,26 @@ const DepartmentList = () => {
             className="pl-10"
           />
         </div>
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="show"
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 rounded-xl"
-        >
-          {filteredDepartments.map((department) => (
-            <motion.div
-              key={department.id}
-              variants={itemVariants}
-              className="h-full"
-            >
-              <DepartmentCard {...department} officers={officers} />
-            </motion.div>
-          ))}
-        </motion.div>
+        {filteredDepartments.length === 0 ? (
+          <div>Không tìm thấy phòng ban</div>
+        ) : (
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="show"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 rounded-xl"
+          >
+            {filteredDepartments.map((department) => (
+              <motion.div
+                key={department.id}
+                variants={itemVariants}
+                className="h-full"
+              >
+                <DepartmentCard department={department} convertDepartmentIdToName={convertDepartmentIdToName} />
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
       </div>
     </div>
   );

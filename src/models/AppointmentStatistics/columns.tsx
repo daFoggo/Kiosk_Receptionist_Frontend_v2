@@ -37,6 +37,11 @@ const columns: ColumnDef<IAppointmentDataManagement>[] = [
     header: "Thời gian",
     enableColumnFilter: false,
   },
+  {
+    accessorKey: "status",
+    header: "Trạng thái",
+    enableColumnFilter: false,
+  },
 ];
 
 export default columns;

@@ -1,12 +1,11 @@
 "use client";
 
-import { Clock, Users, CircleUserRound } from "lucide-react";
+import { Clock, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import {
   Card,
   CardHeader,
   CardTitle,
-  CardDescription,
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
@@ -18,8 +17,28 @@ import {
   formatWorkingHours,
 } from "@/utils/Helper/DepartmentCard";
 import { IDepartMentCardProps } from "@/models/DepartmentCard/type";
+import { useEffect, useState } from "react";
+import { IOfficer } from "@/models/DepartmentList/type";
+import { getOfficerIp } from "@/utils/ip";
+import axios from "axios";
 
-export default function DepartmentCard(department: IDepartMentCardProps) {
+const DepartmentCard = ({ department, convertDepartmentIdToName }: IDepartMentCardProps) => {
+  const [officers, setOfficers] = useState<IOfficer[]>([]);
+
+  useEffect(() => {
+    handleGetOfficers();
+  }, []);
+
+  const handleGetOfficers = async () => {
+    try {
+      const response = await axios.get(
+        `${getOfficerIp}?phong_ban_id=${department.id}`
+      );
+      setOfficers(response.data.payload);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
 
   return (
@@ -36,47 +55,41 @@ export default function DepartmentCard(department: IDepartMentCardProps) {
               variant="outline"
               className="font-semibold text-muted-foreground"
             >
-              {department.code}
+              {department.ten_phong_ban
+                .split(" ")
+                .map((word) => word[0])
+                .join("")
+                .toUpperCase()}
             </Badge>
             <Badge
               variant="secondary"
               className="flex items-center gap-1 font-semibold"
             >
               <Users className="w-3 h-3" />
-              {department.staffs.length}
+              {officers.length}
             </Badge>
           </div>
           <CardTitle className="text-lg sm:text-xl font-bold line-clamp-2">
-            {department.name}
+            {department.ten_phong_ban}
           </CardTitle>
           <Separator />
-          {department.description && (
-            <CardDescription className="text-sm text-muted-foreground line-clamp-2">
-              {department.description}
-            </CardDescription>
-          )}
         </CardHeader>
 
         <CardContent className="flex-grow space-y-4">
-          <div className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
-            <CircleUserRound className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-            <span className="line-clamp-1">
-              Trưởng phòng: {department.headOfDepartment}
-            </span>
-          </div>
           <div className="flex items-center gap-2 text-sm font-semibold text-muted-foreground">
             <Clock className="w-4 h-4 flex-shrink-0" />
             <span className="line-clamp-2">
-              {formatWorkingDays(department.workingDays)},{" "}
-              {formatWorkingHours(department.workingHours)}
+              {formatWorkingDays([2, 7])}, {formatWorkingHours([8, 17.3])}
             </span>
           </div>
         </CardContent>
 
         <CardFooter className="mt-auto pt-4 z-10">
-          <CreateModifyAppointment officers={department.officers} />
+          <CreateModifyAppointment officers={officers} convertDepartmentIdToName={convertDepartmentIdToName}/>
         </CardFooter>
       </Card>
     </motion.div>
   );
-}
+};
+
+export default DepartmentCard;

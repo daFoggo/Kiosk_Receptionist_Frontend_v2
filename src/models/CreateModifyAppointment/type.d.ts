@@ -1,4 +1,4 @@
-import { IOfficer } from "../DepartmentList/type";
+import { IDepartment, IOfficer } from "../DepartmentList/type";
 
 export interface IAppointment {
   id: string;
@@ -12,9 +12,11 @@ export interface IAppointment {
 }
 
 export interface ICreateModifyAppointmentProps {
-  mode?: "create" | "edit";
   appointment?: Appointment;
+  officers?: IOfficer[];
+  department?: IDepartment[];
+  convertDepartmentIdToName: (id: number) => string;
+  mode?: "create" | "edit";
   onSuccess?: () => void;
   trigger?: React.ReactNode;
-  officers?: IOfficer[];
 }
