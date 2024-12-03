@@ -46,7 +46,13 @@ import {
 import TimeSelector from "../ui/time-selector";
 
 import { ICreateModifyAppointmentProps } from "@/models/CreateModifyAppointment/type";
-import { createAppointmentIp, updateAppointmentIp } from "@/utils/ip";
+import {
+  createAppointmentIp,
+  getOfficerIp,
+  updateAppointmentIp,
+} from "@/utils/ip";
+import { IOfficer } from "@/models/DepartmentList/type";
+import { Checkbox } from "../ui/checkbox";
 
 const formSchema = z.object({
   cccd_nguoi_hen: z.string(),
@@ -64,10 +70,15 @@ const CreateModifyAppointment = ({
   onSuccess,
   trigger,
   officers,
+  department,
+  convertDepartmentIdToName,
 }: ICreateModifyAppointmentProps) => {
   const [open, setOpen] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [currentCccd, setCurrentCccd] = useState<string | null>(null);
+  const [allOfficers, setAllOfficers] = useState<IOfficer[]>([]);
+  const [includeAllDepartments, setIncludeAllDepartments] = useState(false);
+  const currentOfficerList = includeAllDepartments ? allOfficers : officers;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -88,6 +99,10 @@ const CreateModifyAppointment = ({
           : undefined,
     },
   });
+
+  useEffect(() => {
+    handleGetAllOfficer();
+  }, []);
 
   useEffect(() => {
     const user = localStorage.getItem("user");
@@ -153,6 +168,11 @@ const CreateModifyAppointment = ({
     return () => subscription.unsubscribe();
   }, [form]);
 
+  const handleGetAllOfficer = async () => {
+    const response = await axios.get(getOfficerIp);
+    setAllOfficers(response.data.payload);
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -181,6 +201,21 @@ const CreateModifyAppointment = ({
                 <span className="block sm:inline">{formError}</span>
               </div>
             )}
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="include-all-departments"
+                checked={includeAllDepartments}
+                onCheckedChange={(checked) =>
+                  setIncludeAllDepartments(!!checked)
+                }
+              />
+              <label
+                htmlFor="include-all-departments"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Bao gồm cả phòng ban khác
+              </label>
+            </div>
             <FormField
               control={form.control}
               name="cccd_nguoi_duoc_hen"
@@ -217,7 +252,7 @@ const CreateModifyAppointment = ({
                         <CommandList>
                           <CommandEmpty>Không tìm thấy người này.</CommandEmpty>
                           <CommandGroup>
-                            {officers?.map((officer) => (
+                            {currentOfficerList?.map((officer) => (
                               <CommandItem
                                 key={officer.cccd_id}
                                 onSelect={() => {
@@ -244,7 +279,7 @@ const CreateModifyAppointment = ({
                                 }}
                               >
                                 <div className="flex items-center">
-                                  {officer.ho_ten}
+                                  {officer.ho_ten} - {convertDepartmentIdToName(Number(officer.phong_ban_id))}
                                   {Array.isArray(field.value) &&
                                     field.value.some(
                                       (id) => id === officer.cccd_id
