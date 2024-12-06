@@ -6,5 +6,5 @@ export interface IIdentifyDataManagement {
   role: string;
   dob: string;
   gender: string;
-  image_data: string[];
+  img: string[];
 }

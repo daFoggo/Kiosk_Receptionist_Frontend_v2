@@ -47,8 +47,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
-
-import { yearStatData, RECENTLY_APPOINTMENT } from "./constant";
 import {
   IAppointmentDataManagement,
   IMonthStat,

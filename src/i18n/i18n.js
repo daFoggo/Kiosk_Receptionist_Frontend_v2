@@ -52,6 +52,7 @@ const resources = {
       "aitranscript.chat":
         "Welcome to Research Institute of Posts and Telecommunications",
       "verify.back": "Back",
+      "verify.next": "Next",
       "verify.confirm": "Confirm",
 
       "verify.capture": "Capture",
@@ -127,6 +128,7 @@ const resources = {
       "interactionMenu.userInfo.description": "Thông tin cá nhân của bạn",
       "aitranscript.chat": "Chào mừng đến với Viện Khoa học Kỹ thuật Bưu điện",
       "verify.back": "Quay lại",
+      "verify.next": "Tiếp tục",
       "verify.confirm": "Xác nhận",
       "verify.capture": "Chụp ảnh",
       "verify.step1.title": "Chọn vai trò của bạn",
@@ -199,7 +201,8 @@ const resources = {
       "aitranscript.chat":
         "Research Institute of Posts and Telecommunications에 진심으로 환영합니다.",
       "verify.back": "뒤로",
-      "verify.confirm": "확인",
+      "verify.next": "다음",
+      "veriy.confirm": "확인",
       "verify.capture": "캡처",
       "verify.step1.title": "역할 선택",
       "verify.step1.guest": "손님",

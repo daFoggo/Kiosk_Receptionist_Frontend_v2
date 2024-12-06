@@ -4,6 +4,7 @@ import Webcam from "react-webcam";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 import {
   Camera,
@@ -19,26 +20,31 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Card } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { useWebsocket } from "@/contexts/WebsocketContext";
-import { TRole, IFormData } from "@/models/VerifyCCCD/type";
 import { convertFormKey } from "@/utils/Helper/VerifyCCCD";
-import { ICCCDData } from "@/models/WebsocketContext/type";
+import { getClassIp, getDepartmentIp, updateIdentifyDataIp } from "@/utils/ip";
 import { extractedFields, captureSteps } from "./constant";
-import { updateIdentifyDataIp } from "@/utils/ip";
-import { useTranslation } from "react-i18next";
-import { verify } from "crypto";
+import { ICCCDData } from "@/models/WebsocketContext/type";
+import {
+  TRole,
+  IFormData,
+  IClass,
+  IVerifyCCCDProps,
+} from "@/models/VerifyCCCD/type";
+import { IDepartment } from "@/models/DepartmentList/type";
 
-interface VerifyCCCDProps {
-  onClose?: () => void;
-}
-
-const VerifyCCCD = ({ onClose }: VerifyCCCDProps) => {
+const VerifyCCCD = ({ onClose }: IVerifyCCCDProps) => {
   const { t } = useTranslation();
   const [step, setStep] = useState(0);
-  const [capturedImages, setCapturedImages] = useState<string[]>([]);
   const webcamRef = useRef<Webcam>(null);
-  const { cccdData, resetCCCDData } = useWebsocket();
   const { register, handleSubmit, setValue, watch, reset } = useForm<IFormData>(
     {
       defaultValues: {
@@ -47,11 +53,20 @@ const VerifyCCCD = ({ onClose }: VerifyCCCDProps) => {
     }
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const role = watch("role");
+  const { cccdData, resetCCCDData } = useWebsocket();
+  const [classData, setClassData] = useState<IClass[]>([]);
+  const [departmentData, setDepartmentData] = useState<IDepartment[]>([]);
+  const [capturedImages, setCapturedImages] = useState<string[]>([]);
+  const [selectedDepartment, setSelectedDepartment] = useState<string>("");
 
   useEffect(() => {
-    if (cccdData && step === 4) {
+    handleGetClassData();
+    handleGetDepartmentData();
+  }, []);
+
+  useEffect(() => {
+    if (cccdData && step === 5) {
       extractedFields.forEach((field) => {
         setValue(
           field.formKey as keyof IFormData,
@@ -61,44 +76,74 @@ const VerifyCCCD = ({ onClose }: VerifyCCCDProps) => {
     }
   }, [cccdData, step, setValue]);
 
+  const handleGetClassData = async () => {
+    try {
+      const response = await axios.get(getClassIp);
+      setClassData(response.data.payload);
+    } catch (error) {
+      toast.error("Có lỗi xảy ra khi lấy dữ liệu lớp học");
+      console.error("Error getting class data: ", error);
+    }
+  };
+
+  const handleGetDepartmentData = async () => {
+    try {
+      const response = await axios.get(getDepartmentIp);
+      setDepartmentData(response.data.payload);
+    } catch (error) {
+      toast.error("Có lỗi xảy ra khi lấy dữ liệu phòng ban");
+      console.error("Error getting department data: ", error);
+    }
+  };
+
   const resetForm = useCallback(() => {
     reset();
     setCapturedImages([]);
+    setSelectedDepartment("");
     extractedFields.forEach((field) => {
       setValue(field.formKey as keyof IFormData, "");
     });
     setStep(0);
-  }, [reset]);
+  }, [reset, setValue]);
 
   const capturePhoto = useCallback(() => {
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
-      setCapturedImages((prev) => {
-        const newImages = [...prev];
-        newImages[step - 1] = imageSrc;
-        return newImages;
-      });
-
-      if (step < 3) {
+      setCapturedImages((prev) => [...prev, imageSrc]);
+      if (capturedImages.length < 2) {
         setStep((prev) => prev + 1);
       } else {
-        setStep(4);
+        setStep(5);
       }
     }
-  }, [step]);
+  }, [capturedImages]);
 
   const handleRoleSelect = (selectedRole: TRole) => {
     setValue("role", selectedRole);
-    setStep(1);
+    setStep(selectedRole === "guest" ? 2 : 1);
   };
 
   const handleBack = () => {
-    if (step > 1 && step <= 3) {
+    if (step > 2 && step <= 4) {
       setCapturedImages((prev) => prev.slice(0, -1));
     }
+
     if (step === 1) {
-      setValue("role", "");
+      reset({
+        role: "",
+      });
+      setStep(0);
+      return;
     }
+
+    if (role === "guest" && step === 2) {
+      reset({
+        role: "",
+      });
+      setStep(0);
+      return;
+    }
+
     setStep((prev) => prev - 1);
   };
 
@@ -111,6 +156,7 @@ const VerifyCCCD = ({ onClose }: VerifyCCCDProps) => {
         DOB: data.dateOfBirth,
         Gender: data.gender,
       },
+      ...(role !== "guest" && { department_code: selectedDepartment }),
       role: data.role,
     };
 
@@ -169,8 +215,56 @@ const VerifyCCCD = ({ onClose }: VerifyCCCDProps) => {
           </Card>
         );
       case 1:
+        return (
+          <Card className="py-6 px-12 space-y-6 rounded-2xl">
+            <h2 className="text-3xl font-bold text-center">
+              {role === "student" ? "Chọn lớp" : "Chọn phòng ban"}
+            </h2>
+            <Select
+              onValueChange={setSelectedDepartment}
+              value={selectedDepartment}
+            >
+              <SelectTrigger className="text-xl font-semibold">
+                <SelectValue
+                  placeholder={`Chọn ${
+                    role === "student" ? "lớp hành chính" : "phòng ban"
+                  }`}
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {(role === "student" ? classData : departmentData)?.map(
+                  (item) => (
+                    <SelectItem
+                      key={item.id}
+                      value={item.id.toString()}
+                      className="text-xl font-semibold"
+                    >
+                      {role === "student"
+                        ? (item as IClass)?.ten_lop_hanh_chinh
+                        : (item as IDepartment)?.ten_phong_ban}
+                    </SelectItem>
+                  )
+                )}
+              </SelectContent>
+            </Select>
+            <div className="flex space-x-6 font-semibold text-xl">
+              <Button onClick={handleBack} variant="outline" className="p-6">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                {t("verify.back")}
+              </Button>
+              <Button
+                onClick={() => setStep(2)}
+                className="flex-1 p-6"
+                disabled={!selectedDepartment}
+              >
+                {t("verify.next")}
+              </Button>
+            </div>
+          </Card>
+        );
       case 2:
       case 3:
+      case 4:
         return (
           <>
             <div className="relative w-full max-w-md aspect-video bg-background rounded-2xl overflow-hidden shadow-sm">
@@ -194,27 +288,24 @@ const VerifyCCCD = ({ onClose }: VerifyCCCDProps) => {
               </div>
             </div>
             <div className="text-center font-semibold space-y-2">
-              <h3 className="text-3xl">{captureSteps[step - 1]?.label}</h3>
+              <h3 className="text-3xl">{captureSteps[step - 2]?.label}</h3>
               <p className="text-xl text-muted-foreground">
-                {captureSteps[step - 1]?.instruction}
+                {captureSteps[step - 2]?.instruction}
               </p>
             </div>
             <div className="flex space-x-6 font-semibold text-xl">
-              <Button
-                onClick={handleBack}
-                variant="outline"
-                icon={<ArrowLeft />}
-                className="p-6"
-              >
+              <Button onClick={handleBack} variant="outline" className="p-6">
+                <ArrowLeft className="mr-2 h-4 w-4" />
                 {t("verify.back")}
               </Button>
-              <Button onClick={capturePhoto} icon={<Camera />} className="p-6">
+              <Button onClick={capturePhoto} className="p-6">
+                <Camera className="mr-2 h-4 w-4" />
                 {t("verify.capture")}
               </Button>
             </div>
           </>
         );
-      case 4:
+      case 5:
         return (
           <motion.div
             className="w-full max-w-md space-y-4"
@@ -239,16 +330,12 @@ const VerifyCCCD = ({ onClose }: VerifyCCCDProps) => {
               </div>
             ))}
             <div className="flex space-x-6 font-semibold text-xl">
-              <Button
-                onClick={handleBack}
-                variant="outline"
-                icon={<ArrowLeft />}
-                className="p-6 "
-              >
+              <Button onClick={handleBack} variant="outline" className="p-6">
+                <ArrowLeft className="mr-2 h-4 w-4" />
                 {t("verify.back")}
               </Button>
               <Button
-                onClick={() => setStep(5)}
+                onClick={() => setStep(6)}
                 className="flex-1 p-6"
                 disabled={extractedFields.some(
                   (field) => !watch(field.formKey as keyof IFormData)
@@ -259,7 +346,7 @@ const VerifyCCCD = ({ onClose }: VerifyCCCDProps) => {
             </div>
           </motion.div>
         );
-      case 5:
+      case 6:
         return (
           <motion.div
             className="w-full max-w-md space-y-6"
@@ -267,7 +354,9 @@ const VerifyCCCD = ({ onClose }: VerifyCCCDProps) => {
             animate={{ opacity: 1, y: 0 }}
           >
             <div className="text-center space-y-2 font-semibold">
-              <h2 className="text-3xl text-center">{t("verify.step4.title")}</h2>
+              <h2 className="text-3xl text-center">
+                {t("verify.step4.title")}
+              </h2>
               <p className="text-xl text-muted-foreground">
                 {t("verify.step4.description")}
               </p>
@@ -284,6 +373,26 @@ const VerifyCCCD = ({ onClose }: VerifyCCCDProps) => {
                 />
               </div>
             ))}
+            {selectedDepartment && (
+              <div className="space-y-2">
+                <Label className="text-xl font-semibold text-muted-foreground">
+                  {role === "student" ? "Lớp hành chính" : "Phòng ban"}
+                </Label>
+                <Input
+                  value={
+                    role === "student"
+                      ? classData.find(
+                          (cls) => cls.id.toString() === selectedDepartment
+                        )?.ten_lop_hanh_chinh
+                      : departmentData.find(
+                          (dept) => dept.id.toString() === selectedDepartment
+                        )?.ten_phong_ban
+                  }
+                  readOnly
+                  className="text-lg font-semibold"
+                />
+              </div>
+            )}
             <div className="space-y-2">
               <Label className="text-xl font-semibold text-muted-foreground">
                 Ảnh đã chụp
@@ -300,12 +409,8 @@ const VerifyCCCD = ({ onClose }: VerifyCCCDProps) => {
               </div>
             </div>
             <div className="flex space-x-6 font-semibold text-xl">
-              <Button
-                onClick={handleBack}
-                variant="outline"
-                icon={<ArrowLeft />}
-                className="p-6"
-              >
+              <Button onClick={handleBack} variant="outline" className="p-6">
+                <ArrowLeft className="mr-2 h-4 w-4" />
                 {t("verify.back")}
               </Button>
               <Button
@@ -325,7 +430,7 @@ const VerifyCCCD = ({ onClose }: VerifyCCCDProps) => {
 
   return (
     <Card className="flex flex-col items-center space-y-6 p-6 bg-gradient-to-br bg-primary/10 rounded-2xl">
-      <Progress value={(step / 5) * 100} className="w-full max-w-md" />
+      <Progress value={(step / 6) * 100} className="w-full max-w-md" />
       {renderStep()}
     </Card>
   );

@@ -6,6 +6,7 @@ export type IFormData = {
   idNumber: string;
   dateOfBirth: string;
   gender: string;
+  department: string;
 };
 
 export interface ICCCDData {
@@ -13,4 +14,13 @@ export interface ICCCDData {
   Name: string;
   DOB: string;
   Gender: string;
+}
+
+export interface IClass {
+  id: number;
+  ten_lop_hanh_chinh: string;
+}
+
+export interface IVerifyCCCDProps {
+  onClose?: () => void;
 }

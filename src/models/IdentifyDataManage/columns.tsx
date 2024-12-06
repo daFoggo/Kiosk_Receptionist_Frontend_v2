@@ -17,6 +17,9 @@ import {
 } from "@/components/ui/carousel";
 import FilterCol from "@/components/FilterCol";
 import { useState } from "react";
+import { backendIp } from "@/utils/ip";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 const columns: ColumnDef<IIdentifyDataManagement>[] = [
   {
@@ -118,10 +121,10 @@ const columns: ColumnDef<IIdentifyDataManagement>[] = [
     enableColumnFilter: false,
   },
   {
-    accessorKey: "b64",
+    accessorKey: "img",
     header: "Dữ liệu ảnh",
     cell: ({ row }) => {
-      const imageData: string[] = row.getValue("b64");
+      const imageData: string[] = row.getValue("img");
       const [isOpen, setIsOpen] = useState(false);
 
       return (
@@ -141,12 +144,27 @@ const columns: ColumnDef<IIdentifyDataManagement>[] = [
             <div className="flex items-center justify-center h-full">
               <Carousel className="w-full max-w-xs">
                 <CarouselContent>
-                  {imageData?.map((base64, index) => (
-                    <CarouselItem key={index}>
-                      <img
-                        src={base64}
+                  {imageData?.map((imgUrl, index) => (
+                    <CarouselItem key={index} className="flex justify-center items-center">
+                      <LazyLoadImage
+                        src={`${backendIp}/${imgUrl}`}
                         alt={`Image ${index + 1}`}
-                        className="w-full h-auto"
+                        effect="blur"
+                        wrapperClassName="w-full h-full"
+                        beforeLoad={() => console.log('Đang tải ảnh...')}
+                        delayTime={300} 
+                        threshold={100} 
+                        wrapperProps={{
+                          className: "relative w-full h-full",
+                          style: { minHeight: '200px' }
+                        }}
+                        placeholder={(
+                          <div className="absolute inset-0 flex items-center justify-center 
+                            bg-gray-200 animate-pulse">
+                            <span className="text-gray-500 text-sm">Đang tải...</span>
+                          </div>
+                        )}
+                        className="w-full h-auto object-contain"
                       />
                     </CarouselItem>
                   ))}

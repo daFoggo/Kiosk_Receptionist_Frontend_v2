@@ -14,3 +14,4 @@ export interface IDepartment {
   ma_phong_ban: number;
   ten_phong_ban: string;
 }
+

@@ -1,4 +1,5 @@
-export const httpIp = import.meta.env.VITE_BACKEND_IP;
+export const backendIp = import.meta.env.VITE_BACKEND_IP;
+export const httpIp = import.meta.env.VITE_BACKEND_API;
 export const wsIp = import.meta.env.VITE_WEBSOCKET_IP;
 export const openWeatherIp = import.meta.env.VITE_OPENWEATHER_API;
 
