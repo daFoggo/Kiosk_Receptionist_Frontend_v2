@@ -14,7 +14,7 @@ import {
   FileText,
   X,
 } from "lucide-react";
-import { IInstitueCalendar } from "@/models/InstitueCalendar/type";
+import { IInstitueCalendar } from "@/models/institue-calendar";
 import {
   Sheet,
   SheetContent,
@@ -67,7 +67,7 @@ const InstitueCalendar = memo(() => {
   const getCalendarData = async () => {
     try {
       const response = await axios.get(getInstitueCalendarIp);
-      const calendarData = response.data;
+      const calendarData = response.data.payload;
       setFullCalendar(calendarData);
       const nextWork = findUpcomingWork(calendarData);
       setCalendar(nextWork);
@@ -80,8 +80,9 @@ const InstitueCalendar = memo(() => {
   // tim lich sap toi trong ngay
   const findUpcomingWork = useMemo(
     () => (
-      works: IInstitueCalendar[]
+      works: IInstitueCalendar[] | null
     ): IInstitueCalendar | null => {
+      if (!works || !Array.isArray(works)) return null;
       const currentTime = new Date();
       const todayStart = new Date(
         currentTime.getFullYear(),

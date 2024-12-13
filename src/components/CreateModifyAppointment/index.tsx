@@ -1,11 +1,9 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { vi } from "date-fns/locale";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import axios from "axios";
 import { toast } from "sonner";
 
@@ -31,11 +29,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
   Command,
   CommandEmpty,
   CommandGroup,
@@ -43,26 +36,46 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import TimeSelector from "../ui/time-selector";
-
-import { ICreateModifyAppointmentProps } from "@/models/CreateModifyAppointment/type";
+import { Checkbox } from "../ui/checkbox";
+import { ICreateModifyAppointmentProps } from "@/models/create-modify-appointment";
+import { IOfficer } from "@/models/department-list";
 import {
   createAppointmentIp,
   getOfficerIp,
   updateAppointmentIp,
 } from "@/utils/ip";
-import { IOfficer } from "@/models/DepartmentList/type";
-import { Checkbox } from "../ui/checkbox";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
-const formSchema = z.object({
-  cccd_nguoi_hen: z.string(),
-  cccd_nguoi_duoc_hen: z.array(z.string()).min(1, "Chọn ít nhất 1 người"),
-  ngay_gio_bat_dau: z.date(),
-  ngay_gio_ket_thuc: z.date(),
-  dia_diem: z.string().min(1, "Cần phải nhập địa điểm"),
-  muc_dich: z.string().min(1, "Cần phải nhập mục đích"),
-  ghi_chu: z.string().optional(),
-});
+const timeFormatRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+
+const formSchema = z
+  .object({
+    cccd_nguoi_hen: z.string(),
+    cccd_nguoi_duoc_hen: z.array(z.string()).min(1, "Chọn ít nhất 1 người"),
+    ngay_hen: z.date(),
+    gio_bat_dau: z
+      .string()
+      .regex(timeFormatRegex, "Định dạng giờ không hợp lệ (HH:mm)"),
+    gio_ket_thuc: z
+      .string()
+      .regex(timeFormatRegex, "Định dạng giờ không hợp lệ (HH:mm)"),
+    dia_diem: z.string().min(1, "Cần phải nhập địa điểm"),
+    muc_dich: z.string().min(1, "Cần phải nhập mục đích"),
+    ghi_chu: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    // Validate that end time is after start time
+    const startTime = parse(data.gio_bat_dau, "HH:mm", new Date());
+    const endTime = parse(data.gio_ket_thuc, "HH:mm", new Date());
+
+    if (startTime >= endTime) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["gio_ket_thuc"],
+        message: "Thời gian kết thúc phải sau thời gian bắt đầu",
+      });
+    }
+  });
 
 const CreateModifyAppointment = ({
   mode = "create",
@@ -70,7 +83,6 @@ const CreateModifyAppointment = ({
   onSuccess,
   trigger,
   officers,
-  department,
   convertDepartmentIdToName,
 }: ICreateModifyAppointmentProps) => {
   const [open, setOpen] = useState(false);
@@ -89,14 +101,18 @@ const CreateModifyAppointment = ({
       dia_diem: mode === "edit" ? appointment?.dia_diem : "",
       muc_dich: mode === "edit" ? appointment?.muc_dich : "",
       ghi_chu: mode === "edit" ? appointment?.ghi_chu : "",
-      ngay_gio_bat_dau:
+      ngay_hen:
         mode === "edit"
           ? new Date(appointment?.ngay_gio_bat_dau || "")
           : undefined,
-      ngay_gio_ket_thuc:
+      gio_bat_dau:
         mode === "edit"
-          ? new Date(appointment?.ngay_gio_ket_thuc || "")
-          : undefined,
+          ? format(new Date(appointment?.ngay_gio_bat_dau || ""), "HH:mm")
+          : "",
+      gio_ket_thuc:
+        mode === "edit"
+          ? format(new Date(appointment?.ngay_gio_ket_thuc || ""), "HH:mm")
+          : "",
     },
   });
 
@@ -107,11 +123,15 @@ const CreateModifyAppointment = ({
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (user) {
-      const parsedUser = JSON.parse(user);
-      const cccdValue =
-        mode === "edit" ? appointment?.cccd_nguoi_hen : parsedUser?.username;
-      setCurrentCccd(cccdValue);
-      form.setValue("cccd_nguoi_hen", parsedUser.username, {
+      // const parsedUser = JSON.parse(user);
+      // const cccdValue =
+      //   mode === "edit" ? appointment?.cccd_nguoi_hen : parsedUser?.cccd_id;
+      // setCurrentCccd(cccdValue);
+      // form.setValue("cccd_nguoi_hen", parsedUser.cccd_id, {
+      //   shouldValidate: true,
+      //   shouldDirty: true,
+      // });
+      form.setValue("cccd_nguoi_hen", "001205056637", {
         shouldValidate: true,
         shouldDirty: true,
       });
@@ -119,21 +139,24 @@ const CreateModifyAppointment = ({
   }, [form]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (values.ngay_gio_ket_thuc <= values.ngay_gio_bat_dau) {
-      setFormError("Thời gian kết thúc phải sau thời gian bắt đầu");
-      return;
-    }
+    const startDateTime = new Date(values.ngay_hen);
+    const [startHours, startMinutes] = values.gio_bat_dau
+      .split(":")
+      .map(Number);
+    startDateTime.setHours(startHours, startMinutes);
+
+    const endDateTime = new Date(values.ngay_hen);
+    const [endHours, endMinutes] = values.gio_ket_thuc.split(":").map(Number);
+    endDateTime.setHours(endHours, endMinutes);
 
     const formattedData = {
       ...values,
-      ngay_gio_bat_dau: format(
-        values.ngay_gio_bat_dau,
-        "yyyy-MM-dd'T'HH:mm:ss"
-      ),
-      ngay_gio_ket_thuc: format(
-        values.ngay_gio_ket_thuc,
-        "yyyy-MM-dd'T'HH:mm:ss"
-      ),
+      ngay_gio_bat_dau: format(startDateTime, "yyyy-MM-dd'T'HH:mm:ss"),
+      ngay_gio_ket_thuc: format(endDateTime, "yyyy-MM-dd'T'HH:mm:ss"),
+      // Remove unnecessary fields before sending to API
+      ngay_hen: undefined,
+      gio_bat_dau: undefined,
+      gio_ket_thuc: undefined,
     };
 
     try {
@@ -182,7 +205,7 @@ const CreateModifyAppointment = ({
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="w-[95%] rounded-lg sm:max-w-[425px] md:max-w-[600px] lg:max-w-[800px]">
+      <DialogContent className="w-[95%] h-[95%] rounded-lg  sm:max-w-[425px] md:max-w-[600px] lg:max-w-[800px] overflow-auto">
         <DialogHeader>
           <DialogTitle>
             {mode === "edit" ? "Chỉnh sửa lịch hẹn" : "Đặt lịch hẹn mới"}
@@ -279,7 +302,10 @@ const CreateModifyAppointment = ({
                                 }}
                               >
                                 <div className="flex items-center">
-                                  {officer.ho_ten} - {convertDepartmentIdToName(Number(officer.phong_ban_id))}
+                                  {officer.ho_ten} -{" "}
+                                  {convertDepartmentIdToName(
+                                    Number(officer.phong_ban_id)
+                                  )}
                                   {Array.isArray(field.value) &&
                                     field.value.some(
                                       (id) => id === officer.cccd_id
@@ -300,115 +326,61 @@ const CreateModifyAppointment = ({
                 </FormItem>
               )}
             />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
               <FormField
                 control={form.control}
-                name="ngay_gio_bat_dau"
+                name="ngay_hen"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Ngày & Thời gian bắt đầu</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant={"outline"}
-                            className="w-full pl-3 text-left font-normal"
-                          >
-                            {field.value ? (
-                              format(field.value, "PPP HH:mm", { locale: vi })
-                            ) : (
-                              <span>Chọn ngày bắt đầu</span>
-                            )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          initialFocus
-                          locale={vi}
-                        />
-                        <div className="p-3 border-t">
-                          <TimeSelector
-                            value={
-                              field.value ? format(field.value, "HH:mm") : ""
-                            }
-                            onChange={(time) => {
-                              const [hours, minutes] = time.split(":");
-                              const newDate = new Date(
-                                field.value || new Date()
-                              );
-                              newDate.setHours(
-                                parseInt(hours),
-                                parseInt(minutes)
-                              );
-                              field.onChange(newDate);
-                            }}
-                          />
-                        </div>
-                      </PopoverContent>
-                    </Popover>
+                    <FormLabel>Ngày hẹn</FormLabel>
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      locale={vi}
+                      classNames={{
+                        months:
+                          "flex w-full flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0 flex-1 text-center",
+                        month: "space-y-4 w-full flex flex-col",
+                        table: "w-full h-full border-collapse space-y-1",
+                        head_row: "",
+                        row: "w-full mt-2",
+                      }}
+                      className="rounded-md border w-full"
+                      required
+                    />
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="ngay_gio_ket_thuc"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel>Ngày & Thời gian kết thúc</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant={"outline"}
-                            className="w-full pl-3 text-left font-normal"
-                          >
-                            {field.value ? (
-                              format(field.value, "PPP HH:mm", { locale: vi })
-                            ) : (
-                              <span>Chọn ngày kết thúc</span>
-                            )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          locale={vi}
-                          initialFocus
-                        />
-                        <div className="p-3 border-t">
-                          <TimeSelector
-                            value={
-                              field.value ? format(field.value, "HH:mm") : ""
-                            }
-                            onChange={(time) => {
-                              const [hours, minutes] = time.split(":");
-                              const newDate = new Date(
-                                field.value || new Date()
-                              );
-                              newDate.setHours(
-                                parseInt(hours),
-                                parseInt(minutes)
-                              );
-                              field.onChange(newDate);
-                            }}
-                          />
-                        </div>
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="gio_bat_dau"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Giờ bắt đầu (HH:mm)</FormLabel>
+                      <FormControl>
+                        <Input placeholder="VD: 09:00" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="gio_ket_thuc"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Giờ kết thúc (HH:mm)</FormLabel>
+                      <FormControl>
+                        <Input placeholder="VD: 10:30" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
             <FormField
               control={form.control}
@@ -453,6 +425,8 @@ const CreateModifyAppointment = ({
               type="submit"
               className="w-full"
               onClick={() => {
+                console.log("Form values:", form.getValues());
+                console.log("Form errors:", form.formState.errors);
                 if (!form.formState.isValid) {
                   setFormError(
                     "Vui lòng điền toàn bộ các thông tin chính xác."

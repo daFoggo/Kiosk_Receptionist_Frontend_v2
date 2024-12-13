@@ -39,7 +39,7 @@ import {
 import {
   IPersonalCalendarData,
   IPersonalCalendarProps,
-} from "@/models/PersonalCalendar/type";
+} from "@/models/personal-calendar";
 
 const PersonalCalendar = ({
   currentRole,

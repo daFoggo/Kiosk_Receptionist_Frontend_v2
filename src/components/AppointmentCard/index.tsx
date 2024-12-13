@@ -1,6 +1,6 @@
 import React from "react";
 import QRCode from "react-qr-code";
-import { IAppointmentCardProps } from "@/models/AppointmentTable/type";
+import { IAppointmentCardProps } from "@/models/appointment-table";
 import { getStatusColor } from "@/utils/Helper/AppointmentTable";
 import { format, parseISO } from "date-fns";
 import { useForm } from "react-hook-form";

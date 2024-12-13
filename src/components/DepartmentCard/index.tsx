@@ -1,4 +1,4 @@
-"use client";
+;
 
 import { Clock, Users } from "lucide-react";
 import { motion } from "framer-motion";
@@ -16,9 +16,9 @@ import {
   formatWorkingDays,
   formatWorkingHours,
 } from "@/utils/Helper/DepartmentCard";
-import { IDepartMentCardProps } from "@/models/DepartmentCard/type";
+import { IDepartMentCardProps } from "@/models/department-card";
 import { useEffect, useState } from "react";
-import { IOfficer } from "@/models/DepartmentList/type";
+import { IOfficer } from "@/models/department-list";
 import { getOfficerIp } from "@/utils/ip";
 import axios from "axios";
 

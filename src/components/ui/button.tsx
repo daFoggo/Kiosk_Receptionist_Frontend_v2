@@ -35,14 +35,14 @@ const buttonVariants = cva(
 );
 
 export interface ButtonProps
-  extends Omit<HTMLMotionProps<"button">, "color">,
+  extends Omit<HTMLMotionProps<"button">, "color" | "children">,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   icon?: React.ReactNode;
   iconPosition?: "left" | "right" | "center";
+  children?: React.ReactNode;
 }
 
-const MotionButton = motion.button;
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
@@ -58,10 +58,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    const Comp = asChild ? Slot : MotionButton;
 
     const content = (
-      <>
+      <React.Fragment>
         {icon && iconPosition === "left" && (
           <span className="mr-1">{icon}</span>
         )}
@@ -70,15 +69,15 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {icon && iconPosition === "right" && (
           <span className="ml-1">{icon}</span>
         )}
-      </>
+      </React.Fragment>
     );
 
     return (
       <motion.button
         className={cn(buttonVariants({ variant, size, className }), "gap-2")}
         ref={ref}
-        whileTap={{ scale: 0.95 }}
-        transition={{ type: "spring", stiffness: 300, damping: 17 }}
+        whileTap={{ scale: 0.98 }}
+        transition={{ type: "spring", stiffness: 300, damping: 17}}
         {...props}
       >
         {content}

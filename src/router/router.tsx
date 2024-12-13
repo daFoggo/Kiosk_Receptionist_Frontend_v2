@@ -1,89 +1,101 @@
-import { createBrowserRouter, RouteObject } from "react-router-dom";
-import routes from "./routerConfig";
+import {
+  createBrowserRouter,
+  Navigate,
+  Outlet,
+  useNavigate,
+} from "react-router-dom";
+import { routes } from "./routes";
 
-import RootLayout from "@/layouts/RootLayout";
-import ManageLayout from "@/layouts/ManageLayout";
-import AppointmentLayout from "@/layouts/AppointmentLayout";
-import AuthLayout from "@/layouts/AuthLayout";
+import { useAuth } from "@/contexts/auth-context";
+
+import RootLayout from "@/layouts/root-layout";
+import AuthLayout from "@/layouts/auth-layout";
+import AppointmentLayout from "@/layouts/appointment-layout";
 
 import Home from "@/pages/Home";
-import IdentifyDataManagement from "@/pages/IdentifyDataManagement";
-import InstitueCalendarManagement from "@/pages/InstitueCalendarManagement";
-import EventManagement from "@/pages/EventManagement";
-import AppointmentLogin from "@/pages/AppointmentLogin";
-import AppointmentRegister from "@/pages/AppointmentRegister";
-import AdminLogin from "@/pages/AdminLogin";
+import Login from "@/pages/Login";
+import Register from "@/pages/Register";
 import MyAppointment from "@/pages/MyAppointment";
 import DepartmentList from "@/pages/DepartmentList/";
-import AppointmentStatistics from "@/pages/AppointmentStatistics";
 
-const routeLayout: RouteObject[] = [
+import frogJumping from "@/assets/gifs/frog-laughing.gif";
+import { IAuthContextType } from "@/models/auth-context";
+import { useEffect } from "react";
+import AppointmentDashboard from "@/pages/AppointmentDashboard";
+
+const ProtectedRoute = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated = false, user } = useAuth() as IAuthContextType;
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
+
+    if (storedToken && storedUser && !isAuthenticated) {
+      return;
+    }
+
+    if (!storedToken || !storedUser) {
+      navigate(routes.login, { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
+
+  return isAuthenticated ? <Outlet /> : null;
+};
+
+const router = createBrowserRouter([
   {
-    path: "/",
-    element: <RootLayout />,
-    children: [
-      {
-        path: "/",
-        element: <Home />,
-      },
-    ],
-  },
-  {
-    path: "/admin",
-    element: <ManageLayout />,
-    children: [
-      {
-        path: routes.identifyData,
-        element: <IdentifyDataManagement />,
-      },
-      {
-        path: routes.institueCalendar,
-        element: <InstitueCalendarManagement />,
-      },
-      {
-        path: routes.eventManagement,
-        element: <EventManagement />,
-      },
-      {
-        path: routes.appointmentStatistics,
-        element: <AppointmentStatistics />,
-      }
-    ],
-  },
-  {
-    path: "/appointment",
-    element: <AppointmentLayout />,
-    children: [
-      {
-        path: routes.myAppointment,
-        element: <MyAppointment />,
-      },
-      {
-        path: routes.departmentList,
-        element: <DepartmentList />,
-      },
-    ],
-  },
-  {
-    path: "/auth",
     element: <AuthLayout />,
     children: [
       {
-        path: routes.adminLogin,
-        element: <AdminLogin />,
-      },
-      {
-        path: routes.appointmentLogin,
-        element: <AppointmentLogin />,
-      },
-      {
-        path: routes.appointmentRegister,
-        element: <AppointmentRegister />,
+        path: routes.login,
+        element: <Login />,
       },
     ],
   },
-];
-
-const router = createBrowserRouter(routeLayout);
+  {
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: routes.appointment.dashboard,
+        element: <AppointmentLayout />,
+        children: [
+          {
+            path: routes.appointment.dashboard,
+            element: <AppointmentDashboard />,
+            children: [
+              {
+                path: routes.appointment.myAppointment(),
+                element: <MyAppointment />,
+              },
+              {
+                path: routes.appointment.departmentList(),
+                element: <DepartmentList />,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: "/",
+    element: <Home />,
+  },
+  {
+    path: "*",
+    element: (
+      <div className="flex flex-col gap-2 items-center justify-center h-screen">
+        <p className="font-semibold">Biết ông bốn không ? </p>
+        <p className="font-semibold">404 Not Found</p>
+        <img
+          src={frogJumping}
+          alt="insert ảnh ếch cười vào mặt bạn"
+          className="rounded-md"
+        />
+      </div>
+    ),
+  },
+]);
 
 export default router;

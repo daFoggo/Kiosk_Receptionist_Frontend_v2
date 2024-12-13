@@ -1,5 +1,3 @@
-"use client";
-
 import { motion } from "framer-motion";
 import { useState, useMemo, useEffect } from "react";
 import { Search } from "lucide-react";
@@ -11,24 +9,25 @@ import { Input } from "@/components/ui/input";
 
 import { containerVariants, itemVariants } from "./motion";
 import { getDepartmentIp } from "@/utils/ip";
-import { IDepartment } from "@/models/DepartmentList/type";
+import { IDepartment } from "@/models/department-list";
+import { toast } from "sonner";
 
 const DepartmentList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm] = useDebounce(searchTerm, 300);
   const [departments, setDepartments] = useState<IDepartment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const handleGetDepartments = async () => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       const response = await axios.get(`${getDepartmentIp}`);
-      setDepartments(response.data.payload);
-      setError(null);
+      if (response.data.success) {
+        setDepartments(response.data.payload);
+      }
     } catch (error) {
+      toast.error("Lỗi khi lấy danh sách phòng ban");
       console.error(error);
-      setError("Failed to fetch departments");
       setDepartments([]);
     } finally {
       setIsLoading(false);
@@ -49,7 +48,7 @@ const DepartmentList = () => {
 
   const convertDepartmentIdToName = (id: number) => {
     const department = departments.find((dept) => dept.id === id);
-    return department?.ten_phong_ban || 'Không xác định';
+    return department?.ten_phong_ban || "Không xác định";
   };
 
   const handleSearch = (value: string) => {
@@ -57,19 +56,12 @@ const DepartmentList = () => {
   };
 
   if (isLoading) {
-    return <div>Loading departments...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
+    return <div>Đang tải danh sách...</div>;
   }
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-col gap-4 mt-2">
-        <h1 className="font-semibold text-lg sm:text-2xl">
-          Danh sách phòng ban
-        </h1>
+      <div className="flex flex-col gap-4">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -94,7 +86,10 @@ const DepartmentList = () => {
                 variants={itemVariants}
                 className="h-full"
               >
-                <DepartmentCard department={department} convertDepartmentIdToName={convertDepartmentIdToName} />
+                <DepartmentCard
+                  department={department}
+                  convertDepartmentIdToName={convertDepartmentIdToName}
+                />
               </motion.div>
             ))}
           </motion.div>

@@ -21,7 +21,7 @@ import {
   WiDayFog,
 } from "react-icons/wi";
 
-import { IWeatherIconProps, IWeatherData } from "@/models/Weather/type";
+import { IWeatherIconProps, IWeatherData } from "@/models/weather";
 import { useTranslation } from "react-i18next";
 import { openWeatherIp } from "@/utils/ip";
 

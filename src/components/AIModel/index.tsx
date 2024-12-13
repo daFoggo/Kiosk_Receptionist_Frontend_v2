@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState, memo } from "react";
-import { useAISpeech } from "@/contexts/AISpeechContext";
+import { useAISpeech } from "@/contexts/ai-speech-context";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Card } from "@/components/ui/card";
 

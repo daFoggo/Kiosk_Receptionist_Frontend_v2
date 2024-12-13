@@ -28,18 +28,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { useWebsocket } from "@/contexts/WebsocketContext";
+import { useWebsocket } from "@/contexts/websocket-context";
 import { convertFormKey } from "@/utils/Helper/VerifyCCCD";
 import { getClassIp, getDepartmentIp, updateIdentifyDataIp } from "@/utils/ip";
 import { extractedFields, captureSteps } from "./constant";
-import { ICCCDData } from "@/models/WebsocketContext/type";
+import { ICCCDData } from "@/models/websocket-context";
 import {
   TRole,
   IFormData,
   IClass,
   IVerifyCCCDProps,
-} from "@/models/VerifyCCCD/type";
-import { IDepartment } from "@/models/DepartmentList/type";
+} from "@/models/verify-cccd";
+import { IDepartment } from "@/models/department-list";
 
 const VerifyCCCD = ({ onClose }: IVerifyCCCDProps) => {
   const { t } = useTranslation();

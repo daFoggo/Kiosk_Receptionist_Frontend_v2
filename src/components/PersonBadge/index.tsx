@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { badgeVariants } from "./motion";
 import { convertRole } from "@/utils/Helper/common";
-import { PersonBadgeProps } from "@/models/PersonBadge/type";
+import { PersonBadgeProps } from "@/models/person-badge";
 import { useTranslation } from "react-i18next";
 
 const PersonBadge = memo(

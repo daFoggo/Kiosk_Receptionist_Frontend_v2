@@ -1,4 +1,4 @@
-"use client";
+;
 
 import { motion, useAnimationControls } from "framer-motion";
 import { memo, useCallback, useEffect, useMemo, useRef } from "react";

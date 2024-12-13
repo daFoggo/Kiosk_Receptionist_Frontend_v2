@@ -6,7 +6,7 @@ import {
   ScanQrCode,
   Signature,
 } from "lucide-react";
-import { IMenuItem } from "@/models/InteractionMenu/type";
+import { IMenuItem } from "@/models/interaction-menu";
 import GeneralCalendar from "../GeneralCalendar";
 import PersonalCalendar from "../PersonalCalendar";
 import UserInfo from "../UserInfo";

@@ -1,4 +1,4 @@
-import { IChartTooltipProps } from "@/models/ChartTooltip/type";
+import { IChartTooltipProps } from "@/models/chart-tooltip";
 
 const ChartToooltip = ({ active, payload, label }: IChartTooltipProps) => {
     if (active && payload && payload.length) {

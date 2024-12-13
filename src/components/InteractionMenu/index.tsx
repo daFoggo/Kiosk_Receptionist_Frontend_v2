@@ -23,7 +23,7 @@ import {
   IMenuItem,
   IMenuItemProps,
   IMenuState,
-} from "@/models/InteractionMenu/type";
+} from "@/models/interaction-menu";
 import { interactionMenu } from "./constant";
 import { gridVariants, itemVariants, activeButtonVariants } from "./motion";
 import LanguageSelector from "../LanguageSelector";

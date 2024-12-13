@@ -14,8 +14,8 @@ import HomeWebcam from "@/components/HomeWebcam";
 import InteractionMenu from "@/components/InteractionMenu";
 
 import { navbarVariants, leftItemVariants, rightItemVariants } from "./motion";
-import { useWebsocket } from "@/contexts/WebsocketContext";
-import { IMenuItem } from "@/models/InteractionMenu/type";
+import { useWebsocket } from "@/contexts/websocket-context";
+import { IMenuItem } from "@/models/interaction-menu";
 
 const Home = () => {
   const [eventData, setEventData] = useState([

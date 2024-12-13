@@ -25,7 +25,7 @@ import { generateHours } from "@/utils/Helper/common";
 import {
   IInstitueCalendarTableProps,
   IWork,
-} from "@/models/InstitueCalendarTable/type";
+} from "@/models/institue-calendar-table";
 import { useTranslation } from "react-i18next";
 
 const WeeklySchedule = ({ works }: IInstitueCalendarTableProps) => {

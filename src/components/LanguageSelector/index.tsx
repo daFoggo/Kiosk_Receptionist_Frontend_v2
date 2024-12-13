@@ -1,4 +1,4 @@
-"use client";
+;
 
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ILanguage } from "@/models/Language/type";
+import { ILanguage } from "@/models/language";
 
 const languages: ILanguage[] = [
   {

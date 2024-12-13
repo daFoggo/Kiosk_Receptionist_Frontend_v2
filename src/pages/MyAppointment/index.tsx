@@ -12,7 +12,7 @@ const MyAppointment = () => {
 
     if (user) {
       const userObj = JSON.parse(user);
-      setCccdNguoiHen(userObj.username);
+      setCccdNguoiHen("001205056637");
     }
   }, []);
 
@@ -22,11 +22,7 @@ const MyAppointment = () => {
 
   const handleGetAppointments = async () => {
     try {
-      const response = await axios.get(getAppointmentsIp, {
-        params: {
-          cccd_id: cccdNguoiHen,
-        },
-      });
+      const response = await axios.get(`${getAppointmentsIp}?cccd_id=${cccdNguoiHen}`);
       setAppointments(response.data.payload);
     } catch (error) {
       console.error(error);
@@ -35,8 +31,7 @@ const MyAppointment = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-col gap-4 mt-2">
-        <h1 className="font-semibold text-xl sm:text-2xl">Lịch hẹn của tôi</h1>
+      <div className="flex flex-col gap-4">
         <AppointmentTable appointments={appointments} />
       </div>
     </div>

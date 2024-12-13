@@ -1,4 +1,4 @@
-"use client";
+;
 
 import { useState } from "react";
 import {
@@ -30,7 +30,7 @@ import { Button } from "@/components/ui/button";
 import AppointmentCard from "../AppointmentCard";
 
 import { VIEWS } from "./constant";
-import { IAppointment } from "@/models/AppointmentTable/type";
+import { IAppointment } from "@/models/appointment-table";
 
 const DayView = ({
   date,

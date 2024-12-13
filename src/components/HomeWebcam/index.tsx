@@ -6,8 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { IHomeWebcamProps } from "@/models/HomeWebcam/type";
 import PersonBadge from "@/components/PersonBadge";
-import { useAISpeech } from "@/contexts/AISpeechContext";
-import { IPersonData } from "@/models/WebsocketContext/type";
+import { useAISpeech } from "@/contexts/ai-speech-context";
+import { IPersonData } from "@/models/websocket-context";
 
 const HomeWebcam = memo(
   ({ isConnected, onFrameCapture, webcamData }: IHomeWebcamProps) => {

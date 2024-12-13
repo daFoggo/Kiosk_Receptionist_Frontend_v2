@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
-import { IEvent, IEventBannerProps } from "@/models/EventBanner/EventBanner";
+import { IEvent, IEventBannerProps } from "@/models/event-banner";
 import { useTranslation } from "react-i18next";
 import { t } from "i18next";
 
