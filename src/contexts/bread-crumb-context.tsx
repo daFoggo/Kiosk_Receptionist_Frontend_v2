@@ -1,16 +1,17 @@
 import { createContext, useState, useContext, ReactNode } from "react";
-
+import { useLocation } from "react-router-dom";
 const BreadcrumbContext = createContext<IBreadcrumbContextType | undefined>(
   undefined
 );
 
 export const BreadcrumbProvider = ({ children }: { children: ReactNode }) => {
+  const location = useLocation();
   const [currentBreadcrumb, setCurrentBreadcrumb] = useState<{
     parent?: string;
     current: string;
   }>({
     parent: "Quản lý lịch hẹn",
-    current: "Lịch hẹn của tôi",
+    current: location.pathname === "/appointment/my-appointments" ? "Lịch hẹn của tôi" : "Danh sách phòng ban",
   });
 
   const updateBreadcrumb = (breadcrumb: {

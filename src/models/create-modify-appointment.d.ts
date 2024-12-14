@@ -15,8 +15,9 @@ export interface ICreateModifyAppointmentProps {
   appointment?: Appointment;
   officers?: IOfficer[];
   department?: IDepartment[];
-  convertDepartmentIdToName: (id: number) => string;
+  convertDepartmentIdToName?: (id: number) => string;
   mode?: "create" | "edit";
   onSuccess?: () => void;
   trigger?: React.ReactNode;
+  buttonStyle?: string;
 }

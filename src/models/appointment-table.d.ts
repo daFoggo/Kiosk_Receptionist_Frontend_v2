@@ -10,6 +10,7 @@ export interface IAppointment {
     name: string;
     cccd: string;
   }[];
+  qr_code: string;
 }
 
 export interface IAppointmentCardProps {

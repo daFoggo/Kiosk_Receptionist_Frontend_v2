@@ -2,27 +2,21 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import AppointmentTable from "@/components/AppointmentTable";
 import { getAppointmentsIp } from "@/utils/ip";
+import { useAuth } from "@/contexts/auth-context";
 
 const MyAppointment = () => {
   const [appointments, setAppointments] = useState([]);
-  const [cccdNguoiHen, setCccdNguoiHen] = useState("");
-
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-
-    if (user) {
-      const userObj = JSON.parse(user);
-      setCccdNguoiHen("001205056637");
-    }
-  }, []);
+  const cccdId = useAuth()?.user.cccd_id ?? "";
 
   useEffect(() => {
     handleGetAppointments();
-  }, [cccdNguoiHen]);
+  }, [cccdId]);
 
   const handleGetAppointments = async () => {
     try {
-      const response = await axios.get(`${getAppointmentsIp}?cccd_id=${cccdNguoiHen}`);
+      const response = await axios.get(
+        `${getAppointmentsIp}?cccd_id=${cccdId}`
+      );
       setAppointments(response.data.payload);
     } catch (error) {
       console.error(error);

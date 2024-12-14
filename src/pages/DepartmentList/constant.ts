@@ -6,7 +6,7 @@ export const departmentList = [
     description: "",
     headOfDepartment: "Ngô Quốc Dũng",
     workingDays: [2, 7],
-    workingHours: [8, 17.3],
+    workingHours: [8, 17.5],
     staffs: [
       {
         id: 1,
@@ -33,7 +33,7 @@ export const departmentList = [
     description: "",
     headOfDepartment: "Vũ Thị Lan Hương",
     workingDays: [2, 7],
-    workingHours: [8, 17.3],
+    workingHours: [8, 17.5],
     staffs: [
       {
         id: 1,
@@ -84,7 +84,7 @@ export const departmentList = [
     description: "",
     headOfDepartment: "Vũ Hồng Sơn",
     workingDays: [2, 7],
-    workingHours: [8, 17.3],
+    workingHours: [8, 17.5],
     staffs: [
       {
         id: 1,
@@ -127,7 +127,7 @@ export const departmentList = [
     description: "",
     headOfDepartment: "Thái Minh Quân",
     workingDays: [2, 7],
-    workingHours: [8, 17.3],
+    workingHours: [8, 17.5],
     staffs: [
       {
         id: 1,
@@ -162,7 +162,7 @@ export const departmentList = [
     description: "",
     headOfDepartment: "Đào Đức Dương",
     workingDays: [2, 7],
-    workingHours: [8, 17.3],
+    workingHours: [8, 17.5],
     staffs: [
       {
         id: 1,
@@ -189,7 +189,7 @@ export const departmentList = [
     description: "",
     headOfDepartment: "Nguyễn Việt Dũng",
     workingDays: [2, 7],
-    workingHours: [8, 17.3],
+    workingHours: [8, 17.5],
     staffs: [
       {
         id: 1,
@@ -240,7 +240,7 @@ export const departmentList = [
     description: "",
     headOfDepartment: "Đặng Anh Tuấn",
     workingDays: [2, 7],
-    workingHours: [8, 17.3],
+    workingHours: [8, 17.5],
     staffs: [
       {
         id: 1,

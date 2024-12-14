@@ -1,15 +1,6 @@
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import QRCode from "react-qr-code";
-import {
-  Clock,
-  MapPin,
-  User,
-  Download,
-  CalendarOff,
-  CalendarCheck2,
-} from "lucide-react";
+import { Clock, MapPin, User, Download, CalendarOff, CalendarCheck2 } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -30,7 +21,11 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -46,53 +41,54 @@ import {
 } from "@/components/ui/alert-dialog";
 import { IAppointmentCardProps } from "@/models/appointment-table";
 import { format, parseISO } from "date-fns";
-import { getStatusColor } from "@/utils/Helper/appointment-table";
+import {
+  convertStatusName,
+  getStatusColor,
+} from "@/utils/Helper/appointment-table";
+import { backendIp } from "@/utils/ip";
+import { toast } from "sonner";
+import CreateModifyAppointment from "../CreateModifyAppointment";
+import { Textarea } from "../ui/textarea";
 
 const AppointmentCard = ({
   appointment,
   style,
 }: IAppointmentCardProps & { style?: React.CSSProperties }) => {
-  const [qrCodeData, setQrCodeData] = useState<string | null>(null);
-  
-  useEffect(() => {
-    handleGetQrCode();
-  }, []);
-
   const form = useForm({
     defaultValues: {
       id: appointment.id,
-      muc_dich: appointment.muc_dich,
-      ngay_gio_bat_dau: appointment.ngay_gio_bat_dau,
-      ngay_gio_ket_thuc: appointment.ngay_gio_ket_thuc,
-      dia_diem: appointment.dia_diem,
-      trang_thai: appointment.trang_thai,
-      ghi_chu: appointment.ghi_chu,
+      muc_dich: appointment.muc_dich || "",
+      ngay_gio_bat_dau: appointment.ngay_gio_bat_dau || "",
+      ngay_gio_ket_thuc: appointment.ngay_gio_ket_thuc || "",
+      dia_diem: appointment.dia_diem || "",
+      trang_thai: appointment.trang_thai || "",
+      ghi_chu: appointment.ghi_chu || "",
       nguoi_duoc_hen: appointment?.nguoi_duoc_hen || [],
+      qr_code: appointment.qr_code || "",
     },
   });
 
-  const handleGetQrCode = async () => {
+  const handleDownloadQRcode = async () => {
     try {
-      const response = await axios.get(`...?id=${appointment.id}`);
+      const qrCodeUrl = `${backendIp}/${appointment.qr_code}`;
+      const response = await axios.get(qrCodeUrl, { responseType: "blob" });
 
-      if (response.data.success) {
-        setQrCodeData(response.data.data);
-      }
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(response.data);
+      link.download = `QR_${appointment.id}.png`;
+      document.body.appendChild(link);
+
+      link.click();
+
+      document.body.removeChild(link);
+
+      toast.success("Tải ảnh QR thành công");
     } catch (error) {
+      toast.error("Có lỗi khi tải ảnh QR");
       console.error(error);
     }
   };
 
-  const getTemporaryQR = () => {
-    const qrData = {
-      id: appointment.id,
-      purpose: appointment.muc_dich,
-      startTime: appointment.ngay_gio_bat_dau,
-      endTime: appointment.ngay_gio_ket_thuc,
-      location: appointment.dia_diem,
-    };
-    return JSON.stringify(qrData);
-  };
 
   return (
     <Dialog>
@@ -119,130 +115,187 @@ const AppointmentCard = ({
       </DialogTrigger>
       <DialogContent
         onOpenAutoFocus={(e) => e.preventDefault()}
-        className="w-[95%] h-[95%] sm:h-auto rounded-lg sm:max-w-[425px] md:max-w-[600px] lg:max-w-[800px] overflow-y-auto"
+        className="w-[95%] max-h-[95vh] sm:h-auto rounded-lg sm:max-w-[625px] md:max-w-[820px] overflow-y-auto"
       >
         <DialogHeader>
-          <DialogTitle>{appointment.muc_dich}</DialogTitle>
+          <DialogTitle className="line-clamp-1">
+            {appointment.muc_dich}
+          </DialogTitle>
           <DialogDescription>Thông tin chi tiết lịch hẹn</DialogDescription>
         </DialogHeader>
 
-        <div className="flex flex-col-reverse sm:flex-row gap-6 justify-between">
-          {/* Info */}
-          <Form {...form}>
-            <form className="space-y-6 flex-1">
-              <FormField
-                name="trang_thai"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Trạng thái</FormLabel>
-                    <Badge
-                      className={`${getStatusColor(
-                        appointment.trang_thai
-                      )} ml-2`}
+        <Form {...form}>
+          <form>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Basic Info */}
+              <div className="md:col-span-2 space-y-4">
+                <FormField
+                  name="trang_thai"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Trạng thái</FormLabel>
+                      <Badge className={`${getStatusColor(appointment.trang_thai)} ml-2`}>
+                        {convertStatusName(field.value)}
+                      </Badge>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  name="muc_dich"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Mục đích hẹn</FormLabel>
+                      <Textarea {...field} readOnly className="h-20" />
+                    </FormItem>
+                  )}
+                />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <FormField
+                    name="ngay_gio_bat_dau"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Bắt đầu</FormLabel>
+                        <Input
+                          {...field}
+                          value={format(parseISO(field.value), "dd/MM/yyyy HH:mm")}
+                          readOnly
+                        />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    name="ngay_gio_ket_thuc"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Kết thúc</FormLabel>
+                        <Input
+                          {...field}
+                          value={format(parseISO(field.value), "dd/MM/yyyy HH:mm")}
+                          readOnly
+                        />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <FormField
+                  name="dia_diem"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Địa điểm</FormLabel>
+                      <Input {...field} readOnly />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              {/* QR Code */}
+              <div className="md:col-span-1">
+                <Card className="h-full">
+                  <CardContent className="p-4 flex flex-col items-center gap-4">
+                    <div className="relative group w-full">
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-primary rounded-lg blur-sm opacity-25 group-hover:opacity-40 transition duration-300" />
+                      <div className="relative bg-white dark:bg-gray-800 p-2 rounded-lg shadow-sm">
+                        <Dialog>
+                          <DialogTrigger asChild className="p-0 w-full">
+                            <img
+                              src={`${backendIp}/${form.getValues("qr_code")}`}
+                              alt="QR Code"
+                              className="dark:bg-white object-cover w-full h-auto rounded-lg"
+                            />
+                          </DialogTrigger>
+                          <DialogContent
+                            onOpenAutoFocus={(e) => e.preventDefault()}
+                            className="w-[95%] sm:h-auto rounded-lg"
+                          >
+                            <DialogHeader>
+                              <DialogTitle>QR lịch hẹn</DialogTitle>
+                              <DialogDescription>
+                                Scan mã QR này tại Kiosk để có thể liên hệ với bên
+                                cần hẹn khi bạn đến.
+                              </DialogDescription>
+                            </DialogHeader>
+                            <div className="flex items-center justify-center">
+                              <img
+                                src={`${backendIp}/${form.getValues("qr_code")}`}
+                                alt="QR Code"
+                                className="dark:bg-white w-full"
+                              />
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                    </div>
+                    <Button
+                      className="font-semibold w-full"
+                      icon={<Download className="w-4 h-4" />}
+                      onClick={() => handleDownloadQRcode()}
                     >
-                      {field.value}
-                    </Badge>
-                  </FormItem>
-                )}
-              />
+                      Tải xuống QR
+                    </Button>
+                    <p className="text-sm text-center text-muted-foreground">Hoặc nhấn vào ảnh QR để mở rộng hơn...</p>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+
+            {/* Additional Information */}
+            <div className="mt-6 space-y-4">
               <FormField
                 name="nguoi_duoc_hen"
-                render={({ field }) => {
-                  return (
-                    <FormItem>
-                      <FormLabel>Người được hẹn</FormLabel>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            className="w-full justify-between"
-                          >
-                            {field.value?.length > 0
-                              ? `Đã chọn ${field.value?.length} người`
-                              : `Chọn người cần hẹn`}
-                            <User className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent
-                          style={{
-                            width: "var(--radix-popper-anchor-width)",
-                            maxWidth: "var(--radix-popper-anchor-width)",
-                            minWidth: "var(--radix-popper-anchor-width)",
-                          }}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Người được hẹn</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className="w-full justify-between"
                         >
-                          <Command className="w-full rounded-lg border">
-                            <CommandList>
-                              <CommandEmpty>
-                                Không có người được hẹn.
-                              </CommandEmpty>
-                              <CommandGroup heading="Danh sách người được hẹn">
-                                {field.value.map((person: any, index: any) => (
-                                  <CommandItem
-                                    key={person.cccd_id || index}
-                                    className="flex items-center gap-2 py-2"
-                                  >
-                                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
-                                      <User className="h-4 w-4 text-primary" />
-                                    </div>
-                                    <div className="flex flex-col">
-                                      <span className="font-semibold">
-                                        {person.ho_ten}
+                          {field.value?.length > 0
+                            ? `Đã hẹn ${field.value?.length} người`
+                            : `Chọn người cần hẹn`}
+                          <User className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent
+                        style={{
+                          width: "var(--radix-popper-anchor-width)",
+                          maxWidth: "var(--radix-popper-anchor-width)",
+                          minWidth: "var(--radix-popper-anchor-width)",
+                        }}
+                      >
+                        <Command className="w-full rounded-lg border">
+                          <CommandList>
+                            <CommandEmpty>
+                              Không có người được hẹn.
+                            </CommandEmpty>
+                            <CommandGroup heading="Danh sách người được hẹn">
+                              {field.value.map((person: any, index: any) => (
+                                <CommandItem
+                                  key={person.cccd_id || index}
+                                  className="flex items-center gap-2 py-2"
+                                >
+                                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
+                                    <User className="h-4 w-4 text-primary" />
+                                  </div>
+                                  <div className="flex flex-col">
+                                    <span className="font-semibold">
+                                      {person.ho_ten}
+                                    </span>
+                                    {person.email && (
+                                      <span className="text-xs text-muted-foreground">
+                                        {person.email}
                                       </span>
-                                      {person.email && (
-                                        <span className="text-xs text-muted-foreground">
-                                          {person.email}
-                                        </span>
-                                      )}
-                                      {person.cccd_id && (
-                                        <span className="text-xs text-muted-foreground">
-                                          CCCD: {person.cccd}
-                                        </span>
-                                      )}
-                                    </div>
-                                  </CommandItem>
-                                ))}
-                              </CommandGroup>
-                            </CommandList>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
-                    </FormItem>
-                  );
-                }}
-              />
-              <FormField
-                name="ngay_gio_bat_dau"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Ngày giờ bắt đầu</FormLabel>
-                    <Input
-                      {...field}
-                      value={format(parseISO(field.value), "dd/MM/yyyy HH:mm")}
-                      readOnly
-                    />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="ngay_gio_ket_thuc"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Ngày giờ kết thúc</FormLabel>
-                    <Input
-                      {...field}
-                      value={format(parseISO(field.value), "dd/MM/yyyy HH:mm")}
-                      readOnly
-                    />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="dia_diem"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Địa điểm</FormLabel>
-                    <Input {...field} readOnly />
+                                    )}
+                                  </div>
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
                   </FormItem>
                 )}
               />
@@ -251,91 +304,15 @@ const AppointmentCard = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Ghi chú</FormLabel>
-                    <Input {...field} readOnly />
+                    <Textarea {...field} readOnly className="h-20" />
                   </FormItem>
                 )}
               />
-            </form>
-          </Form>
-          <Separator orientation="vertical" className="hidden sm:block" />
+            </div>
+          </form>
+        </Form>
 
-          {/* QR Code Section */}
-          <div className="flex flex-col items-center gap-6 sm:w-2/5">
-            <Card className="w-full h-full">
-              <CardContent className="p-6 flex flex-col items-center gap-4">
-                <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-primary rounded-lg blur-sm opacity-25 group-hover:opacity-40 transition duration-300" />
-                  <div className="relative bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
-                    {/* Display QR code from API*/}
-                    {/* <img
-                      src={getQRCodeUrl()}
-                      alt="QR Code"
-                      className="w-full h-auto"
-                    /> */}
-                    <div className="bg-white p-2 rounded-lg">
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <QRCode
-                            value={getTemporaryQR()}
-                            size={180}
-                            style={{
-                              height: "auto",
-                              maxWidth: "100%",
-                              width: "100%",
-                            }}
-                            viewBox={`0 0 256 256`}
-                            className="dark:bg-white cursor-pointer"
-                          />
-                        </DialogTrigger>
-                        <DialogContent
-                          onOpenAutoFocus={(e) => e.preventDefault()}
-                          className="w-[95%] sm:h-auto rounded-lg"
-                        >
-                          <DialogHeader>
-                            <DialogTitle>QR lịch hẹn</DialogTitle>
-                            <DialogDescription>
-                              Scan mã QR này tại Kiosk để có thể liên hệ với bên
-                              cần hẹn khi bạn đến.
-                            </DialogDescription>
-                          </DialogHeader>
-                          <div className="p-6">
-                            <QRCode
-                              value={getTemporaryQR()}
-                              size={180}
-                              style={{
-                                height: "auto",
-                                maxWidth: "100%",
-                                width: "100%",
-                              }}
-                              viewBox={`0 0 256 256`}
-                              className="dark:bg-white"
-                            />
-                          </div>
-                        </DialogContent>
-                      </Dialog>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="text-center space-y-2">
-                  <div className="font-semibold">QR lịch hẹn</div>
-                  <div className="text-sm text-muted-foreground">
-                    Scan mã QR này tại Kiosk để có thể liên hệ với bên cần hẹn
-                    khi bạn đến.
-                  </div>
-                </div>
-
-                <Button
-                  className="font-semibold"
-                  icon={<Download className="w-4 h-4" />}
-                >
-                  Tải xuống
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-        <DialogFooter className="mt-6 flex gap-2">
+        <DialogFooter className="mt-6 flex justify-between items-center">
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button
@@ -361,31 +338,11 @@ const AppointmentCard = ({
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button
-                className="font-semibold"
-                variant="default"
-                icon={<CalendarCheck2 className="h-4 w-4" />}
-              >
-                Đánh dấu đã hoàn thành
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>
-                  Bạn có chắc chắn muốn đánh dấu lịch hẹn này là đã hoàn thành
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  Hành động này sẽ không thể hoàn tác.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Hủy</AlertDialogCancel>
-                <AlertDialogAction>Đồng ý</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <CreateModifyAppointment
+            mode="edit"
+            appointment={appointment}
+            buttonStyle="w-auto"
+          />
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -393,3 +350,4 @@ const AppointmentCard = ({
 };
 
 export default AppointmentCard;
+

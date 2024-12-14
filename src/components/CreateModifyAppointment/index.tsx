@@ -5,7 +5,7 @@ import axios from "axios";
 import { vi } from "date-fns/locale";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Users } from "lucide-react";
+import { CalendarCog, CalendarPlus, Loader2, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -85,7 +85,8 @@ const CreateModifyAppointment = ({
   onSuccess,
   trigger,
   officers,
-  convertDepartmentIdToName,
+  convertDepartmentIdToName = () => "",
+  buttonStyle,
 }: ICreateModifyAppointmentProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [open, setOpen] = useState(false);
@@ -198,10 +199,25 @@ const CreateModifyAppointment = ({
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(open) => {
+        setOpen(open);
+        if (!open) {
+          setTimeout(() => {
+            document.body.style.pointerEvents = "auto";
+          }, 100);
+        }
+      }}
+    >
       <DialogTrigger asChild>
         {trigger || (
-          <Button className="w-full font-semibold">
+          <Button className={`w-full font-semibold ${buttonStyle}`}>
+            {mode === "edit" ? (
+              <CalendarCog className="size-4" />
+            ) : (
+              <CalendarPlus className="size-4" />
+            )}
             {mode === "edit" ? "Chỉnh sửa lịch hẹn" : "Đặt lịch hẹn mới"}
           </Button>
         )}
