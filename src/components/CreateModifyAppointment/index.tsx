@@ -5,7 +5,7 @@ import axios from "axios";
 import { vi } from "date-fns/locale";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Users } from "lucide-react";
+import { Loader2, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -35,7 +35,11 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   createAppointmentIp,
   getOfficerIp,
@@ -50,9 +54,7 @@ const timeFormatRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
 const formSchema = z
   .object({
     cccd_nguoi_hen: z.string(),
-    cccd_nguoi_duoc_hen: z.array(z.string())
-    // .min(1, "Chọn ít nhất 1 người")
-    ,
+    cccd_nguoi_duoc_hen: z.array(z.string()).min(1, "Chọn ít nhất 1 người"),
     ngay_hen: z.date(),
     gio_bat_dau: z
       .string()
@@ -85,6 +87,7 @@ const CreateModifyAppointment = ({
   officers,
   convertDepartmentIdToName,
 }: ICreateModifyAppointmentProps) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [open, setOpen] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [currentCccd, setCurrentCccd] = useState<string | null>(null);
@@ -96,8 +99,8 @@ const CreateModifyAppointment = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       cccd_nguoi_hen: currentCccd || "",
-      cccd_nguoi_duoc_hen: ["001205020978"],
-        // mode === "edit" ? appointment?.cccd_nguoi_duoc_hen : [],
+      cccd_nguoi_duoc_hen:
+        mode === "edit" ? appointment?.cccd_nguoi_duoc_hen : [],
       dia_diem: mode === "edit" ? appointment?.dia_diem : "",
       muc_dich: mode === "edit" ? appointment?.muc_dich : "",
       ghi_chu: mode === "edit" ? appointment?.ghi_chu : "",
@@ -123,15 +126,11 @@ const CreateModifyAppointment = ({
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (user) {
-      // const parsedUser = JSON.parse(user);
-      // const cccdValue =
-      //   mode === "edit" ? appointment?.cccd_nguoi_hen : parsedUser?.cccd_id;
-      // setCurrentCccd(cccdValue);
-      // form.setValue("cccd_nguoi_hen", parsedUser.cccd_id, {
-      //   shouldValidate: true,
-      //   shouldDirty: true,
-      // });
-      form.setValue("cccd_nguoi_hen", "001205056637", {
+      const parsedUser = JSON.parse(user);
+      const cccdValue =
+        mode === "edit" ? appointment?.cccd_nguoi_hen : parsedUser?.cccd_id;
+      setCurrentCccd(cccdValue);
+      form.setValue("cccd_nguoi_hen", parsedUser.cccd_id, {
         shouldValidate: true,
         shouldDirty: true,
       });
@@ -153,12 +152,12 @@ const CreateModifyAppointment = ({
       ...values,
       ngay_gio_bat_dau: format(startDateTime, "yyyy-MM-dd'T'HH:mm:ss"),
       ngay_gio_ket_thuc: format(endDateTime, "yyyy-MM-dd'T'HH:mm:ss"),
-      // Remove unnecessary fields before sending to API
       ngay_hen: undefined,
       gio_bat_dau: undefined,
       gio_ket_thuc: undefined,
     };
 
+    setIsSubmitting(true);
     try {
       let response;
       if (mode === "edit" && appointment?.id) {
@@ -183,6 +182,8 @@ const CreateModifyAppointment = ({
     } catch (error) {
       console.error("Error handling appointment:", error);
       setFormError("Có lỗi xảy ra. Vui lòng thử lại sau.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -433,8 +434,18 @@ const CreateModifyAppointment = ({
                   );
                 }
               }}
+              disabled={isSubmitting}
             >
-              Đặt lịch hẹn
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="animate-spin mr-2 size-4" />
+                  Đang xử lý...
+                </>
+              ) : mode === "edit" ? (
+                "Chỉnh sửa lịch hẹn"
+              ) : (
+                "Đặt lịch hẹn"
+              )}
             </Button>
           </form>
         </Form>

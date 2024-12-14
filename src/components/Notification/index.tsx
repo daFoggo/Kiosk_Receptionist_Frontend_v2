@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { tabList, notificationData } from "./constant";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { tabList, notificationData } from "./constant";
 
 const Notification = () => {
   const [activeTab, setActiveTab] = useState("inbox");

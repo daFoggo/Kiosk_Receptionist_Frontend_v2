@@ -9,4 +9,5 @@ export interface IAuthContextType {
 export interface IUser {
   name: string;
   role: string;
+  cccd_id: string;
 }
