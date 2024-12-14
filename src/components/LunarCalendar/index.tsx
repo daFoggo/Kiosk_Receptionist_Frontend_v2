@@ -1,10 +1,9 @@
-import { SolarDate } from "@nghiavuive/lunar_date_vi";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { SolarDate } from "@nghiavuive/lunar_date_vi";
 import { format } from "date-fns";
-import { vi, enUS, ko } from "date-fns/locale"; // Import thêm locale enUS
+import { vi, enUS, ko } from "date-fns/locale"; 
 import { Calendar as CalendarIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
-
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -12,8 +11,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Card, CardContent, CardTitle } from "../ui/card";
-import { useTranslation } from "react-i18next";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 const LunarCalendar = () => {
   const [date, setDate] = useState<Date>(new Date());
@@ -112,7 +111,7 @@ const LunarCalendar = () => {
               <Button
                 variant={"outline"}
                 className={cn(
-                  "w-fit justify-start text-left font-semibold rounded-xl text-xl",
+                  "w-fit justify-start text-left font-semibold rounde-lg text-xl",
                   !date && "text-muted-foreground"
                 )}
                 icon={<CalendarIcon />}

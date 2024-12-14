@@ -1,7 +1,7 @@
-;
-
-import { Clock, Users } from "lucide-react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import { motion } from "framer-motion";
+import { Clock, Users } from "lucide-react";
 import {
   Card,
   CardHeader,
@@ -15,12 +15,10 @@ import CreateModifyAppointment from "@/components/CreateModifyAppointment";
 import {
   formatWorkingDays,
   formatWorkingHours,
-} from "@/utils/Helper/DepartmentCard";
-import { IDepartMentCardProps } from "@/models/department-card";
-import { useEffect, useState } from "react";
-import { IOfficer } from "@/models/department-list";
+} from "@/utils/Helper/department-card";
 import { getOfficerIp } from "@/utils/ip";
-import axios from "axios";
+import { IDepartMentCardProps } from "@/models/department-card";
+import { IOfficer } from "@/models/department-list";
 
 const DepartmentCard = ({ department, convertDepartmentIdToName }: IDepartMentCardProps) => {
   const [officers, setOfficers] = useState<IOfficer[]>([]);

@@ -1,9 +1,7 @@
 import { memo, useEffect, useState, useRef, useMemo } from "react";
 import axios from "axios";
 import { toast } from "sonner";
-
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 import {
   ArrowUpRight,
   BriefcaseBusiness,
@@ -14,7 +12,8 @@ import {
   FileText,
   X,
 } from "lucide-react";
-import { IInstitueCalendar } from "@/models/institue-calendar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
@@ -27,11 +26,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import InstitueCalendarTable from "@/components/InstitueCalendarTable";
-
-import { getInstitueCalendarIp } from "@/utils/ip";
+import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import { truncateText } from "@/utils/Helper/common";
-import { Card, CardContent, CardFooter, CardTitle } from "../ui/card";
-import { useTranslation } from "react-i18next";
+import { getInstitueCalendarIp } from "@/utils/ip";
+import { IInstitueCalendar } from "@/models/institue-calendar";
 
 const InstitueCalendar = memo(() => {
   const calendarRef = useRef<HTMLDivElement>(null);

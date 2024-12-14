@@ -1,7 +1,6 @@
-"use client";
-
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/auth-context";
 import { Bell, ChevronsUpDown, LogOut } from "lucide-react";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -18,9 +17,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useAuth } from "@/contexts/auth-context";
-import { ThemeToggle } from "../ThemeToggle";
-import { useNavigate } from "react-router-dom";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { routes } from "@/router/routes";
 
 const NavUser = ({

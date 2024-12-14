@@ -1,20 +1,16 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-
-import WelcomeBanner from "@/components/WelcomeBanner";
+import { useWebsocket } from "@/contexts/websocket-context";
 import EventBanner from "@/components/EventBanner";
 import LunarCalendar from "@/components/LunarCalendar";
 import RootNavbar from "@/components/RootNavbar";
 import Weather from "@/components/Weather";
 import InstitueCalendar from "@/components/InstitueCalendar";
 import AIModel from "@/components/AIModel";
-
 import AITranscript from "@/components/AITranscript";
 import HomeWebcam from "@/components/HomeWebcam";
 import InteractionMenu from "@/components/InteractionMenu";
-
 import { navbarVariants, leftItemVariants, rightItemVariants } from "./motion";
-import { useWebsocket } from "@/contexts/websocket-context";
 import { IMenuItem } from "@/models/interaction-menu";
 
 const Home = () => {
@@ -73,7 +69,7 @@ const Home = () => {
       {/*Utility components */}
       <div className="grid grid-cols-4 gap-6 w-full">
         <motion.div
-          className="col-span-3"
+          className="col-span-3 z-10"
           initial="hidden"
           animate="visible"
           variants={leftItemVariants}
@@ -154,6 +150,3 @@ const Home = () => {
 };
 
 export default Home;
-function useAIContext(): { speak: any; stopSpeaking: any } {
-  throw new Error("Function not implemented.");
-}

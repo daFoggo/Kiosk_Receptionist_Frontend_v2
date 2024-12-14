@@ -1,8 +1,7 @@
-;
+import CountUp from "react-countup";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { IStatisticBlockProps } from "@/models/statistic-block";
-import CountUp from "react-countup";
 
 const StatisticBlock = ({
   icon,

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
+import { useTranslation } from "react-i18next";
 import {
   ChevronLeft,
   ChevronRight,
@@ -20,13 +20,11 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-
 import { generateHours } from "@/utils/Helper/common";
 import {
   IInstitueCalendarTableProps,
   IWork,
 } from "@/models/institue-calendar-table";
-import { useTranslation } from "react-i18next";
 
 const WeeklySchedule = ({ works }: IInstitueCalendarTableProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);

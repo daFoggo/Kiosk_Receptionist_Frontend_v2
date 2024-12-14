@@ -1,9 +1,9 @@
+import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import axios from "axios";
-import { ReactNode, useEffect } from "react";
-import { createContext, useContext, useState } from "react";
-import { IAuthContextType, IUser } from "@/models/auth-context";
 import { jwtDecode } from "jwt-decode";
 import { LOGIN_IP } from "@/utils/ip";
+import { IAuthContextType, IUser } from "@/models/auth-context";
+
 const AuthContext = createContext<IAuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       localStorage.removeItem("user");
       setIsAuthenticated(false);
     }
-  }, []); // Chỉ chạy 1 lần khi mount
+  }, []); 
 
   const login = async (cccd_id: string, password: string) => {
     try {

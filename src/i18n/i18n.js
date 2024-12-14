@@ -107,7 +107,7 @@ const resources = {
       "interactionMenu.verifyInfo.title": "Xác thực thông tin",
       "interactionMenu.verifyInfo.description":
         "Sử dụng thiết bị bên dưới để xác thực CCCD của bạn",
-      "interactionMenu.apppointmentCheckin.title": "Check-in cuộc hẹn",
+      "interactionMenu.apppointmentCheckin.title": "Check-in lịch hẹn",
       "interactionMenu.apppointmentCheckin.description":
         "Quét mã QR để check-in",
       "interactionMenu.procedures.title": "Thủ tục hành chính",

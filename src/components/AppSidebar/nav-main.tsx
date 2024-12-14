@@ -1,5 +1,6 @@
-import { ChevronRight, type LucideIcon } from "lucide-react";
+import { useBreadcrumb } from "@/contexts/bread-crumb-context";
 import { Link } from "react-router-dom";
+import { ChevronRight, type LucideIcon } from "lucide-react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -16,7 +17,6 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { useBreadcrumb } from "@/contexts/bread-crumb-context";
 
 const NavMain = ({
   items,
@@ -51,7 +51,7 @@ const NavMain = ({
               <SidebarMenuButton 
                 asChild 
                 tooltip={item.title}
-                onClick={() => handleNavigation('Quản lý dữ liệu', item.title)}
+                onClick={() => handleNavigation('Quản lý lịch hẹn', item.title)}
               >
                 <Link to={item.url}>
                   <item.icon />

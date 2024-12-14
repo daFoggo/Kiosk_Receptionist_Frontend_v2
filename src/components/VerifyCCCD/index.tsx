@@ -1,11 +1,11 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import Webcam from "react-webcam";
-import { motion } from "framer-motion";
 import axios from "axios";
+import { useForm } from "react-hook-form";
+import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
-
+import Webcam from "react-webcam";
+import { useWebsocket } from "@/contexts/websocket-context";
 import {
   Camera,
   Scan,
@@ -27,11 +27,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-import { useWebsocket } from "@/contexts/websocket-context";
-import { convertFormKey } from "@/utils/Helper/VerifyCCCD";
+import { convertFormKey } from "@/utils/Helper/verify-cccd";
 import { getClassIp, getDepartmentIp, updateIdentifyDataIp } from "@/utils/ip";
-import { extractedFields, captureSteps } from "./constant";
 import { ICCCDData } from "@/models/websocket-context";
 import {
   TRole,
@@ -40,6 +37,7 @@ import {
   IVerifyCCCDProps,
 } from "@/models/verify-cccd";
 import { IDepartment } from "@/models/department-list";
+import { extractedFields, captureSteps } from "./constant";
 
 const VerifyCCCD = ({ onClose }: IVerifyCCCDProps) => {
   const { t } = useTranslation();

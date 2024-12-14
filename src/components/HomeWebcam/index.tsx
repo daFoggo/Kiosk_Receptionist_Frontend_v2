@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Users, SignalHigh, Scan } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { IHomeWebcamProps } from "@/models/HomeWebcam/type";
+import { IHomeWebcamProps } from "@/models/home-webcam";
 import PersonBadge from "@/components/PersonBadge";
 import { useAISpeech } from "@/contexts/ai-speech-context";
 import { IPersonData } from "@/models/websocket-context";
@@ -30,10 +30,12 @@ const HomeWebcam = memo(
             lastAnnouncedPersonRef.current.name !== person.name
           ) {
             speak(
-              `Chào mừng quý khách ${person.name !== "Khách" ? person.name : ""} đến với Viện Khoa học Kĩ thuật Bưu điện`,
+              `Chào mừng quý khách ${
+                person.name !== "Khách" ? person.name : ""
+              } đến với Viện Khoa học Kĩ thuật Bưu điện`,
               `Research Institute of Posts and Telecommunications에 ${person.name}님을 진심으로 환영합니다.`
             );
-        
+
             lastAnnouncedPersonRef.current = person;
           }
         }, 500);
@@ -187,12 +189,14 @@ const HomeWebcam = memo(
                   />
                 )}
 
-                {webcamData?.others?.map((person, index) => (
-                  <PersonBadge
-                    key={`other-${person.name}-${index}`}
-                    person={person}
-                  />
-                ))}
+                {webcamData?.others?.map(
+                  (person: { name: any; role?: string }, index: any) => (
+                    <PersonBadge
+                      key={`other-${person.name}-${index}`}
+                      person={{ ...person, role: person.role || "Guest" }}
+                    />
+                  )
+                )}
               </AnimatePresence>
             </div>
           </motion.div>

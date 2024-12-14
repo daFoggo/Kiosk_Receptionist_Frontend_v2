@@ -1,7 +1,5 @@
-;
-
-import { motion, useAnimationControls } from "framer-motion";
 import { memo, useCallback, useEffect, useMemo, useRef } from "react";
+import { motion, useAnimationControls } from "framer-motion";
 import logoScu from "/src/assets/logo/logo-scu.png";
 import { ANIMATION_DURATION, INITIAL_BANNERS } from "./constant";
 

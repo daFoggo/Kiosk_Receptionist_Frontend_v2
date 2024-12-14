@@ -1,6 +1,13 @@
-;
-
 import { useState } from "react";
+import { vi } from "date-fns/locale";
+import {
+  Calendar as CalendarIcon,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import AppointmentCard from "@/components/AppointmentCard";
 import {
   format,
   startOfMonth,
@@ -18,17 +25,6 @@ import {
   addMonths,
   differenceInMinutes,
 } from "date-fns";
-import { vi } from "date-fns/locale";
-
-import {
-  Calendar as CalendarIcon,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import AppointmentCard from "../AppointmentCard";
-
 import { VIEWS } from "./constant";
 import { IAppointment } from "@/models/appointment-table";
 

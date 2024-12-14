@@ -1,16 +1,15 @@
-import { motion } from "framer-motion";
 import { useState, useMemo, useEffect } from "react";
-import { Search } from "lucide-react";
-import { useDebounce } from "use-debounce";
 import axios from "axios";
+import { motion } from "framer-motion";
+import { Search } from "lucide-react";
+import { toast } from "sonner";
 
-import DepartmentCard from "@/components/DepartmentCard/";
+import { useDebounce } from "use-debounce";
 import { Input } from "@/components/ui/input";
-
-import { containerVariants, itemVariants } from "./motion";
+import DepartmentCard from "@/components/DepartmentCard/";
 import { getDepartmentIp } from "@/utils/ip";
 import { IDepartment } from "@/models/department-list";
-import { toast } from "sonner";
+import { containerVariants, itemVariants } from "./motion";
 
 const DepartmentList = () => {
   const [searchTerm, setSearchTerm] = useState("");

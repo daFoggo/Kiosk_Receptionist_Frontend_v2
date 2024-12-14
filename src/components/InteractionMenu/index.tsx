@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo, memo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,15 +10,16 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "../ui/dialog";
+} from "@/components/ui/dialog";
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "../ui/sheet";
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "../ui/drawer";
+} from "@/components/ui/sheet";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
+import LanguageSelector from "@/components/LanguageSelector";
 import {
   IInteractionMenuProps,
   IMenuItem,
@@ -26,8 +28,6 @@ import {
 } from "@/models/interaction-menu";
 import { interactionMenu } from "./constant";
 import { gridVariants, itemVariants, activeButtonVariants } from "./motion";
-import LanguageSelector from "../LanguageSelector";
-import { useTranslation } from "react-i18next";
 
 const MenuItem = memo(({ item, onClick, isActive }: IMenuItemProps) => (
   <motion.div

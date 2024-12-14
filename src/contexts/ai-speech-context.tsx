@@ -1,15 +1,15 @@
 import {
-  IAIContextState,
-  IAIContextValue,
-  IAIProviderProps,
-} from "@/models/ai-speech-context";
-import {
   createContext,
   useContext,
   useState,
   useRef,
   useCallback,
 } from "react";
+import {
+  IAIContextState,
+  IAIContextValue,
+  IAIProviderProps,
+} from "@/models/ai-speech-context";
 
 const defaultState: IAIContextState = {
   isPlaying: false,

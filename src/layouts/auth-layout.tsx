@@ -1,7 +1,7 @@
+import { Outlet } from "react-router-dom";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/Navbar";
 import { Toaster } from "@/components/ui/sonner";
-import { Outlet } from "react-router-dom";
 
 const AuthLayout = () => {
   return (

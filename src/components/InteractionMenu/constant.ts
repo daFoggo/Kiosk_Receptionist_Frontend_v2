@@ -35,7 +35,7 @@ export const interactionMenu = (
       action: "dialog",
       component: AppointmentChecking,
       requiredProps: [],
-      disabled: true,
+      disabled: false,
     },
     {
       id: 3,
@@ -95,7 +95,7 @@ export const interactionMenu = (
       action: "dialog",
       component: AppointmentChecking,
       requiredProps: [],
-      disabled: true,
+      disabled: false,
     },
     {
       id: 6,
@@ -155,7 +155,7 @@ export const interactionMenu = (
       action: "dialog",
       component: AppointmentChecking,
       requiredProps: [],
-      disabled: true,
+      disabled: false,
     },
     {
       id: 6,
@@ -216,7 +216,7 @@ export const interactionMenu = (
       action: "dialog",
       component: AppointmentChecking,
       requiredProps: [],
-      disabled: true,
+      disabled: false,
     },
     {
       id: 6,

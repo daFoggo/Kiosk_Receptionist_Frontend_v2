@@ -1,6 +1,6 @@
-import { useAISpeech } from "@/contexts/ai-speech-context";
-import { Card, CardContent, CardHeader } from "../ui/card";
 import { useTranslation } from "react-i18next";
+import { useAISpeech } from "@/contexts/ai-speech-context";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 const AITranscript = () => {
   const { t } = useTranslation();

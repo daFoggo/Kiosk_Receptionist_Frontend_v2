@@ -1,7 +1,7 @@
+import { Link } from "react-router-dom";
 import { NavigationMenu } from "@/components/ui/navigation-menu";
 import Logo from "@/components/Logo";
-import { Link } from "react-router-dom";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { routes } from "@/router/routes";
 
 const MainNav = () => {

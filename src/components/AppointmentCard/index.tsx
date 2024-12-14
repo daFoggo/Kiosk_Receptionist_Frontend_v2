@@ -1,10 +1,7 @@
-import React from "react";
-import QRCode from "react-qr-code";
-import { IAppointmentCardProps } from "@/models/appointment-table";
-import { getStatusColor } from "@/utils/Helper/AppointmentTable";
-import { format, parseISO } from "date-fns";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-
+import axios from "axios";
+import QRCode from "react-qr-code";
 import {
   Clock,
   MapPin,
@@ -22,20 +19,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Badge } from "../ui/badge";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { Form, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "../ui/input";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandItem,
   CommandList,
-} from "../ui/command";
-import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
-import { Button } from "../ui/button";
-import { Separator } from "../ui/separator";
+} from "@/components/ui/command";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -47,11 +44,20 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { IAppointmentCardProps } from "@/models/appointment-table";
+import { format, parseISO } from "date-fns";
+import { getStatusColor } from "@/utils/Helper/appointment-table";
 
 const AppointmentCard = ({
   appointment,
   style,
 }: IAppointmentCardProps & { style?: React.CSSProperties }) => {
+  const [qrCodeData, setQrCodeData] = useState<string | null>(null);
+  
+  useEffect(() => {
+    handleGetQrCode();
+  }, []);
+
   const form = useForm({
     defaultValues: {
       id: appointment.id,
@@ -65,9 +71,16 @@ const AppointmentCard = ({
     },
   });
 
-  // Function to generate QR code URL - replace with your actual QR code generation logic
-  const getQRCodeUrl = () => {
-    return `/api/placeholder/200/200`;
+  const handleGetQrCode = async () => {
+    try {
+      const response = await axios.get(`...?id=${appointment.id}`);
+
+      if (response.data.success) {
+        setQrCodeData(response.data.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const getTemporaryQR = () => {

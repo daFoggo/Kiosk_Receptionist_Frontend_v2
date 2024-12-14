@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
 import { Github } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 const Footer = () => {

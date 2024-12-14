@@ -85,7 +85,7 @@ const router = createBrowserRouter([
   {
     path: "*",
     element: (
-      <div className="flex flex-col gap-2 items-center justify-center h-screen">
+      <div className="flex flex-col gap-2 items-center justify-center h-screen w-full">
         <p className="font-semibold">Biết ông bốn không ? </p>
         <p className="font-semibold">404 Not Found</p>
         <img

@@ -1,10 +1,10 @@
 import { forwardRef, memo } from "react";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import { badgeVariants } from "./motion";
 import { convertRole } from "@/utils/Helper/common";
 import { PersonBadgeProps } from "@/models/person-badge";
-import { useTranslation } from "react-i18next";
+import { badgeVariants } from "./motion";
 
 const PersonBadge = memo(
   forwardRef<HTMLDivElement, PersonBadgeProps>(

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
-
 import {
   CalendarIcon,
   ChevronLeft,
@@ -17,10 +16,9 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Badge } from "../ui/badge";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -35,7 +33,7 @@ import {
   isCurrentHour,
   convertColor,
   isCurrentDate,
-} from "@/utils/Helper/PersonalCalendar";
+} from "@/utils/Helper/personal-calendar";
 import {
   IPersonalCalendarData,
   IPersonalCalendarProps,

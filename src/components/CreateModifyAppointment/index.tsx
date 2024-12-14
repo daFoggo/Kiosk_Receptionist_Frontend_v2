@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
+import * as z from "zod";
+import { toast } from "sonner";
+import axios from "axios";
+import { vi } from "date-fns/locale";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { vi } from "date-fns/locale";
-import { format, parse } from "date-fns";
-import axios from "axios";
-import { toast } from "sonner";
-
-import { CalendarIcon, Users } from "lucide-react";
+import { Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -36,22 +34,25 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { Checkbox } from "../ui/checkbox";
-import { ICreateModifyAppointmentProps } from "@/models/create-modify-appointment";
-import { IOfficer } from "@/models/department-list";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   createAppointmentIp,
   getOfficerIp,
   updateAppointmentIp,
 } from "@/utils/ip";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { ICreateModifyAppointmentProps } from "@/models/create-modify-appointment";
+import { IOfficer } from "@/models/department-list";
+import { format, parse } from "date-fns";
 
 const timeFormatRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
 
 const formSchema = z
   .object({
     cccd_nguoi_hen: z.string(),
-    cccd_nguoi_duoc_hen: z.array(z.string()).min(1, "Chọn ít nhất 1 người"),
+    cccd_nguoi_duoc_hen: z.array(z.string())
+    // .min(1, "Chọn ít nhất 1 người")
+    ,
     ngay_hen: z.date(),
     gio_bat_dau: z
       .string()
@@ -64,7 +65,6 @@ const formSchema = z
     ghi_chu: z.string().optional(),
   })
   .superRefine((data, ctx) => {
-    // Validate that end time is after start time
     const startTime = parse(data.gio_bat_dau, "HH:mm", new Date());
     const endTime = parse(data.gio_ket_thuc, "HH:mm", new Date());
 
@@ -96,8 +96,8 @@ const CreateModifyAppointment = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       cccd_nguoi_hen: currentCccd || "",
-      cccd_nguoi_duoc_hen:
-        mode === "edit" ? appointment?.cccd_nguoi_duoc_hen : [],
+      cccd_nguoi_duoc_hen: ["001205020978"],
+        // mode === "edit" ? appointment?.cccd_nguoi_duoc_hen : [],
       dia_diem: mode === "edit" ? appointment?.dia_diem : "",
       muc_dich: mode === "edit" ? appointment?.muc_dich : "",
       ghi_chu: mode === "edit" ? appointment?.ghi_chu : "",
