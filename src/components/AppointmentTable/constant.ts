@@ -1,5 +1,5 @@
 export const VIEWS = {
-  DAY: "ngày",
-  WEEK: "tuần",
-  MONTH: "tháng",
+  DAY: "Ngày",
+  WEEK: "Tuần",
+  MONTH: "Tháng",
 };

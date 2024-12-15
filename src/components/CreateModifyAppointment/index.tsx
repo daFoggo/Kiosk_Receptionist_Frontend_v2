@@ -364,6 +364,7 @@ const CreateModifyAppointment = ({
                         row: "w-full mt-2",
                       }}
                       className="rounded-md border w-full"
+                      disabled={(date) => date < new Date()}
                       required
                     />
                     <FormMessage />
