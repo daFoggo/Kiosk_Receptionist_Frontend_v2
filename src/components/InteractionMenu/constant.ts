@@ -168,7 +168,7 @@ export const interactionMenu = (
       disabled: true,
     },
   ],
-  staff: [
+  officer: [
     {
       id: 1,
       title: t("interactionMenu.generalSchedule.instructor.title"),
