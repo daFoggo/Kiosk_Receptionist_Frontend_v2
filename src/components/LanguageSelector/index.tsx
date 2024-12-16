@@ -23,6 +23,11 @@ const languages: ILanguage[] = [
     code: "kr",
     name: "한국어",
     flag: "🇰🇷",
+  },
+  {
+    code: "ja",
+    name: "日本語",
+    flag: "🇯🇵",
   }
 ];
 

@@ -116,7 +116,6 @@ export const WebsocketProvider = ({ children }: IWebsocketProviderProps) => {
     (frameData: string) => {
       if (wsRef.current?.readyState === WEBSOCKETSTATE.OPEN) {
         wsRef.current.send(frameData);
-        console.log("Frame sent");
       } else {
         console.warn("WebSocket is not connected. Attempting to reconnect...");
         connectWebsocket();

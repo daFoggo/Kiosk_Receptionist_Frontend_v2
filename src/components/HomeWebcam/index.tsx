@@ -33,7 +33,7 @@ const HomeWebcam = memo(
               `Chào mừng quý khách ${
                 person.name !== "Khách" ? person.name : ""
               } đến với Viện Khoa học Kĩ thuật Bưu điện`,
-              `Research Institute of Posts and Telecommunications에 ${person.name}님을 진심으로 환영합니다.`
+               `郵政・通信研究所に${person.name}様を心から歓迎いたします。`
             );
 
             lastAnnouncedPersonRef.current = person;

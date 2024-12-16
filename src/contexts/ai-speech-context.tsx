@@ -35,13 +35,12 @@ export const AISpeechProvider: React.FC<IAIProviderProps> = ({
   const getVoiceByLanguage = useCallback(
     (lang: string) => {
       const voices = speechSynthesis.getVoices();
-
-      if (lang === "ko-KR") {
+      if (lang === "ja-JP") {
         const sunHiVoice = voices.find(
           (voice) =>
-            voice.name === "Microsoft SunHi Online (Natural) - Korean (Korea)"
+            voice.name ===
+            "Microsoft Nanami Online (Natural) - Japanese (Japan)"
         );
-        console.log(sunHiVoice);
         return sunHiVoice || null;
       } else if (lang === "vi-VN") {
         const hoaiMyVoice = voices.find(
@@ -49,7 +48,6 @@ export const AISpeechProvider: React.FC<IAIProviderProps> = ({
             voice.name ===
             "Microsoft HoaiMy Online (Natural) - Vietnamese (Vietnam)"
         );
-        console.log(hoaiMyVoice);
         return hoaiMyVoice || null;
       }
     },
@@ -93,8 +91,8 @@ export const AISpeechProvider: React.FC<IAIProviderProps> = ({
 
       // Create Korean utterance
       const koreanUtterance = new SpeechSynthesisUtterance(koreanText);
-      koreanUtterance.lang = "ko-KR";
-      const koreanVoice = getVoiceByLanguage("ko-KR");
+      koreanUtterance.lang = "ja-JP";
+      const koreanVoice = getVoiceByLanguage("ja-JP");
       if (koreanVoice) {
         koreanUtterance.voice = koreanVoice;
       }
