@@ -10,6 +10,7 @@ import AITranscript from "@/components/AITranscript";
 import HomeWebcam from "@/components/HomeWebcam";
 import InteractionMenu from "@/components/InteractionMenu";
 import { IMenuItem } from "@/models/interaction-menu";
+import WelcomeBanner from "@/components/WelcomeBanner";
 
 const Home = () => {
   const [eventData, setEventData] = useState([
@@ -54,6 +55,8 @@ const Home = () => {
 
   return (
     <div className="relative h-screen bg-gradient-to-b from-indigo-100 to-violet-100 dark:from-indigo-900 dark:to-violet-900 w-full flex flex-col items-center p-6 space-y-6 overflow-hidden">
+      <WelcomeBanner />
+
       <div className="w-full flex flex-col gap-6">
         <RootNavbar />
       </div>
