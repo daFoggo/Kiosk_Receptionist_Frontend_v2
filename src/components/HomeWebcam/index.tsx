@@ -47,7 +47,7 @@ const HomeWebcam = memo(
               announcedAt: currentTime
             };
           }
-        }, 1000); 
+        }, 800); 
       },
       [speak, stopSpeaking]
     );
