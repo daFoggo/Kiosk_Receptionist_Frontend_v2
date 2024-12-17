@@ -27,10 +27,10 @@ import { dateUtils } from "@/utils/Helper/event-banner";
 // Memoized components
 const ResponsiveBadge = memo(
   ({ icon, text }: { icon: React.ReactNode; text: string }) => (
-    <Badge variant="secondary" className="px-2 py-1 max-w-[180px]" title={text}>
+    <Badge variant="secondary" className="px-2 py-1 max-w-[300px]" title={text}>
       <div className="flex items-center gap-1 w-full">
         {icon}
-        <span className="text-sm line-clamp-2">{text}</span>
+        <span className="text-sm truncate">{text}</span>
       </div>
     </Badge>
   )
@@ -99,7 +99,7 @@ const EventDialog = memo(
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
         <DialogHeader>
-          <DialogTitle className="text-2xl font-semibold text-primary">
+          <DialogTitle className="text-2xl font-semibold text-primary line-clamp-2">
             {t("eventbanner.dialog.title")}
           </DialogTitle>
         </DialogHeader>
