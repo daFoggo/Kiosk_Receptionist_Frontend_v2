@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { SolarDate } from "@nghiavuive/lunar_date_vi";
 import { format } from "date-fns";
-import { vi, enUS, ko } from "date-fns/locale"; 
+import { vi, enUS, ko, ja } from "date-fns/locale"; 
 import { Calendar as CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -27,11 +27,13 @@ const LunarCalendar = () => {
       return ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
     } else if (i18n.language === "kr") {
       return ["월", "화", "수", "목", "금", "토", "일"];
+    } else if (i18n.language === "ja") {
+      return ["月", "火", "水", "木", "金", "土", "日"];
     }
   };
 
   const getLocale = () => {
-    return i18n.language === "vi" ? vi : i18n.language === "en" ? enUS : ko;
+    return i18n.language === "vi" ? vi : i18n.language === "en" ? enUS : i18n.language === "kr" ? ko : i18n.language === "ja" ? ja : enUS;
   };
 
   useEffect(() => {

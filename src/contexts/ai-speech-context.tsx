@@ -85,7 +85,7 @@ export const AISpeechProvider: React.FC<IAIProviderProps> = ({
       if (englishVoice) {
         englishUtterance.voice = englishVoice;
       }
-      englishUtterance.rate = 0.9;
+      englishUtterance.rate = 1.0;
       englishUtterance.pitch = 1.0;
       englishUtterance.volume = 1.0;
 
@@ -96,7 +96,7 @@ export const AISpeechProvider: React.FC<IAIProviderProps> = ({
       if (koreanVoice) {
         koreanUtterance.voice = koreanVoice;
       }
-      koreanUtterance.rate = 0.9;
+      koreanUtterance.rate = 1.0;
       koreanUtterance.pitch = 1.0;
       koreanUtterance.volume = 1.0;
 

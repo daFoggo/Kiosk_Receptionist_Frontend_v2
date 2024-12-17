@@ -30,7 +30,7 @@ const ResponsiveBadge = memo(
     <Badge variant="secondary" className="px-2 py-1 max-w-[180px]" title={text}>
       <div className="flex items-center gap-1 w-full">
         {icon}
-        <span className="text-sm truncate">{text}</span>
+        <span className="text-sm line-clamp-2">{text}</span>
       </div>
     </Badge>
   )

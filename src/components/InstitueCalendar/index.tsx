@@ -148,15 +148,16 @@ const InstitueCalendar = memo(() => {
       </CardTitle>
       <CardContent className="p-0 mb-4">
         {calendar ? (
-          <h1 className="text-2xl text-left font-semibold text-primary">
-            {truncateText(calendar?.name as string, 50)}
+          <h1 className="text-2xl text-left font-semibold text-primary line-clamp-2">
+            {calendar?.name}
           </h1>
         ) : (
           <p className="text-2xl text-left text-muted-foreground font-semibold">
             {t("instituecalendar.displaynone")}
           </p>
         )}
-
+      </CardContent>
+      <CardFooter className="p-0 flex justify-between">
         {calendar ? (
           <Badge
             variant="secondary"
@@ -177,9 +178,6 @@ const InstitueCalendar = memo(() => {
         ) : (
           <div></div>
         )}
-      </CardContent>
-      <CardFooter className="p-0 flex justify-between">
-        <div></div>
         <Sheet>
           <SheetTrigger asChild>
             <Button

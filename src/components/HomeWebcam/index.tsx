@@ -1,44 +1,53 @@
-import { useState, useRef, useEffect, useCallback, memo } from "react";
-import Webcam from "react-webcam";
-import { motion, AnimatePresence } from "framer-motion";
-import { Users, SignalHigh, Scan } from "lucide-react";
+import PersonBadge from "@/components/PersonBadge";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { IHomeWebcamProps } from "@/models/home-webcam";
-import PersonBadge from "@/components/PersonBadge";
 import { useAISpeech } from "@/contexts/ai-speech-context";
-import { IPersonData } from "@/models/websocket-context";
+import { IHomeWebcamProps } from "@/models/home-webcam";
+import { IPersonData, IPersonDataWithTime } from "@/models/websocket-context";
+import { AnimatePresence, motion } from "framer-motion";
+import { Scan, SignalHigh, Users } from "lucide-react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
+import Webcam from "react-webcam";
 
 const HomeWebcam = memo(
   ({ isConnected, onFrameCapture, webcamData }: IHomeWebcamProps) => {
     const { speak, stopSpeaking } = useAISpeech();
     const webcamRef = useRef<Webcam>(null);
     const captureIntervalRef = useRef<NodeJS.Timeout>();
-    const lastAnnouncedPersonRef = useRef<IPersonData | null>(null);
+    const lastAnnouncedPersonRef = useRef<IPersonDataWithTime | null>(null);
     const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     const debouncedWelcomeSpeech = useCallback(
       (person: IPersonData) => {
+        // Clear timeout cũ nếu có để tránh các lệnh gọi không mong muốn
         if (debounceTimeoutRef.current) {
           clearTimeout(debounceTimeoutRef.current);
         }
-
+    
         debounceTimeoutRef.current = setTimeout(() => {
-          if (
-            !lastAnnouncedPersonRef.current ||
-            lastAnnouncedPersonRef.current.name !== person.name
-          ) {
+          const currentTime = Date.now();
+          
+          const timeSinceLastAnnouncement = 
+            currentTime - (lastAnnouncedPersonRef.current?.announcedAt || 0);
+    
+          const shouldAnnounce = 
+            !lastAnnouncedPersonRef.current || 
+            lastAnnouncedPersonRef.current.name !== person.name && 
+            timeSinceLastAnnouncement > 15000;
+    
+          if (shouldAnnounce) {
             speak(
-              `Chào mừng quý khách ${
-                person.name !== "Khách" ? person.name : ""
-              } đến với Viện Khoa học Kĩ thuật Bưu điện`,
-               `郵政・通信研究所に${person.name}様を心から歓迎いたします。`
+              `Chào mừng quý khách đến với Viện Khoa học Kĩ thuật Bưu điện`,
+              `郵便技術科学研究所へようこそ`
             );
-
-            lastAnnouncedPersonRef.current = person;
+    
+            lastAnnouncedPersonRef.current = {
+              ...person,
+              announcedAt: currentTime
+            };
           }
-        }, 500);
+        }, 1000); 
       },
       [speak, stopSpeaking]
     );

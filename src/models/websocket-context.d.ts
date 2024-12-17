@@ -42,3 +42,7 @@ export interface IPersonData {
   role: string;
   cccd?: string;
 }
+
+interface IPersonDataWithTime extends IPersonData {
+  announcedAt?: number;
+}

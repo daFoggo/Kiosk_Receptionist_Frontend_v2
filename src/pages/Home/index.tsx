@@ -16,9 +16,9 @@ const Home = () => {
     {
       id: 1,
       title: "Opening Ceremony Vietnam - Japan center",
-      start_time: "2024-12-17T13:00:00",
-      end_time: "2024-12-17T15:00:00",
-      location: "RIPT",
+      start_time: "2024-12-17T13:15:00",
+      end_time: "2024-12-17T14:15:00",
+      location: "122 Hoang Quoc Viet Street, Cau Giay District, Hanoi",
     },
   ]);
 

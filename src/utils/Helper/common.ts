@@ -15,17 +15,25 @@ export const generateHours = (length: number) => {
 export const convertRole = (role: string, i18n: string) => {
   switch (role) {
     case "student":
-      return i18n === "en" ? "Student" : i18n === "kr" ? "학생" : "Sinh viên";
+      return i18n === "en"
+        ? "Student"
+        : i18n === "kr"
+        ? "학생"
+        : i18n === "ja"
+        ? "学生"
+        : "Sinh viên";
     case "teacher":
       return i18n === "en"
         ? "Teacher"
         : i18n === "kr"
         ? "선생님"
+        : i18n === "ja"
+        ? "先生"
         : "Giảng viên";
     case "officer":
-      return i18n === "en" ? "Officer" : i18n === "kr" ? "직원" : "Cán bộ";
+      return i18n === "en" ? "Officer" : i18n === "kr" ? "직원" : i18n === "ja" ? "職員" : "Cán bộ";
     case "guest":
-      return i18n === "en" ? "Guest" : i18n === "kr" ? "손님" : "Khách";
+      return i18n === "en" ? "Guest" : i18n === "kr" ? "손님" : i18n === "ja" ? "ゲスト" : "Khách";
     default:
       return role;
   }
