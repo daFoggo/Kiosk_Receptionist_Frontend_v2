@@ -1,3 +1,8 @@
+import animate from "tailwindcss-animate";
+import forms from "@tailwindcss/forms";
+import typography from "@tailwindcss/typography";
+import aspectRatio from "@tailwindcss/aspect-ratio";
+
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: ["class"],
@@ -217,10 +222,10 @@ export default {
     },
   },
   plugins: [
-    require("tailwindcss-animate"),
-    require("@tailwindcss/forms"),
-    require("@tailwindcss/typography"),
-    require("@tailwindcss/aspect-ratio"),
+	animate,
+	forms,
+	typography,
+	aspectRatio,
     function ({ addUtilities }) {
       const newUtilities = {
         ".clip-path-wave": {
