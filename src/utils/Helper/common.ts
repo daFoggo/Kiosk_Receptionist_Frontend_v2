@@ -12,7 +12,7 @@ export const generateHours = (length: number) => {
   });
 };
 
-export const convertRole = (role: string, i18n: string) => {
+export const convertRole = (role: string, i18n?: string) => {
   switch (role) {
     case "student":
       return i18n === "en"

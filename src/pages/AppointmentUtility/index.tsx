@@ -1,16 +1,24 @@
-import { vi } from "date-fns/locale";
-import { Calendar } from "@/components/ui/calendar";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Calendar } from "@/components/ui/calendar";
+import { Card } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { IAppointmentUtility } from "@/models/appointment-utility";
+import { vi } from "date-fns/locale";
 
-const AppointmentUtility = () => {
+const AppointmentUtility = ({ handleSearchByAttendee, handleSearchByRole, isLoading }: IAppointmentUtility) => {
+  const handleRoleChange = (role: string, checked: boolean) => {
+    if (checked) {
+      handleSearchByRole(role);
+    } else {
+      handleSearchByRole("");
+    }
+  };
   return (
     <div className="flex flex-col gap-4">
       <Card className="p-2">
@@ -27,7 +35,7 @@ const AppointmentUtility = () => {
           locale={vi}
         />
       </Card>
-      <Input placeholder="Tìm kiếm người cần hẹn..." className="w-full" />
+      <Input placeholder="Tìm kiếm người cần hẹn..." className="w-full" onChange={(e) => handleSearchByAttendee(e.target.value)} disabled={isLoading} />
       <Accordion
         type="single"
         collapsible
@@ -40,7 +48,7 @@ const AppointmentUtility = () => {
           </AccordionTrigger>
           <AccordionContent className="space-y-2">
             <div className="flex items-center space-x-2">
-              <Checkbox id="isOwner" defaultChecked />
+              <Checkbox id="isOwner" defaultChecked onCheckedChange={(checked) => handleRoleChange("isOwner", checked as boolean)}/>
               <label
                 htmlFor="isOwner"
                 className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -53,6 +61,7 @@ const AppointmentUtility = () => {
                 id="isParticpant"
                 className="border-blue-500 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
                 defaultChecked
+                onCheckedChange={(checked) => handleRoleChange("isParticipant", checked as boolean)}
               />
               <label
                 htmlFor="isParticpant"

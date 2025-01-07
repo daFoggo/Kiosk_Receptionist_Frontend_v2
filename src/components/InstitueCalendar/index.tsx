@@ -181,11 +181,10 @@ const InstitueCalendar = memo(() => {
           <SheetTrigger asChild>
             <Button
               variant="outline"
-              icon={<ArrowUpRight className="h-6 w-6" />}
               className="rounded-3xl text-lg font-semibold bg-secondary"
-              iconPosition="right"
             >
               {t("instituecalendar.detail")}
+              <ArrowUpRight className="h-6 w-6" />
             </Button>
           </SheetTrigger>
           <SheetContent className="sm:max-w-4xl [&>button]:hidden overflow-y-hidden h-dvh">

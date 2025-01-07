@@ -19,6 +19,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { routes } from "@/router/routes";
 import { Bell, ChevronsUpDown, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { convertRole } from "@/utils/Helper/common";
 
 const NavUser = ({
   user,
@@ -48,7 +49,7 @@ const NavUser = ({
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{user?.name}</span>
-                <span className="truncate text-xs">{user?.role}</span>
+                <span className="truncate text-xs">{convertRole(user?.role)}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -69,7 +70,7 @@ const NavUser = ({
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">{user?.name}</span>
-                  <span className="truncate text-xs">{user?.role}</span>
+                  <span className="truncate text-xs">{convertRole(user?.role)}</span>
                 </div>
               </div>
 

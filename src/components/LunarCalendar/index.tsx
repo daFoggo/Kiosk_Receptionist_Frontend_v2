@@ -116,8 +116,8 @@ const LunarCalendar = () => {
                   "w-fit justify-start text-left font-semibold rounde-lg text-xl",
                   !date && "text-muted-foreground"
                 )}
-                icon={<CalendarIcon />}
               >
+                <CalendarIcon />
                 {date &&
                   format(date, "MMMM", { locale: getLocale() })
                     .charAt(0)

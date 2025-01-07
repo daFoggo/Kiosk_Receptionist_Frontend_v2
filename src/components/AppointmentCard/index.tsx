@@ -225,9 +225,9 @@ const AppointmentCard = ({
                     </div>
                     <Button
                       className="font-semibold w-full"
-                      icon={<Download className="w-4 h-4" />}
                       onClick={() => handleDownloadQRcode()}
                     >
+                      <Download className="w-4 h-4" />
                       Tải xuống QR
                     </Button>
                     <p className="text-sm text-center text-muted-foreground">Hoặc nhấn vào ảnh QR để mở rộng hơn...</p>
@@ -316,8 +316,8 @@ const AppointmentCard = ({
               <Button
                 variant="destructive"
                 className="font-semibold"
-                icon={<CalendarOff className="h-4 w-4" />}
               >
+                <CalendarOff className="h-4 w-4" />
                 Hủy lịch hẹn
               </Button>
             </AlertDialogTrigger>

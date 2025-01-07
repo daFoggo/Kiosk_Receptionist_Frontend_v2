@@ -1,12 +1,11 @@
-import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
-import { motion, HTMLMotionProps } from "framer-motion";
+import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-lg ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 transition-colors duration-300",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -32,62 +31,26 @@ const buttonVariants = cva(
       size: "default",
     },
   }
-);
+)
 
 export interface ButtonProps
-  extends Omit<HTMLMotionProps<"button">, "color" | "children">,
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
-  icon?: React.ReactNode;
-  iconPosition?: "left" | "right" | "center";
-  children?: React.ReactNode;
+  asChild?: boolean
 }
 
-
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
-      className,
-      variant,
-      size,
-      asChild = false,
-      icon,
-      iconPosition = "left",
-      children,
-      ...props
-    },
-    ref
-  ) => {
-
-    const content = (
-      <React.Fragment>
-        {icon && iconPosition === "left" && (
-          <span className="mr-1">{icon}</span>
-        )}
-        {children}
-        {icon && iconPosition === "center" && <span>{icon}</span>}
-        {icon && iconPosition === "right" && (
-          <span className="ml-1">{icon}</span>
-        )}
-      </React.Fragment>
-    );
-
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button"
     return (
-      <motion.button
-        className={cn(buttonVariants({ variant, size, className }), "gap-2")}
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
-        whileTap={{ scale: 0.98 }}
-        transition={{ type: "spring", stiffness: 300, damping: 17}}
         {...props}
-      >
-        {content}
-      </motion.button>
-    );
+      />
+    )
   }
-) as React.ForwardRefExoticComponent<
-  ButtonProps & React.RefAttributes<HTMLButtonElement>
->;
+)
+Button.displayName = "Button"
 
-Button.displayName = "Button";
-
-export { Button, buttonVariants };
+export { Button, buttonVariants }
