@@ -1,6 +1,6 @@
+import { ThemeToggle } from "@/components/ThemeToggle";
 import MainNav from "./main-nav";
 import MobileNav from "./mobile-nav";
-import { ThemeToggle } from "@/components/ThemeToggle";
 
 const NavBar = () => {
   return (

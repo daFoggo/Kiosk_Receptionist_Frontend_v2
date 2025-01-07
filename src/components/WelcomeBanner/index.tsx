@@ -1,5 +1,5 @@
-import { memo } from "react";
 import { motion } from "framer-motion";
+import { memo } from "react";
 import { INITIAL_BANNERS } from "./constant";
 
 const WelcomeBanner = memo(() => {

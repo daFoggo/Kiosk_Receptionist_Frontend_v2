@@ -1,24 +1,8 @@
-import { useState, useRef, useCallback, useEffect } from "react";
-import axios from "axios";
-import { useForm } from "react-hook-form";
-import { motion } from "framer-motion";
-import { toast } from "sonner";
-import { useTranslation } from "react-i18next";
-import Webcam from "react-webcam";
-import { useWebsocket } from "@/contexts/websocket-context";
-import {
-  Camera,
-  Scan,
-  ArrowLeft,
-  UserCircle2,
-  GraduationCap,
-  Briefcase,
-} from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
-import { Card } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
@@ -27,17 +11,33 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useWebsocket } from "@/contexts/websocket-context";
+import { IDepartment } from "@/models/department-list";
+import {
+  IClass,
+  IFormData,
+  IVerifyCCCDProps,
+  TRole,
+} from "@/models/verify-cccd";
+import { ICCCDData } from "@/models/websocket-context";
 import { convertFormKey } from "@/utils/Helper/verify-cccd";
 import { getClassIp, getDepartmentIp, updateIdentifyDataIp } from "@/utils/ip";
-import { ICCCDData } from "@/models/websocket-context";
+import axios from "axios";
+import { motion } from "framer-motion";
 import {
-  TRole,
-  IFormData,
-  IClass,
-  IVerifyCCCDProps,
-} from "@/models/verify-cccd";
-import { IDepartment } from "@/models/department-list";
-import { extractedFields, captureSteps } from "./constant";
+  ArrowLeft,
+  Briefcase,
+  Camera,
+  GraduationCap,
+  Scan,
+  UserCircle2,
+} from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import Webcam from "react-webcam";
+import { toast } from "sonner";
+import { captureSteps, extractedFields } from "./constant";
 
 const VerifyCCCD = ({ onClose }: IVerifyCCCDProps) => {
   const { t } = useTranslation();

@@ -1,12 +1,14 @@
-import { useState, useEffect } from "react";
-import * as z from "zod";
-import { toast } from "sonner";
-import axios from "axios";
-import { vi } from "date-fns/locale";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { CalendarCog, CalendarPlus, Loader2, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 import {
   Dialog,
   DialogContent,
@@ -24,30 +26,28 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Textarea } from "@/components/ui/textarea";
+import { ICreateModifyAppointmentProps } from "@/models/create-modify-appointment";
+import { IOfficer } from "@/models/department-list";
 import {
   createAppointmentIp,
   getOfficerIp,
   updateAppointmentIp,
 } from "@/utils/ip";
-import { ICreateModifyAppointmentProps } from "@/models/create-modify-appointment";
-import { IOfficer } from "@/models/department-list";
+import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 import { format, parse } from "date-fns";
+import { vi } from "date-fns/locale";
+import { CalendarCog, CalendarPlus, Loader2, Users } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import * as z from "zod";
 
 const timeFormatRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
 

@@ -1,16 +1,16 @@
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { IAppointment } from "@/models/appointment-table";
+import { getWeekStartDate } from "@/utils/Helper/general-calendar";
+import { addDays, addMonths, addWeeks, format } from "date-fns";
 import { vi } from "date-fns/locale";
 import { CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { format, addDays, addWeeks, addMonths } from "date-fns";
+import { useState } from "react";
 import { VIEWS } from "./constant";
-import { IAppointment } from "@/models/appointment-table";
 import DayView from "./day-view";
-import WeekView from "./week-view";
 import MonthView from "./month-view";
-import { getWeekStartDate } from "@/utils/Helper/general-calendar";
+import WeekView from "./week-view";
 
 const AppointmentTable = ({
   appointments,

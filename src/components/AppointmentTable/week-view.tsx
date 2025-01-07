@@ -1,7 +1,7 @@
-import { format, startOfWeek, endOfWeek, eachDayOfInterval, parseISO, isSameDay, startOfDay, differenceInMinutes, isToday } from "date-fns";
-import { vi } from "date-fns/locale";
-import { IAppointment } from "@/models/appointment-table";
 import AppointmentCard from "@/components/AppointmentCard";
+import { IAppointment } from "@/models/appointment-table";
+import { differenceInMinutes, eachDayOfInterval, endOfWeek, format, isSameDay, isToday, parseISO, startOfDay, startOfWeek } from "date-fns";
+import { vi } from "date-fns/locale";
 
 const WeekView = ({ date, appointments }: { date: Date; appointments: IAppointment[] }) => {
   const weekDays = eachDayOfInterval({

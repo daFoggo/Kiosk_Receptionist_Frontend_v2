@@ -1,6 +1,6 @@
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, parseISO, isSameDay, isToday } from "date-fns";
-import { IAppointment } from "@/models/appointment-table";
 import AppointmentCard from "@/components/AppointmentCard";
+import { IAppointment } from "@/models/appointment-table";
+import { eachDayOfInterval, endOfMonth, format, isSameDay, isToday, parseISO, startOfMonth } from "date-fns";
 
 const MonthView = ({ date, appointments }: { date: Date; appointments: IAppointment[] }) => {
   const daysInMonth = eachDayOfInterval({

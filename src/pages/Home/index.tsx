@@ -1,16 +1,15 @@
-import { useEffect, useState } from "react";
-import { useWebsocket } from "@/contexts/websocket-context";
+import AIModel from "@/components/AIModel";
+import AITranscript from "@/components/AITranscript";
 import EventBanner from "@/components/EventBanner";
+import HomeWebcam from "@/components/HomeWebcam";
+import InstitueCalendar from "@/components/InstitueCalendar";
+import InteractionMenu from "@/components/InteractionMenu";
 import LunarCalendar from "@/components/LunarCalendar";
 import RootNavbar from "@/components/RootNavbar";
 import Weather from "@/components/Weather";
-import InstitueCalendar from "@/components/InstitueCalendar";
-import AIModel from "@/components/AIModel";
-import AITranscript from "@/components/AITranscript";
-import HomeWebcam from "@/components/HomeWebcam";
-import InteractionMenu from "@/components/InteractionMenu";
+import { useWebsocket } from "@/contexts/websocket-context";
 import { IMenuItem } from "@/models/interaction-menu";
-import WelcomeBanner from "@/components/WelcomeBanner";
+import { useEffect, useState } from "react";
 
 const Home = () => {
   const [eventData, setEventData] = useState([
@@ -55,7 +54,7 @@ const Home = () => {
 
   return (
     <div className="relative h-screen bg-gradient-to-b from-indigo-100 to-violet-100 dark:from-indigo-900 dark:to-violet-900 w-full flex flex-col items-center p-6 space-y-6 overflow-hidden">
-      <WelcomeBanner />
+      {/* <WelcomeBanner /> */}
 
       <div className="w-full flex flex-col gap-6">
         <RootNavbar />

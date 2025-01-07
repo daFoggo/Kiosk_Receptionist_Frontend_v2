@@ -1,6 +1,3 @@
-import { useBreadcrumb } from "@/contexts/bread-crumb-context";
-import { Link } from "react-router-dom";
-import { ChevronRight, type LucideIcon } from "lucide-react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -17,6 +14,9 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import { useBreadcrumb } from "@/contexts/bread-crumb-context";
+import { ChevronRight, type LucideIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const NavMain = ({
   items,

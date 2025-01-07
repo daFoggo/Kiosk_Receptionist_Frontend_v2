@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
-import { Inbox } from "lucide-react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { tabList, notificationData } from "./constant";
+import { Inbox } from "lucide-react";
+import { useEffect, useState } from "react";
+import { notificationData, tabList } from "./constant";
 
 const Notification = () => {
   const [activeTab, setActiveTab] = useState("inbox");

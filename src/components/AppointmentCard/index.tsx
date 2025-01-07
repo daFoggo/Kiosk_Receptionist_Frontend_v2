@@ -1,33 +1,3 @@
-import { useForm } from "react-hook-form";
-import axios from "axios";
-import { Clock, MapPin, User, Download, CalendarOff, CalendarCheck2 } from 'lucide-react';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Form, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -39,17 +9,45 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Form, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { IAppointmentCardProps } from "@/models/appointment-table";
-import { format, parseISO } from "date-fns";
 import {
   convertStatusName,
   getStatusColor,
 } from "@/utils/Helper/appointment-table";
 import { backendIp } from "@/utils/ip";
+import axios from "axios";
+import { format, parseISO } from "date-fns";
+import { CalendarOff, Clock, Download, MapPin, User } from 'lucide-react';
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import CreateModifyAppointment from "../CreateModifyAppointment";
 import { Textarea } from "../ui/textarea";
-
 const AppointmentCard = ({
   appointment,
   style,

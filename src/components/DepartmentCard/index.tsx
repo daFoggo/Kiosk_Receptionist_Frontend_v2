@@ -1,24 +1,24 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { motion } from "framer-motion";
-import { Clock, Network, Users } from "lucide-react";
+import CreateModifyAppointment from "@/components/CreateModifyAppointment";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
-  CardHeader,
-  CardTitle,
   CardContent,
   CardFooter,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import CreateModifyAppointment from "@/components/CreateModifyAppointment";
+import { IDepartMentCardProps } from "@/models/department-card";
+import { IOfficer } from "@/models/department-list";
 import {
   formatWorkingDays,
   formatWorkingHours,
 } from "@/utils/Helper/department-card";
 import { getOfficerIp } from "@/utils/ip";
-import { IDepartMentCardProps } from "@/models/department-card";
-import { IOfficer } from "@/models/department-list";
+import axios from "axios";
+import { motion } from "framer-motion";
+import { Clock, Network, Users } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const DepartmentCard = ({
   department,

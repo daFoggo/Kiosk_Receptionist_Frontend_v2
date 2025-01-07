@@ -1,7 +1,7 @@
-import { useTranslation } from "react-i18next";
-import { Card, CardContent } from "@/components/ui/card";
 import logoPtit from "@/assets/logo/logo-ptit.png";
 import logoRipt from "@/assets/logo/logo-ript.png";
+import { Card, CardContent } from "@/components/ui/card";
+import { useTranslation } from "react-i18next";
 
 const RootNavbar = () => {
   const { t } = useTranslation();

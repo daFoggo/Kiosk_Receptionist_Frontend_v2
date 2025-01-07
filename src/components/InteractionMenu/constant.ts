@@ -1,3 +1,4 @@
+import { IMenuItem } from "@/models/interaction-menu";
 import {
   CalendarDays,
   CalendarHeart,
@@ -6,13 +7,12 @@ import {
   ScanQrCode,
   Signature,
 } from "lucide-react";
-import { IMenuItem } from "@/models/interaction-menu";
+import AppointmentChecking from "../AppointmentChecking";
 import GeneralCalendar from "../GeneralCalendar";
 import PersonalCalendar from "../PersonalCalendar";
+import Procedures from "../Procedures";
 import UserInfo from "../UserInfo";
 import VerifyCCCD from "../VerifyCCCD";
-import Procedures from "../Procedures";
-import AppointmentChecking from "../AppointmentChecking";
 
 export const interactionMenu = (
   t: (key: string) => string

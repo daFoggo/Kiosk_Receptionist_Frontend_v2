@@ -1,8 +1,8 @@
-import { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import { IAuthContextType, IUser } from "@/models/auth-context";
+import { LOGIN_IP } from "@/utils/ip";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import { LOGIN_IP } from "@/utils/ip";
-import { IAuthContextType, IUser } from "@/models/auth-context";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext<IAuthContextType | null>(null);
 

@@ -1,6 +1,5 @@
 import {
   createBrowserRouter,
-  Navigate,
   Outlet,
   useNavigate,
 } from "react-router-dom";
@@ -8,20 +7,18 @@ import { routes } from "./routes";
 
 import { useAuth } from "@/contexts/auth-context";
 
-import RootLayout from "@/layouts/root-layout";
-import AuthLayout from "@/layouts/auth-layout";
 import AppointmentLayout from "@/layouts/appointment-layout";
+import AuthLayout from "@/layouts/auth-layout";
 
+import DepartmentList from "@/pages/DepartmentList/";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
-import Register from "@/pages/Register";
 import MyAppointment from "@/pages/MyAppointment";
-import DepartmentList from "@/pages/DepartmentList/";
 
 import frogJumping from "@/assets/gifs/frog-laughing.gif";
 import { IAuthContextType } from "@/models/auth-context";
-import { useEffect } from "react";
 import AppointmentDashboard from "@/pages/AppointmentDashboard";
+import { useEffect } from "react";
 
 const ProtectedRoute = () => {
   const navigate = useNavigate();

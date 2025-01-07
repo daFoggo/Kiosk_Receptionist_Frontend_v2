@@ -1,4 +1,13 @@
 import {
+  ICCCDData,
+  IWebcamData,
+  IWebsocketContext,
+  IWebSocketMessage,
+  IWebsocketProviderProps,
+} from "@/models/websocket-context";
+import { kioskId, WEBSOCKETSTATE } from "@/utils/constant";
+import { wsIp } from "@/utils/ip";
+import {
   createContext,
   useCallback,
   useContext,
@@ -6,15 +15,6 @@ import {
   useRef,
   useState,
 } from "react";
-import { kioskId, WEBSOCKETSTATE } from "@/utils/constant";
-import { wsIp } from "@/utils/ip";
-import {
-  ICCCDData,
-  IWebcamData,
-  IWebsocketContext,
-  IWebSocketMessage,
-  IWebsocketProviderProps,
-} from "@/models/websocket-context";
 
 const WebsocketContext = createContext<IWebsocketContext | undefined>(
   undefined

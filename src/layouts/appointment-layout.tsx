@@ -1,6 +1,6 @@
-import { Outlet } from "react-router-dom";
-import { BreadcrumbProvider } from "@/contexts/bread-crumb-context";
 import { Toaster } from "@/components/ui/sonner";
+import { BreadcrumbProvider } from "@/contexts/bread-crumb-context";
+import { Outlet } from "react-router-dom";
 
 const AppointmentLayout = () => {
   return (

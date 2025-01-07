@@ -1,4 +1,30 @@
-import { useEffect, useRef, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  IPersonalCalendarData,
+  IPersonalCalendarProps,
+} from "@/models/personal-calendar";
+import {
+  convertColor,
+  formatDateForApi,
+  generateHours,
+  generateWeekDays,
+  getWeekStartDate,
+  isCurrentDate,
+  isCurrentHour,
+  parseDate,
+} from "@/utils/Helper/personal-calendar";
+import { getInstructorCalendarIp, getStudentCalendarIp } from "@/utils/ip";
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -10,33 +36,7 @@ import {
   MapPin,
   User,
 } from "lucide-react";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getStudentCalendarIp, getInstructorCalendarIp } from "@/utils/ip";
-import {
-  formatDateForApi,
-  generateHours,
-  generateWeekDays,
-  getWeekStartDate,
-  parseDate,
-  isCurrentHour,
-  convertColor,
-  isCurrentDate,
-} from "@/utils/Helper/personal-calendar";
-import {
-  IPersonalCalendarData,
-  IPersonalCalendarProps,
-} from "@/models/personal-calendar";
+import { useEffect, useRef, useState } from "react";
 
 const PersonalCalendar = ({
   currentRole,

@@ -1,9 +1,9 @@
+import { Badge } from "@/components/ui/badge";
+import { PersonBadgeProps } from "@/models/person-badge";
+import { convertRole } from "@/utils/Helper/common";
+import { motion } from "framer-motion";
 import { forwardRef, memo } from "react";
 import { useTranslation } from "react-i18next";
-import { motion } from "framer-motion";
-import { Badge } from "@/components/ui/badge";
-import { convertRole } from "@/utils/Helper/common";
-import { PersonBadgeProps } from "@/models/person-badge";
 import { badgeVariants } from "./motion";
 
 const PersonBadge = memo(

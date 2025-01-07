@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
-import { NavigationMenu } from "@/components/ui/navigation-menu";
 import Logo from "@/components/Logo";
+import { NavigationMenu } from "@/components/ui/navigation-menu";
+import { Link } from "react-router-dom";
 
 const MainNav = () => {
   return (

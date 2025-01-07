@@ -1,7 +1,7 @@
-import { format, parseISO, isSameDay, startOfDay, differenceInMinutes } from "date-fns";
-import { vi } from "date-fns/locale";
-import { IAppointment } from "@/models/appointment-table";
 import AppointmentCard from "@/components/AppointmentCard";
+import { IAppointment } from "@/models/appointment-table";
+import { differenceInMinutes, format, isSameDay, parseISO, startOfDay } from "date-fns";
+import { vi } from "date-fns/locale";
 
 const DayView = ({ date, appointments }: { date: Date; appointments: IAppointment[] }) => {
   const hours = Array.from({ length: 13 }, (_, i) => i + 7);

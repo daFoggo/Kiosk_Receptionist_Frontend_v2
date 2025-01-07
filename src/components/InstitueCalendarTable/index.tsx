@@ -1,30 +1,30 @@
-import React, { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useTranslation } from "react-i18next";
-import {
-  ChevronLeft,
-  ChevronRight,
-  MapPin,
-  Clock,
-  Calendar as CalendarIcon,
-  User,
-} from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
-import { generateHours } from "@/utils/Helper/common";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
   IInstitueCalendarTableProps,
   IWork,
 } from "@/models/institue-calendar-table";
+import { generateHours } from "@/utils/Helper/common";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  Calendar as CalendarIcon,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  MapPin,
+  User,
+} from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const WeeklySchedule = ({ works }: IInstitueCalendarTableProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);

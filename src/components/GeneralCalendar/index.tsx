@@ -1,4 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -10,39 +22,26 @@ import {
   MapPin,
   User,
 } from "lucide-react";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useEffect, useRef, useState } from "react";
 
 import {
-  getAllStudentCalendarIp,
-  getAllInstructorCalendarIp,
+  getAllStudentCalendarIp
 } from "@/utils/ip";
 
-import {
-  formatDateForApi,
-  generateHours,
-  generateWeekDays,
-  getWeekStartDate,
-  parseDate,
-  isCurrentHour,
-  convertColor,
-  isCurrentDate,
-} from "@/utils/Helper/general-calendar";
 import {
   IGeneralCalendarData,
   IGeneralCalendarProps,
 } from "@/models/general-calendar";
+import {
+  convertColor,
+  formatDateForApi,
+  generateHours,
+  generateWeekDays,
+  getWeekStartDate,
+  isCurrentDate,
+  isCurrentHour,
+  parseDate,
+} from "@/utils/Helper/general-calendar";
 
 const GeneralCalendar = ({ currentRole }: IGeneralCalendarProps) => {
   const [isLoading, setIsLoading] = useState(false);

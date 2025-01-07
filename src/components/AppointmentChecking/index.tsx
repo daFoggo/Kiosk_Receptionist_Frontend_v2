@@ -1,13 +1,13 @@
-import { useState, useEffect, useRef } from "react";
-import axios from "axios";
-import { toast } from "sonner";
-import { motion } from "framer-motion";
-import { useZxing } from "react-zxing";
-import Webcam from "react-webcam";
-import { CheckCircle, Camera, Loader2 } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import axios from "axios";
+import { motion } from "framer-motion";
+import { Camera, CheckCircle, Loader2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import Webcam from "react-webcam";
+import { useZxing } from "react-zxing";
+import { toast } from "sonner";
 
 const AppointmentChecking = () => {
   const [result, setResult] = useState("");

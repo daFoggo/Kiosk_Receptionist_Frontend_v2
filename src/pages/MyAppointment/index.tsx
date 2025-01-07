@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
 import AppointmentTable from "@/components/AppointmentTable";
-import { getAppointmentsIp } from "@/utils/ip";
 import { useAuth } from "@/contexts/auth-context";
+import { getAppointmentsIp } from "@/utils/ip";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import AppointmentUtility from "../AppointmentUtility";
 
 const MyAppointment = () => {

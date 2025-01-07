@@ -1,28 +1,28 @@
-import { useEffect, useState, useCallback, memo } from "react";
-import { useTranslation } from "react-i18next";
-import { t } from "i18next";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  CalendarHeart,
-  Clock,
-  ClockArrowDown,
-  ClockArrowUp,
-  ChevronLeft,
-  ChevronRight,
-  MapPin,
-} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import { IEvent, IEventBannerProps } from "@/models/event-banner";
 import { dateUtils } from "@/utils/Helper/event-banner";
+import { AnimatePresence, motion } from "framer-motion";
+import { t } from "i18next";
+import {
+  CalendarHeart,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  ClockArrowDown,
+  ClockArrowUp,
+  MapPin,
+} from "lucide-react";
+import { memo, useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 // Memoized components
 const ResponsiveBadge = memo(

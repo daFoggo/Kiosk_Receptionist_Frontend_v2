@@ -1,6 +1,4 @@
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/auth-context";
-import { Bell, ChevronsUpDown, LogOut } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -17,8 +15,10 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { useAuth } from "@/contexts/auth-context";
 import { routes } from "@/router/routes";
+import { Bell, ChevronsUpDown, LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const NavUser = ({
   user,

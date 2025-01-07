@@ -1,17 +1,3 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { useTranslation } from "react-i18next";
-import {
-  WiDaySunny,
-  WiDayCloudy,
-  WiCloud,
-  WiCloudy,
-  WiShowers,
-  WiDayRainWind,
-  WiThunderstorm,
-  WiDaySnow,
-  WiDayFog,
-} from "react-icons/wi";
 import {
   Card,
   CardContent,
@@ -20,8 +6,22 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { IWeatherIconProps, IWeatherData } from "@/models/weather";
+import { IWeatherData, IWeatherIconProps } from "@/models/weather";
 import { openWeatherIp } from "@/utils/ip";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  WiCloud,
+  WiCloudy,
+  WiDayCloudy,
+  WiDayFog,
+  WiDayRainWind,
+  WiDaySnow,
+  WiDaySunny,
+  WiShowers,
+  WiThunderstorm,
+} from "react-icons/wi";
 
 const WeatherIcon = ({ icon, className }: IWeatherIconProps) => {
   const icons = {

@@ -1,7 +1,7 @@
-import { useRef, useEffect, useState, memo } from "react";
-import { useAISpeech } from "@/contexts/ai-speech-context";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Card } from "@/components/ui/card";
+import { useAISpeech } from "@/contexts/ai-speech-context";
+import { memo, useEffect, useRef, useState } from "react";
 
 const AIModel = memo(() => {
   const { currentVideo, isPlaying } = useAISpeech();

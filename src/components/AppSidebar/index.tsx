@@ -1,8 +1,3 @@
-import * as React from "react";
-import { useAuth } from "@/contexts/auth-context";
-import {
-  Command,
-} from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -12,9 +7,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useAuth } from "@/contexts/auth-context";
+import {
+  Command,
+} from "lucide-react";
+import * as React from "react";
+import { NAVIGATION_LINKS } from "./constant";
 import NavMain from "./nav-main";
 import NavUser from "./nav-user";
-import { NAVIGATION_LINKS } from "./constant";
 
 const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
   const user = useAuth()?.user ?? {

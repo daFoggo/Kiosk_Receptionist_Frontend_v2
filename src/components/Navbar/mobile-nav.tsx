@@ -1,6 +1,4 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Menu } from "lucide-react";
+import Logo from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -8,8 +6,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import Logo from "@/components/Logo";
 import { routes } from "@/router/routes";
+import { Menu } from "lucide-react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const MobileNav = () => {
   const [open, setOpen] = useState(false);
