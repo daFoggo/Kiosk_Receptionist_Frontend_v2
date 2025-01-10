@@ -48,18 +48,13 @@ const WeeklySchedule = ({ works }: IInstitueCalendarTableProps) => {
 
   // Utilities
   const getWeekDates = (date: Date) => {
-    // Clone date to avoid mutation
     const firstDay = new Date(date);
     const lastDay = new Date(date);
-    
-    // Get day of week (0 = Sun, 1 = Mon, ...)
     const currentDay = date.getDay();
     
-    // Calculate first day of week (Monday)
     const mondayDiff = currentDay === 0 ? -6 : 1 - currentDay;
     firstDay.setDate(date.getDate() + mondayDiff);
     
-    // Calculate last day of week (Sunday)
     lastDay.setDate(firstDay.getDate() + 6);
 
     return { monday: firstDay, sunday: lastDay };
@@ -69,10 +64,9 @@ const WeeklySchedule = ({ works }: IInstitueCalendarTableProps) => {
     const newDate = new Date(currentDate);
     newDate.setDate(newDate.getDate() + days);
     
-    // Get week range for newDate
     const { monday, sunday } = getWeekDates(newDate);
     
-    // Only allow navigation within current week
+
     if (newDate >= monday && newDate <= sunday) {
       setCurrentDate(newDate);
     }
@@ -95,7 +89,6 @@ const WeeklySchedule = ({ works }: IInstitueCalendarTableProps) => {
     return parseInt(hour) === currentHour;
   };
 
-  // Render Functions
   const renderField = (icon: React.ReactNode, label: string, value: string) => (
     <div className="flex items-center space-x-2 font-semibold">
       <div className="text-primary">{icon}</div>
@@ -178,7 +171,6 @@ const WeeklySchedule = ({ works }: IInstitueCalendarTableProps) => {
   );
 
   const { monday, sunday } = getWeekDates(new Date());
-  const isCurrentWeek = currentDate >= monday && currentDate <= sunday;
 
   return (
     <Card className="w-full h-full p-4 rounded-3xl">
