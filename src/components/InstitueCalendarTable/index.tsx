@@ -28,7 +28,6 @@ import { useTranslation } from "react-i18next";
 
 const WeeklySchedule = ({ works }: IInstitueCalendarTableProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
-
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedWork, setSelectedWork] = useState<IWork | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -49,17 +48,31 @@ const WeeklySchedule = ({ works }: IInstitueCalendarTableProps) => {
 
   // Utilities
   const getWeekDates = (date: Date) => {
-    const day = date.getDay();
-    const diff = date.getDate() - day + (day === 0 ? -6 : 1); // Adjust for Sunday
-    const monday = new Date(date.setDate(diff));
-    const sunday = new Date(date.setDate(diff + 6));
-    return { monday, sunday };
+    // Clone date to avoid mutation
+    const firstDay = new Date(date);
+    const lastDay = new Date(date);
+    
+    // Get day of week (0 = Sun, 1 = Mon, ...)
+    const currentDay = date.getDay();
+    
+    // Calculate first day of week (Monday)
+    const mondayDiff = currentDay === 0 ? -6 : 1 - currentDay;
+    firstDay.setDate(date.getDate() + mondayDiff);
+    
+    // Calculate last day of week (Sunday)
+    lastDay.setDate(firstDay.getDate() + 6);
+
+    return { monday: firstDay, sunday: lastDay };
   };
 
   const navigateCalendar = (days: number) => {
     const newDate = new Date(currentDate);
     newDate.setDate(newDate.getDate() + days);
-    const { monday, sunday } = getWeekDates(new Date());
+    
+    // Get week range for newDate
+    const { monday, sunday } = getWeekDates(newDate);
+    
+    // Only allow navigation within current week
     if (newDate >= monday && newDate <= sunday) {
       setCurrentDate(newDate);
     }
@@ -196,11 +209,13 @@ const WeeklySchedule = ({ works }: IInstitueCalendarTableProps) => {
             size="icon"
             onClick={() => navigateCalendar(-1)}
             disabled={currentDate <= monday}
-          ><ChevronLeft className="h-8 w-8" /></Button>
+          >
+            <ChevronLeft className="h-8 w-8" />
+          </Button>
           <Button
             className="font-semibold text-lg"
             onClick={goToday}
-            disabled={!isCurrentWeek}
+
           >
             {t("instituecalendar.table.today")}
           </Button>
@@ -249,7 +264,7 @@ const WeeklySchedule = ({ works }: IInstitueCalendarTableProps) => {
                       <Clock className="h-5 w-5" />,
                       t("instituecalendar.table.field.time"),
                       new Date(selectedWork?.iso_datetime || "").toLocaleString(
-                        "vi-VN"
+                        getLocale()
                       )
                     )}
                     {renderField(
