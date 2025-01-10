@@ -114,11 +114,16 @@ export const WebsocketProvider = ({ children }: IWebsocketProviderProps) => {
 
   const sendFrame = useCallback(
     (frameData: string) => {
-      if (wsRef.current?.readyState === WEBSOCKETSTATE.OPEN) {
-        wsRef.current.send(frameData);
-      } else {
-        console.warn("WebSocket is not connected. Attempting to reconnect...");
-        connectWebsocket();
+      try {
+        if (wsRef.current?.readyState === WEBSOCKETSTATE.OPEN) {
+          wsRef.current.send(frameData);
+        } else {
+          console.warn("WebSocket is not connected. Attempting to reconnect...");
+          connectWebsocket();
+        }
+      } catch (error) {
+        console.warn("Error sending frame:", error);
+        connectWebsocket(); 
       }
     },
     [connectWebsocket]

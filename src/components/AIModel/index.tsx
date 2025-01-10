@@ -11,26 +11,38 @@ const AIModel = memo(() => {
 
   useEffect(() => {
     const videoElement = videoRef.current;
-    if (videoElement) {
-      videoElement.addEventListener("loadeddata", () => setIsLoaded(true));
-      videoElement.addEventListener("error", () =>
-        setError("Failed to load video")
-      );
+
+    if (!videoElement) return;
+    setIsLoaded(false);
+
+    const handleLoaded = () => setIsLoaded(true);
+    const handleError = () => setError("Failed to load video");
+
+    videoElement.addEventListener("loadeddata", handleLoaded);
+    videoElement.addEventListener("error", handleError);
+    
+    try {
       videoElement.play();
-      return () => {
-        videoElement.pause();
-        videoElement.removeEventListener("loadeddata", () => setIsLoaded(true));
-        videoElement.removeEventListener("error", () =>
-          setError("Failed to load video")
-        );
-      };
+    } catch (err) {
+      setError("Failed to play video");
     }
-  }, [isLoaded]);
+
+    return () => {
+      videoElement.pause();
+      videoElement.removeEventListener("loadeddata", handleLoaded);
+      videoElement.removeEventListener("error", handleError);
+    };
+
+  }, [currentVideo]);
 
   useEffect(() => {
     const videoElement = videoRef.current;
-    if (videoElement) {
-      videoElement.paused ? videoElement.play() : videoElement.pause();
+    if (!videoElement) return;
+
+    if (isPlaying) {
+      videoElement.play().catch(() => setError("Failed to play video"));
+    } else {
+      videoElement.pause();
     }
   }, [isPlaying]);
 
